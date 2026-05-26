@@ -1,0 +1,18 @@
+{
+  "name": "michela-ensina-front",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "overrides": {
+    "postcss": "8.5.10"
+  },
+  "scripts": {
+    "dev:marketing": "npm run dev --workspace apps/marketing",
+    "build:marketing": "npm run build --workspace apps/marketing",
+    "lint:marketing": "npm run lint --workspace apps/marketing",
+    "dev:student": "npm run dev --workspace apps/student",
+    "build:student": "npm run build --workspace apps/student",
+    "lint:student": "npm run lint --workspace apps/student"
+  }
+}
