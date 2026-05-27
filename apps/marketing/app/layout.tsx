@@ -2,6 +2,14 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 
 import { Toaster } from "@/components/ui/sonner";
+import {
+  SITE_DEFAULT_DESCRIPTION,
+  SITE_DEFAULT_TITLE,
+  SITE_KEYWORDS,
+  SITE_NAME,
+  SITE_OG_IMAGE,
+  SITE_URL,
+} from "@/lib/seo/site";
 
 import "./globals.css";
 
@@ -55,8 +63,51 @@ const mulish = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Michela Ensina",
-  description: "Website institucional e landing page da Michela Ensina.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_DEFAULT_TITLE,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DEFAULT_DESCRIPTION,
+  keywords: [...SITE_KEYWORDS],
+  category: "education",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: SITE_NAME,
+    locale: "pt_BR",
+    title: SITE_DEFAULT_TITLE,
+    description: SITE_DEFAULT_DESCRIPTION,
+    images: [
+      {
+        url: SITE_OG_IMAGE,
+        width: 512,
+        height: 512,
+        alt: "Modo Fluente - Michela Ensina",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_DEFAULT_TITLE,
+    description: SITE_DEFAULT_DESCRIPTION,
+    images: [SITE_OG_IMAGE],
+  },
   manifest: "/manifest.json",
   icons: {
     icon: [
