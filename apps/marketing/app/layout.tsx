@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-
+import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/sonner";
 import {
   SITE_DEFAULT_DESCRIPTION,
@@ -133,6 +133,7 @@ export default function RootLayout({
       <body className="min-h-full">
         {children}
         <Toaster />
+        <Analytics />
       </body>
     </html>
   );
