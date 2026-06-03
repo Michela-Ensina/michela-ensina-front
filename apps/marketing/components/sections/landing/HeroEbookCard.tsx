@@ -1,20 +1,22 @@
+/* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 
 export function HeroEbookCard() {
   return (
     <div className="relative z-10 w-full">
       <div className="group relative aspect-3/4 rotate-[-2.8deg] overflow-hidden rounded-3xl border-4 border-surface bg-surface shadow-[0_30px_52px_rgba(35,54,149,0.24)] transition-transform duration-500 ease-out will-change-transform motion-reduce:transform-none hover:rotate-0">
-        <div
-          aria-hidden
-          className="absolute inset-0 z-10 bg-center bg-no-repeat"
-          style={{
-            backgroundImage: "url('/assets/ebook-modo-fluente-capa.png')",
-            backgroundPosition: "center top",
-            backgroundSize: "cover",
-            transform: "scale(1.11) translateY(-0.8%)",
-            willChange: "transform",
-          }}
-        />
+        <div aria-hidden className="absolute inset-0 z-10 overflow-hidden">
+          <div className="absolute inset-x-[-5.5%] top-[-6.3%] h-[115%]">
+            <img
+              alt=""
+              className="block h-full w-full object-cover object-top"
+              decoding="async"
+              fetchPriority="high"
+              loading="eager"
+              src="/assets/ebook-modo-fluente-capa.png"
+            />
+          </div>
+        </div>
 
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 text-center">
           <Image
