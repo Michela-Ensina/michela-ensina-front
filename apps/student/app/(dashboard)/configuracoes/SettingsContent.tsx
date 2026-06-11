@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { LogOut, Moon, ShieldCheck, UserRound } from "lucide-react";
 import { toast } from "sonner";
 
 import { Alert } from "@/components/ui/alert";
@@ -9,8 +10,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
+import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
 
@@ -103,52 +105,108 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {(showMustChangePasswordAlert || user?.must_change_password) && (
         <SurfaceCard>
-          <h2 className="text-xl">Ação recomendada</h2>
-          <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-            Para manter sua conta segura, atualize sua senha agora.
-          </p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <h2 className="text-xl">Ação recomendada</h2>
+              <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
+                Atualize sua senha quando puder. Por enquanto, o acesso ao preview permanece liberado.
+              </p>
+            </div>
+            <StatusBadge label="Recomendado" tone="em-andamento" />
+          </div>
         </SurfaceCard>
       )}
 
-      <SurfaceCard>
-        <h2 className="text-xl">Perfil</h2>
-        <div className="mt-3 space-y-1.5 text-sm">
-          <p><strong>Nome:</strong> {user?.name ?? "Não informado"}</p>
-          <p><strong>E-mail:</strong> {user?.email ?? "Não informado"}</p>
-          <p><strong>Status da conta:</strong> {userStatusLabel}</p>
-          <p><strong>Troca de senha obrigatória:</strong> {user?.must_change_password ? "Sim" : "Não"}</p>
-        </div>
-      </SurfaceCard>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <SurfaceCard>
+          <div className="flex items-start gap-3">
+            <div
+              className="flex size-10 shrink-0 items-center justify-center rounded-xl"
+              style={{
+                backgroundColor: "color-mix(in oklab, var(--color-primary) 14%, transparent)",
+                color: "var(--color-primary)",
+              }}
+            >
+              <UserRound size={18} aria-hidden="true" />
+            </div>
+            <div>
+              <h2 className="text-xl">Perfil</h2>
+              <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
+                Dados usados para identificar sua área do aluno.
+              </p>
+            </div>
+          </div>
+
+          <dl className="mt-5 grid gap-3 text-sm">
+            <div className="flex items-center justify-between gap-4">
+              <dt style={{ color: "var(--color-text-muted)" }}>Nome</dt>
+              <dd className="text-right font-semibold">{user?.name ?? "Não informado"}</dd>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <dt style={{ color: "var(--color-text-muted)" }}>E-mail</dt>
+              <dd className="text-right font-semibold">{user?.email ?? "Não informado"}</dd>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <dt style={{ color: "var(--color-text-muted)" }}>Status da conta</dt>
+              <dd className="font-semibold">{userStatusLabel}</dd>
+            </div>
+          </dl>
+        </SurfaceCard>
+
+        <SurfaceCard>
+          <div className="flex items-start gap-3">
+            <div
+              className="flex size-10 shrink-0 items-center justify-center rounded-xl"
+              style={{
+                backgroundColor: "color-mix(in oklab, var(--color-accent) 14%, transparent)",
+                color: "color-mix(in oklab, var(--color-accent) 78%, var(--color-text))",
+              }}
+            >
+              <Moon size={18} aria-hidden="true" />
+            </div>
+            <div>
+              <h2 className="text-xl">Tema</h2>
+              <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
+                O modo escuro é o padrão visual da área do aluno.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <ThemeToggleButton theme={theme} onToggle={() => setTheme(theme === "dark" ? "light" : "dark")} />
+            <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
+              Tema atual: {theme === "dark" ? "Escuro" : "Claro"}
+            </p>
+          </div>
+        </SurfaceCard>
+      </div>
 
       <SurfaceCard>
-        <h2 className="text-xl">Tema</h2>
-        <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          O modo escuro é padrão, mas você pode alternar para o modo claro quando preferir.
-        </p>
-        <div className="mt-4 flex items-center gap-3">
-          <ThemeToggleButton
-            theme={theme}
-            onToggle={() => setTheme(theme === "dark" ? "light" : "dark")}
-          />
-          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-            Tema atual: {theme === "dark" ? "Escuro" : "Claro"}
-          </p>
+        <div className="flex items-start gap-3">
+          <div
+            className="flex size-10 shrink-0 items-center justify-center rounded-xl"
+            style={{
+              backgroundColor: "color-mix(in oklab, #48b08c 18%, transparent)",
+              color: "color-mix(in oklab, #2f9d77 78%, var(--color-text))",
+            }}
+          >
+            <ShieldCheck size={18} aria-hidden="true" />
+          </div>
+          <div>
+            <h2 className="text-xl">Trocar senha</h2>
+            <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
+              Use uma senha forte com pelo menos 8 caracteres.
+            </p>
+          </div>
         </div>
-      </SurfaceCard>
-
-      <SurfaceCard>
-        <h2 className="text-xl">Trocar senha</h2>
-        <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Para sua segurança, use uma senha forte com pelo menos 8 caracteres.
-        </p>
 
         {passwordError ? <Alert tone="error">{passwordError}</Alert> : null}
         {passwordSuccess ? <Alert tone="success">{passwordSuccess}</Alert> : null}
 
-        <form className="mt-4 space-y-3" onSubmit={handleChangePassword}>
+        <form className="mt-5 grid gap-3 md:grid-cols-3" onSubmit={handleChangePassword}>
           <div className="block">
             <Label htmlFor="currentPassword">Senha atual</Label>
             <Input id="currentPassword" type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} placeholder="Senha atual" />
@@ -158,39 +216,38 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
             <Input id="newPassword" type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} placeholder="Nova senha" />
           </div>
           <div className="block">
-            <Label htmlFor="confirmPassword">Confirmar nova senha</Label>
-            <Input id="confirmPassword" type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} placeholder="Confirmar nova senha" />
+            <Label htmlFor="confirmPassword">Confirmar senha</Label>
+            <Input id="confirmPassword" type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} placeholder="Confirmar senha" />
           </div>
 
-          <Button
-            type="submit"
-            disabled={isChangingPassword}
-            variant="primary"
-            style={{ opacity: isChangingPassword ? 0.7 : 1 }}
-          >
-            {isChangingPassword ? "Atualizando..." : "Atualizar senha"}
-          </Button>
+          <div className="md:col-span-3">
+            <Button type="submit" disabled={isChangingPassword} variant="primary" style={{ opacity: isChangingPassword ? 0.7 : 1 }}>
+              {isChangingPassword ? "Atualizando..." : "Atualizar senha"}
+            </Button>
+          </div>
         </form>
       </SurfaceCard>
 
       <SurfaceCard>
-        <h2 className="text-xl">Sessão</h2>
-        <Separator />
-        <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Encerre sua sessão neste dispositivo quando terminar.
-        </p>
-        <Button
-          type="button"
-          onClick={() => void handleLogout()}
-          disabled={isLoggingOut}
-          variant="danger"
-          className="mt-4"
-          style={{
-            opacity: isLoggingOut ? 0.7 : 1,
-          }}
-        >
-          {isLoggingOut ? "Saindo da conta..." : "Sair da conta"}
-        </Button>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-xl">Sessão</h2>
+            <Separator />
+            <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
+              Encerre sua sessão neste dispositivo quando terminar.
+            </p>
+          </div>
+          <Button
+            type="button"
+            onClick={() => void handleLogout()}
+            disabled={isLoggingOut}
+            variant="danger"
+            style={{ opacity: isLoggingOut ? 0.7 : 1 }}
+          >
+            <LogOut size={16} aria-hidden="true" />
+            {isLoggingOut ? "Saindo..." : "Sair da conta"}
+          </Button>
+        </div>
       </SurfaceCard>
     </div>
   );

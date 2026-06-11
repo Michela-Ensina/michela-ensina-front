@@ -1,22 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { BookOpen, CheckCircle2, Clock3 } from "lucide-react";
 
+import { MaterialCard } from "@/components/student/MaterialCard";
+import { MetricTile } from "@/components/student/MetricTile";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { useDashboardData } from "@/lib/student/use-dashboard-data";
 import type { Material } from "@/types/student";
 
 function getNextMaterial(materials: Material[], viewedIds: Set<string>): Material | null {
-  for (const material of materials) {
-    if (!viewedIds.has(material.id)) {
-      return material;
-    }
-  }
-
-  return materials[0] ?? null;
+  return materials.find((material) => !viewedIds.has(material.id)) ?? materials[0] ?? null;
 }
 
 export function DashboardContent() {
@@ -24,32 +22,25 @@ export function DashboardContent() {
 
   if (isLoading) {
     return (
-      <div className="space-y-4 sm:space-y-5">
-        <SurfaceCard>
-          <p style={{ color: "var(--color-text-muted)" }}>Carregando dados do dashboard...</p>
-        </SurfaceCard>
+      <div className="grid gap-4 lg:grid-cols-3">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <SurfaceCard key={index} className="min-h-32 animate-pulse" />
+        ))}
       </div>
     );
   }
 
   if (errorMessage) {
     return (
-      <div className="space-y-4 sm:space-y-5">
-        <SurfaceCard>
-          <h2 className="text-2xl">Não foi possível carregar</h2>
-          <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-            {errorMessage}
-          </p>
-          <Button
-            type="button"
-            onClick={() => void refetch()}
-            variant="outline"
-            className="mt-4"
-          >
-            Tentar novamente
-          </Button>
-        </SurfaceCard>
-      </div>
+      <SurfaceCard>
+        <h2 className="text-2xl">Não foi possível carregar</h2>
+        <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
+          {errorMessage}
+        </p>
+        <Button type="button" onClick={() => void refetch()} variant="outline" className="mt-4">
+          Tentar novamente
+        </Button>
+      </SurfaceCard>
     );
   }
 
@@ -59,26 +50,30 @@ export function DashboardContent() {
 
   const viewedIds = new Set(data.progress.items.filter((item) => item.viewed).map((item) => item.material_id));
   const nextMaterial = getNextMaterial(data.materials, viewedIds);
-  const recentMaterials = data.materials.slice(0, 3);
+  const recentMaterials = data.materials.slice(0, 2);
+  const pendingCount = Math.max(data.progress.total_materials - data.progress.viewed_count, 0);
 
   return (
-    <div className="space-y-4 sm:space-y-5">
-      <SurfaceCard>
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-              Olá, {data.student.name}.
-            </p>
-            <h2 className="mt-2 text-2xl">Que bom te ver por aqui.</h2>
-            <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-              {data.student.email}
+    <div className="space-y-5">
+      <SurfaceCard className="overflow-hidden">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <div className="flex flex-wrap items-center gap-2">
+              <StatusBadge
+                label={data.student.is_active ? "Acesso ativo" : "Acesso limitado"}
+                tone={data.student.is_active ? "concluído" : "bloqueado"}
+              />
+              {data.student.must_change_password ? <StatusBadge label="Senha recomendada" tone="em-andamento" /> : null}
+            </div>
+            <h2 className="mt-4 text-3xl leading-tight">Olá, {data.student.name.split(" ")[0]}.</h2>
+            <p className="mt-2 text-sm sm:text-base" style={{ color: "var(--color-text-muted)" }}>
+              Continue seus estudos do Modo Fluente com materiais organizados e progresso fácil de acompanhar.
             </p>
           </div>
 
-          <StatusBadge
-            label={data.student.is_active ? "Acesso ativo" : "Acesso limitado"}
-            tone={data.student.is_active ? "concluído" : "bloqueado"}
-          />
+          <div className="min-w-64">
+            <ProgressBar value={data.progress.percentage} label="Progresso geral" />
+          </div>
         </div>
       </SurfaceCard>
 
@@ -88,67 +83,51 @@ export function DashboardContent() {
           description="Assim que os conteúdos forem liberados, você verá seu progresso aqui."
         />
       ) : (
-        <div className="grid gap-4 lg:grid-cols-3">
-          <SurfaceCard className="lg:col-span-1">
-            <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-              Progresso geral
-            </p>
-            <p className="mt-2 text-3xl font-bold">{data.progress.percentage}%</p>
-            <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
-              {data.progress.viewed_count} de {data.progress.total_materials} materiais concluídos.
-            </p>
-            <div
-              className="mt-3 h-2 w-full rounded-full"
-              style={{ backgroundColor: "color-mix(in oklab, var(--color-text-muted) 25%, transparent)" }}
-            >
-              <div
-                className="h-2 rounded-full"
-                style={{
-                  width: `${Math.max(0, Math.min(data.progress.percentage, 100))}%`,
-                  backgroundColor: "var(--color-primary)",
-                }}
-              />
-            </div>
-          </SurfaceCard>
+        <>
+          <div className="grid gap-4 md:grid-cols-3">
+            <MetricTile
+              label="Concluídos"
+              value={`${data.progress.viewed_count}`}
+              detail={`${data.progress.total_materials} materiais disponíveis`}
+              icon={<CheckCircle2 size={19} aria-hidden="true" />}
+            />
+            <MetricTile
+              label="Em aberto"
+              value={`${pendingCount}`}
+              detail="Materiais para continuar estudando"
+              icon={<Clock3 size={19} aria-hidden="true" />}
+            />
+            <MetricTile
+              label="Biblioteca"
+              value={`${data.materials.length}`}
+              detail="Vídeos, PDFs, anexos e links"
+              icon={<BookOpen size={19} aria-hidden="true" />}
+            />
+          </div>
 
-          <SurfaceCard className="lg:col-span-1">
-            <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-              Continue de onde parou
-            </p>
-            <h3 className="mt-2 text-xl">{nextMaterial ? nextMaterial.title : "Sem sugestão disponível"}</h3>
-            <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-              {nextMaterial?.description ??
-                "Assim que houver um material disponível, ele aparecerá aqui para você continuar."}
-            </p>
-            <div className="mt-3">
-              <Link href="/materiais" className="text-sm font-semibold" style={{ color: "var(--color-primary)" }}>
-                Ver materiais
-              </Link>
-            </div>
-          </SurfaceCard>
-
-          <SurfaceCard className="lg:col-span-1">
-            <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-              Materiais disponíveis
-            </p>
-            {recentMaterials.length > 0 ? (
-              <ul className="mt-3 space-y-2">
-                {recentMaterials.map((item) => (
-                  <li key={item.id} className="rounded-lg border p-2.5" style={{ borderColor: "var(--color-border)" }}>
-                    <p className="text-sm">{item.title}</p>
-                    <p className="mt-1 text-xs capitalize" style={{ color: "var(--color-text-muted)" }}>
-                      {item.type}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="mt-3 text-sm" style={{ color: "var(--color-text-muted)" }}>
-                Nenhum material encontrado.
+          <div className="grid gap-4 lg:grid-cols-[1.1fr_1.4fr]">
+            <SurfaceCard>
+              <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
+                Continuar estudando
               </p>
-            )}
-          </SurfaceCard>
-        </div>
+              <h3 className="mt-2 text-2xl leading-tight">{nextMaterial?.title ?? "Sem sugestão disponível"}</h3>
+              <p className="mt-3 text-sm" style={{ color: "var(--color-text-muted)" }}>
+                {nextMaterial?.description ?? "Assim que houver um material disponível, ele aparecerá aqui."}
+              </p>
+              <Link href={nextMaterial ? `/materiais/${nextMaterial.id}` : "/materiais"} className="mt-5 inline-block">
+                <Button type="button" variant="primary">
+                  Continuar material
+                </Button>
+              </Link>
+            </SurfaceCard>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              {recentMaterials.map((material) => (
+                <MaterialCard key={material.id} material={material} progressItems={data.progress.items} />
+              ))}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
