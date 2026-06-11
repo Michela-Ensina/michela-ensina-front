@@ -11,8 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { ApiClientError } from "@/lib/api/errors";
-import { firstAccess } from "@/lib/api/auth";
+import { completePreviewFirstAccess } from "@/lib/pre-integration/student-preview";
 
 export default function PrimeiroAcessoPage() {
   const router = useRouter();
@@ -50,7 +49,9 @@ export default function PrimeiroAcessoPage() {
     }
 
     if (password.length < 8) {
-      setErrorMessage("A senha deve ter pelo menos 8 caracteres.");
+      const message = "A senha deve ter pelo menos 8 caracteres.";
+      setErrorMessage(message);
+      toast.error(message);
       return;
     }
 
@@ -64,32 +65,18 @@ export default function PrimeiroAcessoPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await firstAccess({
+      const response = await completePreviewFirstAccess({
         token: token.trim(),
         password,
         password_confirmation: passwordConfirmation,
       });
-      const message = response.message || "Primeiro acesso concluído. Você já pode entrar.";
-      setSuccessMessage(message);
-      toast.success(message);
+      setSuccessMessage(response.message);
+      toast.success(response.message);
       router.replace("/login?motivo=primeiro-acesso");
-    } catch (error) {
-      if (error instanceof ApiClientError) {
-        const message =
-          error.status >= 500
-            ? "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
-            : "Não foi possível concluir o primeiro acesso.";
-        setErrorMessage(message);
-        toast.error(message);
-      } else if (error instanceof TypeError) {
-        const message = "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.";
-        setErrorMessage(message);
-        toast.error(message);
-      } else {
-        const message = "Ocorreu um erro inesperado. Tente novamente.";
-        setErrorMessage(message);
-        toast.error(message);
-      }
+    } catch {
+      const message = "Não foi possível simular o primeiro acesso.";
+      setErrorMessage(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -100,16 +87,11 @@ export default function PrimeiroAcessoPage() {
       <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
         <h1 className="text-3xl">Primeiro acesso</h1>
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Defina sua senha inicial para entrar na área do aluno.
+          Defina sua senha inicial para validar a entrada na área do aluno.
         </p>
 
-        {errorMessage ? (
-          <Alert tone="error">{errorMessage}</Alert>
-        ) : null}
-
-        {successMessage ? (
-          <Alert tone="success">{successMessage}</Alert>
-        ) : null}
+        {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
+        {successMessage ? <Alert tone="success">{successMessage}</Alert> : null}
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
           <div className="block">
@@ -125,13 +107,7 @@ export default function PrimeiroAcessoPage() {
             <Input id="passwordConfirmation" type="password" value={passwordConfirmation} onChange={(event) => setPasswordConfirmation(event.target.value)} placeholder="Confirmar nova senha" />
           </div>
 
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            variant="primary"
-            fullWidth
-            style={{ opacity: isSubmitting ? 0.75 : 1 }}
-          >
+          <Button type="submit" disabled={isSubmitting} variant="primary" fullWidth style={{ opacity: isSubmitting ? 0.75 : 1 }}>
             {isSubmitting ? "Concluindo..." : "Concluir primeiro acesso"}
           </Button>
         </form>

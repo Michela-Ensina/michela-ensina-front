@@ -11,8 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { ApiClientError } from "@/lib/api/errors";
-import { resetPassword } from "@/lib/api/auth";
+import { resetPreviewPassword } from "@/lib/pre-integration/student-preview";
 
 export default function RedefinirSenhaPage() {
   const router = useRouter();
@@ -73,7 +72,9 @@ export default function RedefinirSenhaPage() {
     }
 
     if (password.length < 8) {
-      setErrorMessage("A nova senha deve ter pelo menos 8 caracteres.");
+      const message = "A nova senha deve ter pelo menos 8 caracteres.";
+      setErrorMessage(message);
+      toast.error(message);
       return;
     }
 
@@ -87,34 +88,19 @@ export default function RedefinirSenhaPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await resetPassword({
+      const response = await resetPreviewPassword({
         email: email.trim(),
         token: token.trim(),
         password,
         password_confirmation: passwordConfirmation,
       });
-
-      const message = response.message || "Senha redefinida com sucesso. Você já pode entrar.";
-      setSuccessMessage(message);
-      toast.success(message);
+      setSuccessMessage(response.message);
+      toast.success(response.message);
       router.replace("/login?motivo=senha-redefinida");
-    } catch (error) {
-      if (error instanceof ApiClientError) {
-        const message =
-          error.status >= 500
-            ? "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
-            : "Não foi possível redefinir a senha.";
-        setErrorMessage(message);
-        toast.error(message);
-      } else if (error instanceof TypeError) {
-        const message = "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.";
-        setErrorMessage(message);
-        toast.error(message);
-      } else {
-        const message = "Ocorreu um erro inesperado. Tente novamente.";
-        setErrorMessage(message);
-        toast.error(message);
-      }
+    } catch {
+      const message = "Não foi possível simular a redefinição da senha.";
+      setErrorMessage(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -125,16 +111,11 @@ export default function RedefinirSenhaPage() {
       <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
         <h1 className="text-3xl">Redefinir senha</h1>
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Informe os dados para concluir a redefinição da sua senha.
+          Informe os dados para validar a redefinição da sua senha.
         </p>
 
-        {errorMessage ? (
-          <Alert tone="error">{errorMessage}</Alert>
-        ) : null}
-
-        {successMessage ? (
-          <Alert tone="success">{successMessage}</Alert>
-        ) : null}
+        {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
+        {successMessage ? <Alert tone="success">{successMessage}</Alert> : null}
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
           <div className="block">
@@ -154,13 +135,7 @@ export default function RedefinirSenhaPage() {
             <Input id="passwordConfirmation" type="password" value={passwordConfirmation} onChange={(event) => setPasswordConfirmation(event.target.value)} placeholder="Confirmar nova senha" />
           </div>
 
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            variant="primary"
-            fullWidth
-            style={{ opacity: isSubmitting ? 0.75 : 1 }}
-          >
+          <Button type="submit" disabled={isSubmitting} variant="primary" fullWidth style={{ opacity: isSubmitting ? 0.75 : 1 }}>
             {isSubmitting ? "Redefinindo..." : "Redefinir senha"}
           </Button>
         </form>

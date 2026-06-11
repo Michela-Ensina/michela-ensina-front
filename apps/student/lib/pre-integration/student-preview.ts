@@ -1,4 +1,10 @@
-import type { AuthLoginPayload } from "@/types/auth";
+import type {
+  AuthFirstAccessPayload,
+  AuthForgotPasswordPayload,
+  AuthLoginPayload,
+  AuthResetPasswordPayload,
+  MessageResponse,
+} from "@/types/auth";
 import type { Material, ProgressItem, ProgressSummary, User } from "@/types/student";
 
 export const PRE_INTEGRATION_PREVIEW_ENABLED = true;
@@ -154,5 +160,29 @@ export function markPreviewMaterialCompleted(materialId: string): ProgressItem {
     material: material ?? undefined,
     viewed: true,
     viewed_at: new Date().toISOString(),
+  };
+}
+
+export async function requestPreviewPasswordReset(_payload: AuthForgotPasswordPayload): Promise<MessageResponse> {
+  void _payload;
+
+  return {
+    message: "Se este e-mail estiver cadastrado, você receberá as instruções em breve.",
+  };
+}
+
+export async function resetPreviewPassword(_payload: AuthResetPasswordPayload): Promise<MessageResponse> {
+  void _payload;
+
+  return {
+    message: "Senha redefinida com sucesso. Você já pode entrar.",
+  };
+}
+
+export async function completePreviewFirstAccess(_payload: AuthFirstAccessPayload): Promise<MessageResponse> {
+  void _payload;
+
+  return {
+    message: "Primeiro acesso concluído. Você já pode entrar.",
   };
 }

@@ -10,8 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { forgotPassword } from "@/lib/api/auth";
-import { ApiClientError } from "@/lib/api/errors";
+import { requestPreviewPasswordReset } from "@/lib/pre-integration/student-preview";
 
 export default function EsqueciSenhaPage() {
   const [email, setEmail] = useState("");
@@ -45,29 +44,13 @@ export default function EsqueciSenhaPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await forgotPassword({ email: email.trim() });
-      const message =
-        response.message ||
-        "Se este e-mail estiver cadastrado, você receberá as instruções em breve.";
-      setSuccessMessage(message);
-      toast.success(message);
-    } catch (error) {
-      if (error instanceof ApiClientError) {
-        const message =
-          error.status >= 500
-            ? "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
-            : "Não foi possível enviar as instruções agora.";
-        setErrorMessage(message);
-        toast.error(message);
-      } else if (error instanceof TypeError) {
-        const message = "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.";
-        setErrorMessage(message);
-        toast.error(message);
-      } else {
-        const message = "Ocorreu um erro inesperado. Tente novamente.";
-        setErrorMessage(message);
-        toast.error(message);
-      }
+      const response = await requestPreviewPasswordReset({ email: email.trim() });
+      setSuccessMessage(response.message);
+      toast.success(response.message);
+    } catch {
+      const message = "Não foi possível simular o envio das instruções.";
+      setErrorMessage(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -78,16 +61,11 @@ export default function EsqueciSenhaPage() {
       <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
         <h1 className="text-3xl">Esqueci minha senha</h1>
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Informe seu e-mail para receber as instruções de redefinição.
+          Informe seu e-mail para validar o fluxo de recuperação.
         </p>
 
-        {errorMessage ? (
-          <Alert tone="error">{errorMessage}</Alert>
-        ) : null}
-
-        {successMessage ? (
-          <Alert tone="success">{successMessage}</Alert>
-        ) : null}
+        {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
+        {successMessage ? <Alert tone="success">{successMessage}</Alert> : null}
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
           <div className="block">
@@ -101,15 +79,7 @@ export default function EsqueciSenhaPage() {
             />
           </div>
 
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            variant="primary"
-            fullWidth
-            style={{
-              opacity: isSubmitting ? 0.75 : 1,
-            }}
-          >
+          <Button type="submit" disabled={isSubmitting} variant="primary" fullWidth style={{ opacity: isSubmitting ? 0.75 : 1 }}>
             {isSubmitting ? "Enviando..." : "Enviar instruções"}
           </Button>
         </form>
