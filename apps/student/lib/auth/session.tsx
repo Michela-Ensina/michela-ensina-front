@@ -12,6 +12,12 @@ import {
   setStoredUser,
 } from "@/lib/auth/storage";
 import { ApiClientError } from "@/lib/api/errors";
+import {
+  createPreviewLoginSession,
+  getPreviewStudent,
+  PRE_INTEGRATION_PREVIEW_ENABLED,
+  PRE_INTEGRATION_PREVIEW_TOKEN,
+} from "@/lib/pre-integration/student-preview";
 import type { AuthLoginPayload } from "@/types/auth";
 import type { User } from "@/types/student";
 
@@ -64,6 +70,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = useCallback(async () => {
     const currentToken = token ?? getStoredToken();
 
+    if (PRE_INTEGRATION_PREVIEW_ENABLED) {
+      clearSession();
+      return;
+    }
+
     if (currentToken) {
       try {
         await logoutRequest(currentToken);
@@ -77,6 +88,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = useCallback(
     async (payload: AuthLoginPayload) => {
+      if (PRE_INTEGRATION_PREVIEW_ENABLED) {
+        const previewSession = createPreviewLoginSession(payload);
+        applySession(previewSession.token, previewSession.user);
+        return { mustChangePassword: previewSession.mustChangePassword };
+      }
+
       const response = await loginRequest(payload);
 
       let resolvedUser = response.user;
@@ -97,6 +114,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const refreshUser = useCallback(async () => {
     const currentToken = token ?? getStoredToken();
 
+    if (PRE_INTEGRATION_PREVIEW_ENABLED) {
+      const previewUser = getPreviewStudent();
+      applySession(PRE_INTEGRATION_PREVIEW_TOKEN, previewUser);
+      return previewUser;
+    }
+
     if (!currentToken) {
       return null;
     }
@@ -112,6 +135,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     async function hydrateSession() {
+      if (PRE_INTEGRATION_PREVIEW_ENABLED) {
+        applySession(PRE_INTEGRATION_PREVIEW_TOKEN, getPreviewStudent());
+        setIsLoading(false);
+        return;
+      }
+
       const storedToken = getStoredToken();
       const storedUser = getStoredUser();
 

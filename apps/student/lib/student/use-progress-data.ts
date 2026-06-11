@@ -2,9 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { ApiClientError } from "@/lib/api/errors";
-import { getProgress } from "@/lib/api/progress";
-import { useAuth } from "@/lib/auth/use-auth";
+import { getPreviewProgress } from "@/lib/pre-integration/student-preview";
 import type { ProgressSummary } from "@/types/student";
 
 type UseProgressDataResult = {
@@ -16,38 +14,23 @@ type UseProgressDataResult = {
 };
 
 export function useProgressData(): UseProgressDataResult {
-  const { token, logout } = useAuth();
   const [data, setData] = useState<ProgressSummary | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
-    if (!token) {
-      setData(null);
-      setErrorMessage("Sessão inválida. Faça login novamente.");
-      setIsLoading(false);
-      return;
-    }
-
     setIsLoading(true);
     setErrorMessage(null);
 
     try {
-      const progress = await getProgress(token);
-      setData(progress);
-    } catch (error) {
-      if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
-        setErrorMessage("Sua sessão expirou. Faça login novamente.");
-        await logout();
-      } else {
-        setErrorMessage("Não foi possível carregar o progresso agora.");
-      }
-
+      setData(getPreviewProgress());
+    } catch {
+      setErrorMessage("Não foi possível carregar o progresso de pré-integração.");
       setData(null);
     } finally {
       setIsLoading(false);
     }
-  }, [logout, token]);
+  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {

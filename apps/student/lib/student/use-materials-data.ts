@@ -2,10 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { ApiClientError } from "@/lib/api/errors";
-import { getMaterials } from "@/lib/api/materials";
-import { getProgress } from "@/lib/api/progress";
-import { useAuth } from "@/lib/auth/use-auth";
+import { getPreviewMaterialsData } from "@/lib/pre-integration/student-preview";
 import type { Material, ProgressSummary } from "@/types/student";
 
 type MaterialsData = {
@@ -22,38 +19,23 @@ type UseMaterialsDataResult = {
 };
 
 export function useMaterialsData(): UseMaterialsDataResult {
-  const { token, logout } = useAuth();
   const [data, setData] = useState<MaterialsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
-    if (!token) {
-      setData(null);
-      setErrorMessage("Sessão inválida. Faça login novamente.");
-      setIsLoading(false);
-      return;
-    }
-
     setIsLoading(true);
     setErrorMessage(null);
 
     try {
-      const [materials, progress] = await Promise.all([getMaterials(token), getProgress(token)]);
-      setData({ materials, progress });
-    } catch (error) {
-      if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
-        setErrorMessage("Sua sessão expirou. Faça login novamente.");
-        await logout();
-      } else {
-        setErrorMessage("Não foi possível carregar os materiais agora.");
-      }
-
+      setData(getPreviewMaterialsData());
+    } catch {
+      setErrorMessage("Não foi possível carregar os materiais de pré-integração.");
       setData(null);
     } finally {
       setIsLoading(false);
     }
-  }, [logout, token]);
+  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {

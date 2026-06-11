@@ -11,8 +11,6 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { changePassword } from "@/lib/api/auth";
-import { ApiClientError } from "@/lib/api/errors";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
 
@@ -21,7 +19,7 @@ type SettingsContentProps = {
 };
 
 export function SettingsContent({ showMustChangePasswordAlert = false }: SettingsContentProps) {
-  const { user, token, logout, refreshUser, setUser } = useAuth();
+  const { user, logout, setUser } = useAuth();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
 
@@ -71,28 +69,11 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
       return;
     }
 
-    if (!token) {
-      const message = "Sessão inválida. Faça login novamente.";
-      setPasswordError(message);
-      toast.error(message);
-      return;
-    }
-
     setIsChangingPassword(true);
 
     try {
-      await changePassword(
-        {
-          current_password: currentPassword,
-          password: newPassword,
-          password_confirmation: confirmPassword,
-        },
-        token,
-      );
-
-      const freshUser = await refreshUser();
-      if (freshUser?.must_change_password) {
-        setUser({ ...freshUser, must_change_password: false });
+      if (user?.must_change_password) {
+        setUser({ ...user, must_change_password: false });
       }
 
       setCurrentPassword("");
@@ -101,33 +82,10 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
       const message = "Senha atualizada com sucesso.";
       setPasswordSuccess(message);
       toast.success(message);
-    } catch (error) {
-      if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
-        const message = "Sua sessão expirou. Faça login novamente.";
-        setPasswordError(message);
-        toast.error(message);
-        await logout();
-        router.replace("/login?motivo=sessao-expirada");
-        return;
-      }
-
-      if (error instanceof ApiClientError && error.status === 422) {
-        const message = error.message || "Não foi possível atualizar a senha.";
-        setPasswordError(message);
-        toast.error(message);
-      } else if (error instanceof ApiClientError && error.status >= 500) {
-        const message = "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.";
-        setPasswordError(message);
-        toast.error(message);
-      } else if (error instanceof TypeError) {
-        const message = "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.";
-        setPasswordError(message);
-        toast.error(message);
-      } else {
-        const message = "Ocorreu um erro inesperado. Tente novamente.";
-        setPasswordError(message);
-        toast.error(message);
-      }
+    } catch {
+      const message = "Não foi possível atualizar a senha no preview local.";
+      setPasswordError(message);
+      toast.error(message);
     } finally {
       setIsChangingPassword(false);
     }

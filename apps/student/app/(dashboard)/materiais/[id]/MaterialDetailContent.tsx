@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { getMaterialById } from "@/lib/api/materials";
-import { ApiClientError } from "@/lib/api/errors";
-import { getProgress, updateMaterialProgress } from "@/lib/api/progress";
-import { useAuth } from "@/lib/auth/use-auth";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
+import {
+  getPreviewMaterialById,
+  getPreviewProgress,
+  markPreviewMaterialCompleted,
+} from "@/lib/pre-integration/student-preview";
 import type { Material, ProgressItem } from "@/types/student";
 
 type MaterialDetailContentProps = {
@@ -21,7 +22,7 @@ function getMaterialTypeLabel(type: Material["type"]) {
   if (type === "video") return "Vídeo";
   if (type === "pdf") return "PDF";
   if (type === "attachment") return "Anexo";
-  return "Material";
+  return "Link";
 }
 
 function resolveEmbedUrl(rawUrl: string): string | null {
@@ -53,14 +54,12 @@ function resolveEmbedUrl(rawUrl: string): string | null {
 }
 
 function getMaterialStatus(progress: ProgressItem | null) {
-  if (!progress) return { label: "Não iniciado", tone: "novo" as const };
-  if (progress.viewed) return { label: "Concluído", tone: "concluído" as const };
+  if (!progress) return { label: "Ainda não iniciado", tone: "novo" as const };
+  if (progress.viewed) return { label: "Material concluído", tone: "concluído" as const };
   return { label: "Em andamento", tone: "em-andamento" as const };
 }
 
 export function MaterialDetailContent({ materialId }: MaterialDetailContentProps) {
-  const { token, logout } = useAuth();
-
   const [material, setMaterial] = useState<Material | null>(null);
   const [progressItem, setProgressItem] = useState<ProgressItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -70,38 +69,30 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
   const [progressErrorMessage, setProgressErrorMessage] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
-    if (!token) {
-      setErrorMessage("Sessão inválida. Faça login novamente.");
-      setIsLoading(false);
-      return;
-    }
-
     setIsLoading(true);
     setErrorMessage(null);
     setProgressErrorMessage(null);
     setNotFound(false);
 
     try {
-      const [materialResponse, progress] = await Promise.all([
-        getMaterialById(materialId, token),
-        getProgress(token),
-      ]);
+      const materialResponse = getPreviewMaterialById(materialId);
 
+      if (!materialResponse) {
+        setNotFound(true);
+        setMaterial(null);
+        setProgressItem(null);
+        return;
+      }
+
+      const progress = getPreviewProgress();
       setMaterial(materialResponse);
       setProgressItem(progress.items.find((item) => item.material_id === materialId) ?? null);
-    } catch (error) {
-      if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
-        setErrorMessage("Sua sessão expirou. Faça login novamente.");
-        await logout();
-      } else if (error instanceof ApiClientError && error.status === 404) {
-        setNotFound(true);
-      } else {
-        setErrorMessage("Não foi possível carregar este material agora.");
-      }
+    } catch {
+      setErrorMessage("Não foi possível carregar este material de pré-integração.");
     } finally {
       setIsLoading(false);
     }
-  }, [logout, materialId, token]);
+  }, [materialId]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -117,21 +108,15 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
   const embedUrl = material?.url ? resolveEmbedUrl(material.url) : null;
 
   async function handleMarkAsCompleted() {
-    if (!token || !material) return;
+    if (!material) return;
 
     setIsUpdatingProgress(true);
     setProgressErrorMessage(null);
 
     try {
-      const updated = await updateMaterialProgress(material.id, token);
-      setProgressItem(updated);
-    } catch (error) {
-      if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
-        setProgressErrorMessage("Sua sessão expirou. Faça login novamente.");
-        await logout();
-      } else {
-        setProgressErrorMessage("Não foi possível atualizar o progresso agora.");
-      }
+      setProgressItem(markPreviewMaterialCompleted(material.id));
+    } catch {
+      setProgressErrorMessage("Não foi possível atualizar o progresso de pré-integração.");
     } finally {
       setIsUpdatingProgress(false);
     }
@@ -152,12 +137,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
           {errorMessage}
         </p>
-        <Button
-          type="button"
-          onClick={() => void fetchData()}
-          variant="outline"
-          className="mt-4"
-        >
+        <Button type="button" onClick={() => void fetchData()} variant="outline" className="mt-4">
           Tentar novamente
         </Button>
       </SurfaceCard>
@@ -169,7 +149,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
       <SurfaceCard>
         <h2 className="text-2xl">Material não encontrado</h2>
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Este material não está disponível no momento.
+          Este material não está disponível no preview local.
         </p>
         <Link href="/materiais" className="mt-4 inline-block text-sm font-semibold" style={{ color: "var(--color-primary)" }}>
           Voltar para materiais
@@ -238,9 +218,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
           Marque este material como concluído quando finalizar o conteúdo.
         </p>
 
-        {progressErrorMessage ? (
-          <Alert tone="error">{progressErrorMessage}</Alert>
-        ) : null}
+        {progressErrorMessage ? <Alert tone="error">{progressErrorMessage}</Alert> : null}
 
         <Button
           type="button"

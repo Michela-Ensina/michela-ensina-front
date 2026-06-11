@@ -104,9 +104,8 @@ export default function LoginPage() {
       const result = await login({ email: email.trim(), password });
 
       if (result.mustChangePassword) {
-        // TODO: validar com Marco se deve existir fluxo dedicado para troca obrigatoria de senha.
-        toast.info("Faça a troca da senha para continuar com segurança.");
-        router.replace("/configuracoes?aviso=troca-senha");
+        toast.info("Atualize sua senha em Configurações quando puder.");
+        router.replace("/dashboard");
         return;
       }
 
