@@ -56,7 +56,7 @@ export function StudentAppShell({ children, pathname }: StudentAppShellProps) {
 
       <div className="flex min-h-screen w-full flex-col px-4 pb-24 sm:px-6 lg:px-8 lg:pb-8">
         <StudentTopbar title={page.title} subtitle={page.subtitle} />
-        <main className="mx-auto w-full max-w-6xl flex-1">{children}</main>
+        <main className="w-full max-w-[1320px] flex-1">{children}</main>
       </div>
 
       <StudentMobileNav items={NAV_ITEMS} currentPath={pathname} />

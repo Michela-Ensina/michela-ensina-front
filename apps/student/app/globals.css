@@ -37,15 +37,19 @@
   --shadow-focus: 0 0 0 3px rgb(181 126 220 / 0.4);
   --login-glow-a: #211034;
   --login-glow-b: #0b0715;
+  --app-background:
+    radial-gradient(circle at 84% 0%, rgb(79 35 117 / 0.35) 0%, transparent 30%),
+    radial-gradient(circle at 0% 18%, rgb(79 110 232 / 0.12) 0%, transparent 26%),
+    linear-gradient(180deg, #120b1d 0%, var(--color-background) 42%);
 }
 
 :root[data-theme="light"],
 .light {
   color-scheme: light;
 
-  --color-background: #fffefa;
-  --color-surface: #f7f0fc;
-  --color-surface-soft: #efe3f8;
+  --color-background: #fbfafc;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f3eef7;
   --color-text: #2a173d;
   --color-text-muted: #64437f;
   --color-primary: #7e4ca5;
@@ -58,8 +62,11 @@
   --shadow-sm: 0 2px 10px rgb(27 18 41 / 0.08);
   --shadow-md: 0 10px 24px rgb(27 18 41 / 0.14);
   --shadow-focus: 0 0 0 3px rgb(126 76 165 / 0.25);
-  --login-glow-a: #dbc8ef;
-  --login-glow-b: #f7f0fc;
+  --login-glow-a: #ffffff;
+  --login-glow-b: #fbfafc;
+  --app-background:
+    radial-gradient(circle at 96% 0%, rgb(126 76 165 / 0.08) 0%, transparent 26%),
+    linear-gradient(180deg, #ffffff 0%, var(--color-background) 48%);
 }
 
 html,
@@ -107,8 +114,7 @@ body {
 }
 
 body {
-  background: radial-gradient(circle at top right, var(--login-glow-a) 0%, var(--login-glow-b) 45%),
-    var(--color-background);
+  background: var(--app-background), var(--color-background);
   color: var(--color-text);
   font-family: var(--font-body);
   line-height: 1.5;
