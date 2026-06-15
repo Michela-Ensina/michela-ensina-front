@@ -1,40 +1,14 @@
 import Link from "next/link";
-import { FileText, Link2, Paperclip, PlayCircle } from "lucide-react";
 
+import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/MaterialListItem";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { Material, ProgressItem } from "@/types/student";
-
-type MaterialStatus = {
-  label: string;
-  tone: "novo" | "em-andamento" | "concluído";
-};
 
 type MaterialCardProps = {
   material: Material;
   progressItems: ProgressItem[];
 };
-
-function getMaterialStatus(material: Material, progressItems: ProgressItem[]): MaterialStatus {
-  const progress = progressItems.find((item) => item.material_id === material.id);
-
-  if (!progress) {
-    return { label: "Ainda não iniciado", tone: "novo" };
-  }
-
-  if (progress.viewed) {
-    return { label: "Material concluído", tone: "concluído" };
-  }
-
-  return { label: "Em andamento", tone: "em-andamento" };
-}
-
-function getMaterialTypeMeta(type: Material["type"]) {
-  if (type === "video") return { label: "Vídeo", icon: PlayCircle };
-  if (type === "pdf") return { label: "PDF", icon: FileText };
-  if (type === "attachment") return { label: "Anexo", icon: Paperclip };
-  return { label: "Link", icon: Link2 };
-}
 
 export function MaterialCard({ material, progressItems }: MaterialCardProps) {
   const status = getMaterialStatus(material, progressItems);
@@ -42,7 +16,7 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
   const TypeIcon = type.icon;
 
   return (
-    <SurfaceCard className="flex min-h-56 flex-col">
+    <SurfaceCard className="flex min-h-56 flex-col border-transparent shadow-none">
       <div className="flex items-start justify-between gap-3">
         <div
           className="flex size-10 shrink-0 items-center justify-center rounded-xl"
