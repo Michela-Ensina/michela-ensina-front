@@ -2,9 +2,13 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ExternalLink, FileText, Link2, Paperclip, PlayCircle } from "lucide-react";
 
+import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/MaterialListItem";
+import { SectionHeader } from "@/components/student/SectionHeader";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import {
@@ -17,13 +21,6 @@ import type { Material, ProgressItem } from "@/types/student";
 type MaterialDetailContentProps = {
   materialId: string;
 };
-
-function getMaterialTypeLabel(type: Material["type"]) {
-  if (type === "video") return "Vídeo";
-  if (type === "pdf") return "PDF";
-  if (type === "attachment") return "Anexo";
-  return "Link";
-}
 
 function resolveEmbedUrl(rawUrl: string): string | null {
   try {
@@ -53,15 +50,16 @@ function resolveEmbedUrl(rawUrl: string): string | null {
   return null;
 }
 
-function getMaterialStatus(progress: ProgressItem | null) {
-  if (!progress) return { label: "Ainda não iniciado", tone: "novo" as const };
-  if (progress.viewed) return { label: "Material concluído", tone: "concluído" as const };
-  return { label: "Em andamento", tone: "em-andamento" as const };
+function MaterialFallbackIcon({ type }: { type: Material["type"] }) {
+  if (type === "pdf") return <FileText size={28} aria-hidden="true" />;
+  if (type === "attachment") return <Paperclip size={28} aria-hidden="true" />;
+  return <Link2 size={28} aria-hidden="true" />;
 }
 
 export function MaterialDetailContent({ materialId }: MaterialDetailContentProps) {
   const [material, setMaterial] = useState<Material | null>(null);
   const [progressItem, setProgressItem] = useState<ProgressItem | null>(null);
+  const [progressPercentage, setProgressPercentage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
@@ -86,6 +84,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
 
       const progress = getPreviewProgress();
       setMaterial(materialResponse);
+      setProgressPercentage(progress.percentage);
       setProgressItem(progress.items.find((item) => item.material_id === materialId) ?? null);
     } catch {
       setErrorMessage("Não foi possível carregar este material de pré-integração.");
@@ -104,7 +103,11 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
     };
   }, [fetchData]);
 
-  const status = useMemo(() => getMaterialStatus(progressItem), [progressItem]);
+  const status = useMemo(() => {
+    if (!material) return { label: "Ainda não iniciado", tone: "novo" as const };
+    return getMaterialStatus(material, progressItem ? [progressItem] : []);
+  }, [material, progressItem]);
+  const type = material ? getMaterialTypeMeta(material.type) : null;
   const embedUrl = material?.url ? resolveEmbedUrl(material.url) : null;
 
   async function handleMarkAsCompleted() {
@@ -123,11 +126,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
   }
 
   if (isLoading) {
-    return (
-      <SurfaceCard>
-        <p style={{ color: "var(--color-text-muted)" }}>Carregando material...</p>
-      </SurfaceCard>
-    );
+    return <SurfaceCard className="min-h-80 animate-pulse" />;
   }
 
   if (errorMessage) {
@@ -144,14 +143,15 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
     );
   }
 
-  if (notFound || !material) {
+  if (notFound || !material || !type) {
     return (
       <SurfaceCard>
         <h2 className="text-2xl">Material não encontrado</h2>
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
           Este material não está disponível no preview local.
         </p>
-        <Link href="/materiais" className="mt-4 inline-block text-sm font-semibold" style={{ color: "var(--color-primary)" }}>
+        <Link href="/materiais" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--color-primary)" }}>
+          <ArrowLeft size={16} aria-hidden="true" />
           Voltar para materiais
         </Link>
       </SurfaceCard>
@@ -159,33 +159,27 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
   }
 
   return (
-    <div className="space-y-4">
-      <SurfaceCard>
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.08em]" style={{ color: "var(--color-text-muted)" }}>
-              {getMaterialTypeLabel(material.type)}
-            </p>
-            <h2 className="mt-2 text-2xl">{material.title}</h2>
-          </div>
+    <div className="grid gap-5 xl:grid-cols-[1fr_360px]">
+      <section className="space-y-5">
+        <Link href="/materiais" className="inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--color-text-muted)" }}>
+          <ArrowLeft size={16} aria-hidden="true" />
+          Materiais
+        </Link>
 
-          <StatusBadge label={status.label} tone={status.tone} />
-        </div>
+        <SectionHeader
+          title={material.title}
+          description={material.description ?? "Material disponível para estudo."}
+          action={<StatusBadge label={status.label} tone={status.tone} />}
+        />
 
-        <p className="mt-3 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          {material.description ?? "Este material ainda não possui uma descrição detalhada."}
-        </p>
-      </SurfaceCard>
-
-      <SurfaceCard>
-        <h3 className="text-xl">Conteúdo</h3>
-
-        {!material.url ? (
-          <p className="mt-3 text-sm" style={{ color: "var(--color-text-muted)" }}>
-            Material em preparação.
-          </p>
-        ) : material.type === "video" && embedUrl ? (
-          <div className="mt-3 overflow-hidden rounded-xl border" style={{ borderColor: "var(--color-border)" }}>
+        <div
+          className="overflow-hidden rounded-[var(--radius-lg)] border"
+          style={{
+            borderColor: "var(--color-border)",
+            backgroundColor: "color-mix(in oklab, var(--color-surface) 72%, transparent)",
+          }}
+        >
+          {material.type === "video" && embedUrl ? (
             <iframe
               title={material.title}
               src={embedUrl}
@@ -193,50 +187,86 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
+          ) : (
+            <div className="grid min-h-[360px] place-items-center p-8 text-center">
+              <div>
+                <div
+                  className="mx-auto grid size-16 place-items-center rounded-2xl"
+                  style={{
+                    backgroundColor: "color-mix(in oklab, var(--color-primary) 14%, transparent)",
+                    color: "var(--color-primary)",
+                  }}
+                >
+                  <MaterialFallbackIcon type={material.type} />
+                </div>
+                <h3 className="mt-4 text-2xl">{type.label}</h3>
+                <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--color-text-muted)" }}>
+                  Este conteúdo abre em uma referência externa enquanto a integração final não está conectada.
+                </p>
+                <a href={material.url} target="_blank" rel="noreferrer" className="mt-5 inline-block">
+                  <Button type="button" variant="primary" className="gap-2">
+                    Abrir material
+                    <ExternalLink size={16} aria-hidden="true" />
+                  </Button>
+                </a>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <aside className="space-y-4 xl:sticky xl:top-24 xl:self-start">
+        <SurfaceCard>
+          <p className="flex items-center gap-2 text-sm font-semibold">
+            <PlayCircle size={16} aria-hidden="true" />
+            Informações do material
+          </p>
+          <dl className="mt-4 space-y-3 text-sm">
+            <div className="flex items-center justify-between gap-4">
+              <dt style={{ color: "var(--color-text-muted)" }}>Tipo</dt>
+              <dd className="font-semibold">{type.label}</dd>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <dt style={{ color: "var(--color-text-muted)" }}>Status</dt>
+              <dd><StatusBadge label={status.label} tone={status.tone} /></dd>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <dt style={{ color: "var(--color-text-muted)" }}>Ordem</dt>
+              <dd className="font-semibold">{material.order}</dd>
+            </div>
+          </dl>
+        </SurfaceCard>
+
+        <SurfaceCard>
+          <p className="text-sm font-semibold">Progresso da jornada</p>
+          <div className="mt-4">
+            <ProgressBar value={progressPercentage} label="Conclusão geral" />
           </div>
-        ) : (
-          <div className="mt-3 rounded-xl border p-4" style={{ borderColor: "var(--color-border)" }}>
-            <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-              Este conteúdo está disponível por link externo.
-            </p>
-            <a
-              href={material.url}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-3 inline-block text-sm font-semibold"
-              style={{ color: "var(--color-primary)" }}
-            >
-              Abrir material
-            </a>
-          </div>
-        )}
-      </SurfaceCard>
+          <p className="mt-3 text-sm" style={{ color: "var(--color-text-muted)" }}>
+            Marque este conteúdo como concluído quando terminar de estudar.
+          </p>
 
-      <SurfaceCard>
-        <h3 className="text-xl">Progresso</h3>
-        <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Marque este material como concluído quando finalizar o conteúdo.
-        </p>
+          {progressErrorMessage ? <Alert tone="error">{progressErrorMessage}</Alert> : null}
 
-        {progressErrorMessage ? <Alert tone="error">{progressErrorMessage}</Alert> : null}
-
-        <Button
-          type="button"
-          onClick={() => void handleMarkAsCompleted()}
-          disabled={isUpdatingProgress || status.tone === "concluído"}
-          variant="outline"
-          className="mt-4"
-          style={{
-            opacity: isUpdatingProgress || status.tone === "concluído" ? 0.7 : 1,
-          }}
-        >
-          {isUpdatingProgress
-            ? "Atualizando progresso..."
-            : status.tone === "concluído"
-              ? "Material concluído"
-              : "Marcar como concluído"}
-        </Button>
-      </SurfaceCard>
+          <Button
+            type="button"
+            onClick={() => void handleMarkAsCompleted()}
+            disabled={isUpdatingProgress || status.tone === "concluído"}
+            variant={status.tone === "concluído" ? "outline" : "primary"}
+            fullWidth
+            className="mt-4"
+            style={{
+              opacity: isUpdatingProgress || status.tone === "concluído" ? 0.75 : 1,
+            }}
+          >
+            {isUpdatingProgress
+              ? "Atualizando..."
+              : status.tone === "concluído"
+                ? "Material concluído"
+                : "Marcar como concluído"}
+          </Button>
+        </SurfaceCard>
+      </aside>
     </div>
   );
 }

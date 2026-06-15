@@ -1,25 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle2, Circle, Clock3 } from "lucide-react";
+import { CheckCircle2, CircleDashed, Clock3 } from "lucide-react";
 
-import { MetricTile } from "@/components/student/MetricTile";
+import { getMaterialStatus, MaterialListItem } from "@/components/student/MaterialListItem";
+import { SectionHeader } from "@/components/student/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { useProgressData } from "@/lib/student/use-progress-data";
+import { useMaterialsData } from "@/lib/student/use-materials-data";
 
 export function ProgressContent() {
-  const { data, isLoading, errorMessage, isEmpty, refetch } = useProgressData();
+  const { data, isLoading, errorMessage, isEmpty, refetch } = useMaterialsData();
 
   if (isLoading) {
     return (
-      <div className="grid gap-4 lg:grid-cols-3">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <SurfaceCard key={index} className="min-h-32 animate-pulse" />
-        ))}
+      <div className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
+        <SurfaceCard className="min-h-72 animate-pulse" />
+        <SurfaceCard className="min-h-72 animate-pulse" />
       </div>
     );
   }
@@ -38,7 +37,7 @@ export function ProgressContent() {
     );
   }
 
-  if (!data || isEmpty) {
+  if (!data || isEmpty || !data.progress) {
     return (
       <EmptyState
         title="Ainda não há progresso registrado"
@@ -47,82 +46,95 @@ export function ProgressContent() {
     );
   }
 
-  const pendingCount = Math.max(data.total_materials - data.viewed_count, 0);
+  const completedMaterials = data.materials.filter((material) => getMaterialStatus(material, data.progress.items).tone === "concluído");
+  const openMaterials = data.materials.filter((material) => getMaterialStatus(material, data.progress.items).tone !== "concluído");
 
   return (
-    <div className="space-y-5">
-      <SurfaceCard>
-        <div className="grid gap-5 lg:grid-cols-[1.3fr_0.9fr] lg:items-end">
-          <div>
-            <h2 className="text-2xl">Seu progresso</h2>
-            <p className="mt-2 text-sm sm:text-base" style={{ color: "var(--color-text-muted)" }}>
-              Acompanhe o que já foi concluído e o que ainda está aberto para estudo.
-            </p>
+    <div className="grid gap-5 xl:grid-cols-[360px_1fr]">
+      <aside className="space-y-4">
+        <SurfaceCard>
+          <p className="text-sm font-semibold">Resumo da jornada</p>
+          <div className="mt-5">
+            <ProgressBar value={data.progress.percentage} label="Progresso geral" />
           </div>
-          <ProgressBar value={data.percentage} label="Progresso geral" />
-        </div>
-      </SurfaceCard>
-
-      <div className="grid gap-4 md:grid-cols-3">
-        <MetricTile
-          label="Percentual concluído"
-          value={`${data.percentage}%`}
-          detail="Atualizado a partir dos materiais marcados"
-          icon={<CheckCircle2 size={19} aria-hidden="true" />}
-        />
-        <MetricTile
-          label="Concluídos"
-          value={`${data.viewed_count}`}
-          detail={`${data.total_materials} materiais no total`}
-          icon={<Circle size={19} aria-hidden="true" />}
-        />
-        <MetricTile
-          label="Pendentes"
-          value={`${pendingCount}`}
-          detail="Continue no seu ritmo"
-          icon={<Clock3 size={19} aria-hidden="true" />}
-        />
-      </div>
-
-      <SurfaceCard>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h3 className="text-xl">Itens de progresso</h3>
-            <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
-              Status individual dos materiais liberados.
-            </p>
+          <div className="mt-5 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border p-3" style={{ borderColor: "var(--color-border)" }}>
+              <p className="text-2xl font-bold">{completedMaterials.length}</p>
+              <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>Concluídos</p>
+            </div>
+            <div className="rounded-2xl border p-3" style={{ borderColor: "var(--color-border)" }}>
+              <p className="text-2xl font-bold">{openMaterials.length}</p>
+              <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>Em aberto</p>
+            </div>
           </div>
-          <Link href="/materiais">
+        </SurfaceCard>
+
+        <div className="rounded-[var(--radius-lg)] border p-4" style={{ borderColor: "var(--color-border)" }}>
+          <p className="flex items-center gap-2 text-sm font-semibold">
+            <Clock3 size={16} aria-hidden="true" />
+            Próximo passo
+          </p>
+          <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
+            Continue pelo primeiro material em aberto para manter o ritmo sem procurar demais.
+          </p>
+          <Link href="/materiais" className="mt-4 inline-block">
             <Button type="button" variant="outline" size="sm">
-              Ir para materiais
+              Abrir materiais
             </Button>
           </Link>
         </div>
+      </aside>
 
-        <ul className="mt-4 divide-y" style={{ borderColor: "var(--color-border)" }}>
-          {data.items.map((item) => {
-            const title = item.material?.title ?? `Material ${item.material_id.slice(0, 8)}`;
+      <section
+        className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
+        style={{
+          borderColor: "var(--color-border)",
+          backgroundColor: "color-mix(in oklab, var(--color-surface) 68%, transparent)",
+        }}
+      >
+        <div className="border-b py-4" style={{ borderColor: "var(--color-border)" }}>
+          <SectionHeader
+            title="Linha de progresso"
+            description="Materiais agrupados pelo estado atual para uma leitura rápida da sua jornada."
+          />
+        </div>
 
-            return (
-              <li key={item.id} className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
-                <div>
-                  <p className="text-sm font-semibold">{title}</p>
-                  <p className="mt-1 text-xs" style={{ color: "var(--color-text-muted)" }}>
-                    {item.viewed_at
-                      ? `Concluído em ${new Date(item.viewed_at).toLocaleDateString("pt-BR")}`
-                      : "Aguardando conclusão"}
-                  </p>
-                </div>
+        <div className="py-4">
+          <div className="flex items-center gap-2">
+            <CircleDashed size={16} aria-hidden="true" />
+            <h3 className="text-lg">Em aberto</h3>
+          </div>
+          <div className="mt-1">
+            {openMaterials.length > 0 ? (
+              openMaterials.map((material) => (
+                <MaterialListItem key={material.id} material={material} progressItems={data.progress.items} density="compact" />
+              ))
+            ) : (
+              <p className="py-4 text-sm" style={{ color: "var(--color-text-muted)" }}>
+                Não há materiais em aberto no momento.
+              </p>
+            )}
+          </div>
+        </div>
 
-                <StatusBadge
-                  label={item.viewed ? "Material concluído" : "Em andamento"}
-                  tone={item.viewed ? "concluído" : "em-andamento"}
-                />
-              </li>
-            );
-          })}
-        </ul>
-      </SurfaceCard>
+        <div className="border-t py-4" style={{ borderColor: "var(--color-border)" }}>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 size={16} aria-hidden="true" />
+            <h3 className="text-lg">Concluídos</h3>
+          </div>
+          <div className="mt-1">
+            {completedMaterials.length > 0 ? (
+              completedMaterials.map((material) => (
+                <MaterialListItem key={material.id} material={material} progressItems={data.progress.items} density="compact" />
+              ))
+            ) : (
+              <p className="py-4 text-sm" style={{ color: "var(--color-text-muted)" }}>
+                Os materiais concluídos aparecerão aqui.
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
