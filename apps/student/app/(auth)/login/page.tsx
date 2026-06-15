@@ -10,6 +10,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 import { ApiClientError } from "@/lib/api/errors";
@@ -24,6 +25,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [motivo] = useState(() => {
@@ -222,13 +224,14 @@ export default function LoginPage() {
 
           <div className="block">
             <Label htmlFor="password">Senha</Label>
-            <Input
+            <PasswordInput
               id="password"
-              type="password"
               name="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="Digite sua senha"
+              isVisible={isPasswordVisible}
+              onToggleVisibility={() => setIsPasswordVisible((current) => !current)}
             />
           </div>
 

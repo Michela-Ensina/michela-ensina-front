@@ -8,8 +8,8 @@ import { toast } from "sonner";
 import { SectionHeader } from "@/components/student/SectionHeader";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { SettingRow } from "@/components/ui/SettingRow";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
@@ -19,6 +19,14 @@ import { useTheme } from "@/lib/theme/use-theme";
 
 type SettingsContentProps = {
   showMustChangePasswordAlert?: boolean;
+};
+
+type PasswordVisibilityField = "current" | "next" | "confirm";
+
+const hiddenPasswordFields: Record<PasswordVisibilityField, boolean> = {
+  current: false,
+  next: false,
+  confirm: false,
 };
 
 export function SettingsContent({ showMustChangePasswordAlert = false }: SettingsContentProps) {
@@ -34,6 +42,7 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
+  const [visiblePasswordFields, setVisiblePasswordFields] = useState(hiddenPasswordFields);
 
   const userStatusLabel = useMemo(() => {
     if (!user) return "Sem dados";
@@ -43,11 +52,20 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
   function openPasswordDialog() {
     setPasswordError(null);
     setPasswordSuccess(null);
+    setVisiblePasswordFields(hiddenPasswordFields);
     setIsPasswordDialogOpen(true);
   }
 
   function closePasswordDialog() {
+    setVisiblePasswordFields(hiddenPasswordFields);
     setIsPasswordDialogOpen(false);
+  }
+
+  function togglePasswordVisibility(field: PasswordVisibilityField) {
+    setVisiblePasswordFields((current) => ({
+      ...current,
+      [field]: !current[field],
+    }));
   }
 
   async function handleChangePassword(event: React.FormEvent<HTMLFormElement>) {
@@ -251,16 +269,37 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
             <form className="mt-5 grid gap-3" onSubmit={handleChangePassword}>
               <div className="block">
                 <Label htmlFor="currentPassword">Senha atual</Label>
-                <Input id="currentPassword" type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} placeholder="Senha atual" />
+                <PasswordInput
+                  id="currentPassword"
+                  value={currentPassword}
+                  onChange={(event) => setCurrentPassword(event.target.value)}
+                  placeholder="Senha atual"
+                  isVisible={visiblePasswordFields.current}
+                  onToggleVisibility={() => togglePasswordVisibility("current")}
+                />
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="block">
                   <Label htmlFor="newPassword">Nova senha</Label>
-                  <Input id="newPassword" type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} placeholder="Nova senha" />
+                  <PasswordInput
+                    id="newPassword"
+                    value={newPassword}
+                    onChange={(event) => setNewPassword(event.target.value)}
+                    placeholder="Nova senha"
+                    isVisible={visiblePasswordFields.next}
+                    onToggleVisibility={() => togglePasswordVisibility("next")}
+                  />
                 </div>
                 <div className="block">
                   <Label htmlFor="confirmPassword">Confirmar senha</Label>
-                  <Input id="confirmPassword" type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} placeholder="Confirmar senha" />
+                  <PasswordInput
+                    id="confirmPassword"
+                    value={confirmPassword}
+                    onChange={(event) => setConfirmPassword(event.target.value)}
+                    placeholder="Confirmar senha"
+                    isVisible={visiblePasswordFields.confirm}
+                    onToggleVisibility={() => togglePasswordVisibility("confirm")}
+                  />
                 </div>
               </div>
 
