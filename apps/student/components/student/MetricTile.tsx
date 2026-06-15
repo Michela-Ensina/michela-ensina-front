@@ -23,8 +23,9 @@ export function MetricTile({ label, value, detail, icon }: MetricTileProps) {
           <div
             className="flex size-10 shrink-0 items-center justify-center rounded-xl"
             style={{
-              backgroundColor: "color-mix(in oklab, var(--color-primary) 14%, transparent)",
-              color: "var(--color-primary)",
+              background:
+                "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 28%, transparent), color-mix(in oklab, var(--color-accent) 22%, transparent))",
+              color: "var(--color-accent-soft)",
             }}
           >
             {icon}

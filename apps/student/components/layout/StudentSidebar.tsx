@@ -28,8 +28,9 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
         isCollapsed ? "lg:w-20 xl:w-72" : "w-72",
       )}
       style={{
-        borderColor: "color-mix(in oklab, var(--color-border) 70%, transparent)",
-        backgroundColor: "color-mix(in oklab, var(--color-surface) 72%, var(--color-background))",
+        borderColor: "color-mix(in oklab, var(--color-border) 64%, var(--color-accent))",
+        background:
+          "linear-gradient(180deg, color-mix(in oklab, var(--color-surface) 86%, var(--color-primary)) 0%, color-mix(in oklab, var(--color-background) 88%, var(--color-accent)) 100%)",
       }}
     >
       <div className="mb-7 flex items-center justify-between gap-3 px-2">
@@ -73,11 +74,11 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
                 isActive ? "font-semibold" : "hover:opacity-100",
               )}
               style={{
-                color: isActive ? "var(--color-text)" : "var(--color-text-muted)",
+                color: isActive ? "var(--color-brand-cream)" : "var(--color-text-muted)",
                 backgroundColor: isActive
-                  ? "color-mix(in oklab, var(--color-primary) 18%, transparent)"
+                  ? "color-mix(in oklab, var(--color-secondary) 72%, var(--color-accent))"
                   : "transparent",
-                boxShadow: isActive ? "inset 0 0 0 1px color-mix(in oklab, var(--color-primary) 24%, transparent)" : "none",
+                boxShadow: isActive ? "var(--shadow-brand)" : "none",
               }}
             >
               <Icon size={17} aria-hidden="true" />

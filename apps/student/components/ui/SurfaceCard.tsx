@@ -12,8 +12,9 @@ export function SurfaceCard({ className, ...props }: SurfaceCardProps) {
         className,
       )}
       style={{
-        backgroundColor: "var(--color-surface)",
-        borderColor: "var(--color-border)",
+        background:
+          "linear-gradient(145deg, color-mix(in oklab, var(--color-surface) 92%, var(--color-brand-lilac)), var(--color-surface))",
+        borderColor: "color-mix(in oklab, var(--color-border) 78%, var(--color-accent-soft))",
         backdropFilter: "blur(2px)",
       }}
       {...props}

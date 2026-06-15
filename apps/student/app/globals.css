@@ -10,6 +10,14 @@
   --font-body: "Mulish", "Segoe UI", sans-serif;
   --font-display: "Cherry Swash", "Times New Roman", serif;
 
+  --me-blue-dark: #233695;
+  --me-purple-dark: #4d2375;
+  --me-purple: #7e4ca5;
+  --me-lavender: #b57edc;
+  --me-lilac: #dbb5ee;
+  --me-lilac-light: #e4cef4;
+  --me-white: #fffefa;
+
   --me-dark-base: #0f0a18;
   --me-dark-raised: #180f24;
   --me-dark-overlay: #1f1430;
@@ -24,6 +32,10 @@
   --color-primary: #b57edc;
   --color-secondary: #9b64c4;
   --color-accent: #4f6ee8;
+  --color-accent-soft: var(--me-lilac);
+  --color-brand-blue: #6f8cff;
+  --color-brand-lilac: var(--me-lilac);
+  --color-brand-cream: var(--me-white);
   --color-border: var(--me-dark-border);
   --color-selection-bg: #4d2375;
   --color-selection-text: #e4cef4;
@@ -34,13 +46,14 @@
 
   --shadow-sm: 0 2px 8px rgb(10 5 20 / 0.45);
   --shadow-md: 0 8px 24px rgb(10 5 20 / 0.65);
+  --shadow-brand: 0 18px 42px rgb(77 35 117 / 0.24);
   --shadow-focus: 0 0 0 3px rgb(181 126 220 / 0.4);
   --login-glow-a: #211034;
   --login-glow-b: #0b0715;
   --app-background:
-    radial-gradient(circle at 84% 0%, rgb(79 35 117 / 0.35) 0%, transparent 30%),
-    radial-gradient(circle at 0% 18%, rgb(79 110 232 / 0.12) 0%, transparent 26%),
-    linear-gradient(180deg, #120b1d 0%, var(--color-background) 42%);
+    linear-gradient(135deg, rgb(77 35 117 / 0.22) 0%, transparent 34%),
+    linear-gradient(215deg, rgb(35 54 149 / 0.2) 0%, transparent 38%),
+    linear-gradient(180deg, #150d22 0%, var(--color-background) 46%);
 }
 
 :root[data-theme="light"],
@@ -55,18 +68,24 @@
   --color-primary: #7e4ca5;
   --color-secondary: #5f3490;
   --color-accent: #2f49bd;
+  --color-accent-soft: var(--me-lavender);
+  --color-brand-blue: var(--me-blue-dark);
+  --color-brand-lilac: var(--me-lilac);
+  --color-brand-cream: var(--me-white);
   --color-border: #d7c4ea;
   --color-selection-bg: #dbb5ee;
   --color-selection-text: #2a173d;
 
   --shadow-sm: 0 2px 10px rgb(27 18 41 / 0.08);
   --shadow-md: 0 10px 24px rgb(27 18 41 / 0.14);
+  --shadow-brand: 0 16px 34px rgb(77 35 117 / 0.12);
   --shadow-focus: 0 0 0 3px rgb(126 76 165 / 0.25);
   --login-glow-a: #ffffff;
   --login-glow-b: #fbfafc;
   --app-background:
-    radial-gradient(circle at 96% 0%, rgb(126 76 165 / 0.08) 0%, transparent 26%),
-    linear-gradient(180deg, #ffffff 0%, var(--color-background) 48%);
+    linear-gradient(135deg, rgb(228 206 244 / 0.68) 0%, transparent 34%),
+    linear-gradient(215deg, rgb(35 54 149 / 0.08) 0%, transparent 38%),
+    linear-gradient(180deg, #fffefa 0%, var(--color-background) 52%);
 }
 
 html,
