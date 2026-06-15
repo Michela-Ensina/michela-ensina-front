@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { StudentShell } from "@/components/layout/StudentShell";
+import { StudentLayout } from "@/components/layout/StudentLayout";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -83,7 +83,7 @@ export default function PrimeiroAcessoPage() {
   }
 
   return (
-    <StudentShell>
+    <StudentLayout>
       <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
         <h1 className="text-3xl">Primeiro acesso</h1>
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
@@ -118,6 +118,6 @@ export default function PrimeiroAcessoPage() {
           </Link>
         </div>
       </SurfaceCard>
-    </StudentShell>
+    </StudentLayout>
   );
 }

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 
-import { StudentAppShell } from "@/components/layout/StudentAppShell";
+import { StudentAppLayout } from "@/components/layout/StudentAppLayout";
 import { useAuth } from "@/lib/auth/use-auth";
 
 type DashboardLayoutProps = {
@@ -35,5 +35,5 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     return null;
   }
 
-  return <StudentAppShell pathname={pathname}>{children}</StudentAppShell>;
+  return <StudentAppLayout pathname={pathname}>{children}</StudentAppLayout>;
 }

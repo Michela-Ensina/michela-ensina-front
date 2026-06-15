@@ -5,7 +5,7 @@ import { StudentMobileNav } from "@/components/layout/StudentMobileNav";
 import { StudentSidebar, type StudentNavItem } from "@/components/layout/StudentSidebar";
 import { StudentTopbar } from "@/components/layout/StudentTopbar";
 
-type StudentAppShellProps = {
+type StudentAppLayoutProps = {
   children: ReactNode;
   pathname: string;
 };
@@ -47,7 +47,7 @@ function getPageMeta(pathname: string) {
   return PAGE_META[pathname] ?? PAGE_META["/dashboard"];
 }
 
-export function StudentAppShell({ children, pathname }: StudentAppShellProps) {
+export function StudentAppLayout({ children, pathname }: StudentAppLayoutProps) {
   const page = getPageMeta(pathname);
 
   return (
