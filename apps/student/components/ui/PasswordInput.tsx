@@ -29,7 +29,7 @@ export function PasswordInput({
       <button
         type="button"
         disabled={disabled}
-        className="absolute right-2 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-lg transition-colors duration-200 disabled:pointer-events-none disabled:opacity-60"
+        className="student-action student-hover-surface absolute right-2 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-lg disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60"
         style={{ color: "var(--color-text-muted)" }}
         aria-label={isVisible ? "Esconder senha" : "Mostrar senha"}
         onClick={onToggleVisibility}

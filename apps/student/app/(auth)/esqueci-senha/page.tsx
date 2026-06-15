@@ -85,7 +85,7 @@ export default function EsqueciSenhaPage() {
         </form>
 
         <div className="mt-4 text-sm">
-          <Link href="/login" style={{ color: "var(--color-text-muted)" }}>
+          <Link href="/login" className="student-text-action rounded-lg px-2 py-1" style={{ color: "var(--color-text-muted)" }}>
             Voltar para login
           </Link>
         </div>

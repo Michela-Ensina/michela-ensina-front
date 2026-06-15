@@ -39,7 +39,7 @@ export function AccountMenu() {
   return (
     <details className="group relative">
       <summary
-        className="flex min-h-11 cursor-pointer list-none items-center gap-3 rounded-2xl border px-2.5 py-2 transition-colors marker:hidden"
+        className="student-action student-hover-surface flex min-h-11 list-none items-center gap-3 rounded-2xl border px-2.5 py-2 marker:hidden"
         style={{
           borderColor: "color-mix(in oklab, var(--color-border) 70%, transparent)",
           backgroundColor: "color-mix(in oklab, var(--color-surface) 82%, transparent)",
@@ -80,7 +80,7 @@ export function AccountMenu() {
 
         <Link
           href="/configuracoes"
-          className="flex min-h-10 items-center gap-2 rounded-xl px-3 text-sm font-semibold"
+          className="student-action student-hover-surface flex min-h-10 items-center gap-2 rounded-xl px-3 text-sm font-semibold"
           style={{ color: "var(--color-text)" }}
         >
           <Settings size={16} aria-hidden="true" />

@@ -52,9 +52,8 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
       <div
         className="flex size-10 items-center justify-center rounded-xl"
         style={{
-          background:
-            "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 20%, transparent), color-mix(in oklab, var(--color-brand-blue) 14%, transparent))",
-          color: "var(--color-accent-soft)",
+          backgroundColor: "color-mix(in oklab, var(--color-primary) 16%, var(--color-surface))",
+          color: "var(--color-primary)",
         }}
       >
         <TypeIcon size={18} aria-hidden="true" />
@@ -78,13 +77,12 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
       <Link
         href={`/materiais/${material.id}`}
         className={cn(
-          "inline-flex min-h-9 items-center justify-center rounded-xl px-3 text-sm font-semibold",
+          "student-action inline-flex min-h-9 items-center justify-center rounded-xl px-3 text-sm font-semibold",
           density === "compact" ? "col-start-2 justify-self-start" : "",
         )}
         style={{
           color: "var(--color-brand-cream)",
-          background:
-            "linear-gradient(135deg, color-mix(in oklab, var(--color-secondary) 72%, var(--color-accent)), color-mix(in oklab, var(--color-primary) 62%, var(--color-brand-blue)))",
+          backgroundColor: "var(--color-secondary)",
         }}
       >
         {status.tone === "concluído" ? "Revisar" : "Continuar"}

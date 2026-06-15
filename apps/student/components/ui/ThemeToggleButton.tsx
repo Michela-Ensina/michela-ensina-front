@@ -25,7 +25,7 @@ export function ThemeToggleButton({
         type="button"
         onClick={onToggle}
         aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
-        className={className}
+        className={`student-action student-hover-surface ${className ?? ""}`}
         style={{
           display: "inline-flex",
           width: 44,
@@ -56,7 +56,7 @@ export function ThemeToggleButton({
       type="button"
       onClick={onToggle}
       aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
-      className={className}
+      className={`student-action student-hover-surface ${className ?? ""}`}
       style={{
         position: "relative",
         display: "inline-flex",

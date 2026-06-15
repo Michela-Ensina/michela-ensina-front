@@ -22,8 +22,7 @@ export function ProgressBar({ value, label }: ProgressBarProps) {
           className="h-full rounded-full transition-[width] duration-200 ease-out"
           style={{
             width: `${normalizedValue}%`,
-            background:
-              "linear-gradient(90deg, var(--color-primary), var(--color-accent-soft), var(--color-brand-blue))",
+            backgroundColor: "var(--color-primary)",
           }}
         />
       </div>

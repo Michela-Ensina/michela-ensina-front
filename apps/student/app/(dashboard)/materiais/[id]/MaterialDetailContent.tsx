@@ -150,7 +150,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
           Este material não está disponível no preview local.
         </p>
-        <Link href="/materiais" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--color-primary)" }}>
+        <Link href="/materiais" className="student-text-action mt-4 inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold" style={{ color: "var(--color-primary)" }}>
           <ArrowLeft size={16} aria-hidden="true" />
           Voltar para materiais
         </Link>
@@ -161,7 +161,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
   return (
     <div className="grid gap-5 xl:grid-cols-[1fr_360px]">
       <section className="space-y-5">
-        <Link href="/materiais" className="inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--color-text-muted)" }}>
+        <Link href="/materiais" className="student-text-action inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold" style={{ color: "var(--color-text-muted)" }}>
           <ArrowLeft size={16} aria-hidden="true" />
           Materiais
         </Link>
@@ -176,8 +176,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
           className="overflow-hidden rounded-[var(--radius-lg)] border"
           style={{
             borderColor: "color-mix(in oklab, var(--color-border) 70%, var(--color-accent-soft))",
-            background:
-              "linear-gradient(135deg, color-mix(in oklab, var(--color-surface) 82%, var(--color-brand-lilac)), color-mix(in oklab, var(--color-surface) 82%, var(--color-brand-blue)))",
+            backgroundColor: "color-mix(in oklab, var(--color-surface) 88%, var(--color-brand-lilac))",
           }}
         >
           {material.type === "video" && embedUrl ? (
@@ -194,9 +193,8 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
                 <div
                   className="mx-auto grid size-16 place-items-center rounded-2xl"
                   style={{
-                    background:
-                      "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 24%, transparent), color-mix(in oklab, var(--color-brand-blue) 18%, transparent))",
-                    color: "var(--color-accent-soft)",
+                    backgroundColor: "color-mix(in oklab, var(--color-primary) 16%, var(--color-surface))",
+                    color: "var(--color-primary)",
                   }}
                 >
                   <MaterialFallbackIcon type={material.type} />

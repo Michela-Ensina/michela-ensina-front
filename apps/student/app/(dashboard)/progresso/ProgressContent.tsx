@@ -86,8 +86,7 @@ export function ProgressContent() {
           className="rounded-[var(--radius-lg)] border p-4"
           style={{
             borderColor: "color-mix(in oklab, var(--color-border) 70%, var(--color-accent-soft))",
-            background:
-              "linear-gradient(145deg, color-mix(in oklab, var(--color-surface) 78%, var(--color-brand-lilac)), color-mix(in oklab, var(--color-surface) 86%, var(--color-brand-blue)))",
+            backgroundColor: "color-mix(in oklab, var(--color-surface) 88%, var(--color-brand-lilac))",
           }}
         >
           <p className="flex items-center gap-2 text-sm font-semibold">

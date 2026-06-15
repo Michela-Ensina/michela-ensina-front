@@ -251,7 +251,7 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
               </div>
               <button
                 type="button"
-                className="grid size-9 shrink-0 place-items-center rounded-xl border"
+                className="student-action student-hover-surface grid size-9 shrink-0 place-items-center rounded-xl border"
                 style={{
                   borderColor: "var(--color-border)",
                   color: "var(--color-text-muted)",

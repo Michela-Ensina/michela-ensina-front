@@ -28,7 +28,7 @@
   --color-surface: var(--me-dark-raised);
   --color-surface-soft: var(--me-dark-overlay);
   --color-text: #ede8f7;
-  --color-text-muted: #9878bc;
+  --color-text-muted: #b497d2;
   --color-primary: #b57edc;
   --color-secondary: #9b64c4;
   --color-accent: #4f6ee8;
@@ -51,8 +51,6 @@
   --login-glow-a: #211034;
   --login-glow-b: #0b0715;
   --app-background:
-    linear-gradient(135deg, rgb(77 35 117 / 0.22) 0%, transparent 34%),
-    linear-gradient(215deg, rgb(35 54 149 / 0.2) 0%, transparent 38%),
     linear-gradient(180deg, #150d22 0%, var(--color-background) 46%);
 }
 
@@ -83,8 +81,6 @@
   --login-glow-a: #ffffff;
   --login-glow-b: #fbfafc;
   --app-background:
-    linear-gradient(135deg, rgb(228 206 244 / 0.68) 0%, transparent 34%),
-    linear-gradient(215deg, rgb(35 54 149 / 0.08) 0%, transparent 38%),
     linear-gradient(180deg, #fffefa 0%, var(--color-background) 52%);
 }
 
@@ -157,6 +153,45 @@ p {
 
 a {
   color: var(--color-primary);
+}
+
+.student-action {
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease,
+    filter 180ms ease,
+    transform 180ms ease;
+}
+
+.student-text-action {
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    filter 180ms ease;
+}
+
+@media (hover: hover) {
+  .student-action:hover {
+    filter: brightness(1.08);
+  }
+
+  .student-hover-surface:hover {
+    background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
+    border-color: color-mix(in oklab, var(--color-primary) 52%, var(--color-border));
+  }
+
+  .student-text-action:hover {
+    color: var(--color-text);
+    background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
+  }
+}
+
+.student-action:active {
+  transform: translateY(1px);
 }
 
 :focus-visible {

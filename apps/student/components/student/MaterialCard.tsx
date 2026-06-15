@@ -21,9 +21,8 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
         <div
           className="flex size-10 shrink-0 items-center justify-center rounded-xl"
           style={{
-            background:
-              "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 24%, transparent), color-mix(in oklab, var(--color-brand-blue) 18%, transparent))",
-            color: "var(--color-accent-soft)",
+            backgroundColor: "color-mix(in oklab, var(--color-primary) 16%, var(--color-surface))",
+            color: "var(--color-primary)",
           }}
         >
           <TypeIcon size={18} aria-hidden="true" />
@@ -41,7 +40,11 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
         </p>
       </div>
 
-      <Link href={`/materiais/${material.id}`} className="mt-5 text-sm font-semibold" style={{ color: "var(--color-accent-soft)" }}>
+      <Link
+        href={`/materiais/${material.id}`}
+        className="student-text-action -mx-2 mt-5 w-fit rounded-lg px-2 py-1 text-sm font-semibold"
+        style={{ color: "var(--color-primary)" }}
+      >
         {status.tone === "concluído" ? "Revisar material" : "Continuar estudando"}
       </Link>
     </SurfaceCard>

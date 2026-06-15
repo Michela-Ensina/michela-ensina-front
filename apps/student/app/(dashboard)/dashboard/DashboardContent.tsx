@@ -58,10 +58,9 @@ export function DashboardContent() {
       <section
         className="rounded-[var(--radius-lg)] border px-5 py-5 sm:px-6"
         style={{
-          borderColor: "color-mix(in oklab, var(--color-border) 60%, var(--color-accent-soft))",
-          background:
-            "linear-gradient(135deg, color-mix(in oklab, var(--color-secondary) 34%, var(--color-surface)) 0%, color-mix(in oklab, var(--color-surface) 78%, var(--color-brand-blue)) 54%, color-mix(in oklab, var(--color-surface) 86%, var(--color-brand-lilac)) 100%)",
-          boxShadow: "var(--shadow-brand)",
+          borderColor: "color-mix(in oklab, var(--color-border) 76%, var(--color-primary))",
+          backgroundColor: "color-mix(in oklab, var(--color-surface) 86%, var(--color-secondary))",
+          boxShadow: "var(--shadow-md)",
         }}
       >
         <div className="grid gap-6 lg:grid-cols-[1.5fr_0.8fr] lg:items-end">
@@ -85,7 +84,7 @@ export function DashboardContent() {
               className="mt-4 grid grid-cols-3 overflow-hidden rounded-2xl border text-center"
               style={{
                 borderColor: "color-mix(in oklab, var(--color-border) 70%, var(--color-accent-soft))",
-                backgroundColor: "color-mix(in oklab, var(--color-background) 52%, transparent)",
+                backgroundColor: "color-mix(in oklab, var(--color-background) 58%, var(--color-surface))",
               }}
             >
               <div className="px-3 py-3">
@@ -117,7 +116,7 @@ export function DashboardContent() {
               title="Continuar estudando"
               description="O próximo conteúdo aparece em destaque para manter o fluxo de estudo simples."
               action={
-                <Link href="/materiais" className="text-sm font-semibold" style={{ color: "var(--color-primary)" }}>
+                <Link href="/materiais" className="student-text-action rounded-lg px-2 py-1 text-sm font-semibold" style={{ color: "var(--color-primary)" }}>
                   Ver biblioteca
                 </Link>
               }
@@ -126,9 +125,8 @@ export function DashboardContent() {
             <div
               className="grid gap-0 overflow-hidden rounded-[var(--radius-lg)] border lg:grid-cols-[1fr_0.9fr]"
               style={{
-                borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
-                background:
-                  "linear-gradient(135deg, color-mix(in oklab, var(--color-surface) 84%, var(--color-brand-lilac)), color-mix(in oklab, var(--color-surface) 82%, var(--color-brand-blue)))",
+                borderColor: "color-mix(in oklab, var(--color-border) 82%, var(--color-primary))",
+                backgroundColor: "color-mix(in oklab, var(--color-surface) 88%, var(--color-secondary))",
               }}
             >
               <div className="p-5 sm:p-6">
@@ -152,7 +150,7 @@ export function DashboardContent() {
                 className="border-t p-5 lg:border-l lg:border-t-0"
                 style={{
                   borderColor: "var(--color-border)",
-                  backgroundColor: "color-mix(in oklab, var(--color-surface-soft) 58%, var(--color-brand-lilac))",
+                  backgroundColor: "color-mix(in oklab, var(--color-surface-soft) 86%, var(--color-secondary))",
                 }}
               >
                 <p className="flex items-center gap-2 text-sm font-semibold">

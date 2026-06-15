@@ -4,14 +4,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils/cn";
 
 const buttonVariants = cva(
-  "inline-flex cursor-pointer min-h-10 items-center justify-center rounded-[12px] px-4 py-2 text-sm font-semibold transition-opacity focus-visible:outline-none disabled:pointer-events-none disabled:opacity-70",
+  "student-action inline-flex min-h-10 items-center justify-center rounded-[12px] px-4 py-2 text-sm font-semibold focus-visible:outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70",
   {
     variants: {
       variant: {
         primary: "text-[var(--color-background)]",
-        outline: "border bg-transparent text-[var(--color-text)]",
-        ghost: "bg-transparent text-[var(--color-text-muted)]",
-        danger: "border",
+        outline: "student-hover-surface border bg-transparent text-[var(--color-text)]",
+        ghost: "student-hover-surface bg-transparent text-[var(--color-text-muted)]",
+        danger: "student-hover-surface border",
       },
       size: {
         default: "",
@@ -48,9 +48,7 @@ export function Button({
   };
 
   if (variant === "primary") {
-    mergedStyle.background =
-      mergedStyle.background ??
-      "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 86%, var(--color-brand-lilac)), color-mix(in oklab, var(--color-secondary) 74%, var(--color-brand-blue)))";
+    mergedStyle.backgroundColor = mergedStyle.backgroundColor ?? "var(--color-secondary)";
     mergedStyle.color = mergedStyle.color ?? "#fffefa";
   }
 

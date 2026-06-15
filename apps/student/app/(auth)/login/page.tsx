@@ -253,14 +253,14 @@ export default function LoginPage() {
         <div className="mt-6 flex flex-col items-center gap-3 text-sm">
           <Link
             href="/esqueci-senha"
-            className="font-semibold"
+            className="student-text-action rounded-lg px-2 py-1 font-semibold"
             style={{ color: "var(--color-text-muted)" }}
           >
             Esqueci minha senha
           </Link>
           <Link
             href="/primeiro-acesso"
-            className="font-semibold"
+            className="student-text-action rounded-lg px-2 py-1 font-semibold"
             style={{ color: "var(--color-primary)" }}
           >
             Primeiro acesso

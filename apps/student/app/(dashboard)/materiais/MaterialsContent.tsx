@@ -90,9 +90,8 @@ export function MaterialsContent() {
       <section
         className="rounded-[var(--radius-lg)] border p-5 sm:p-6"
         style={{
-          borderColor: "color-mix(in oklab, var(--color-border) 68%, var(--color-accent-soft))",
-          background:
-            "linear-gradient(135deg, color-mix(in oklab, var(--color-surface) 84%, var(--color-brand-lilac)), color-mix(in oklab, var(--color-surface) 86%, var(--color-brand-blue)))",
+          borderColor: "color-mix(in oklab, var(--color-border) 82%, var(--color-primary))",
+          backgroundColor: "color-mix(in oklab, var(--color-surface) 90%, var(--color-brand-lilac))",
         }}
       >
         <div className="grid gap-5 lg:grid-cols-[1fr_0.55fr] lg:items-end">

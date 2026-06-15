@@ -12,9 +12,8 @@ export function StudentTopbar({ title, subtitle }: StudentTopbarProps) {
     <header
       className="sticky top-0 z-20 -mx-4 mb-6 border-b px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       style={{
-        borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
-        background:
-          "linear-gradient(90deg, color-mix(in oklab, var(--color-background) 90%, var(--color-secondary)) 0%, color-mix(in oklab, var(--color-background) 88%, var(--color-accent)) 100%)",
+        borderColor: "color-mix(in oklab, var(--color-border) 80%, var(--color-primary))",
+        backgroundColor: "color-mix(in oklab, var(--color-background) 92%, var(--color-surface))",
       }}
     >
       <div className="flex items-center justify-between gap-4">
