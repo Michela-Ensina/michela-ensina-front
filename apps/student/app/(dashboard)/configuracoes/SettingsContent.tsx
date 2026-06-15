@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Moon, ShieldCheck, UserRound } from "lucide-react";
+import { LogOut, Moon, ShieldCheck, UserRound, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { SectionHeader } from "@/components/student/SectionHeader";
@@ -33,11 +33,22 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
 
   const userStatusLabel = useMemo(() => {
     if (!user) return "Sem dados";
     return user.is_active ? "Ativo" : "Inativo";
   }, [user]);
+
+  function openPasswordDialog() {
+    setPasswordError(null);
+    setPasswordSuccess(null);
+    setIsPasswordDialogOpen(true);
+  }
+
+  function closePasswordDialog() {
+    setIsPasswordDialogOpen(false);
+  }
 
   async function handleChangePassword(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -85,6 +96,7 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
       const message = "Senha atualizada com sucesso.";
       setPasswordSuccess(message);
       toast.success(message);
+      closePasswordDialog();
     } catch {
       const message = "Não foi possível atualizar a senha no preview local.";
       setPasswordError(message);
@@ -173,41 +185,14 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
           </div>
         </SettingRow>
 
-        <div className="py-5">
-          <div className="flex items-start gap-3">
-            <ShieldCheck size={18} aria-hidden="true" style={{ color: "var(--color-primary)" }} />
-            <div>
-              <h2 className="text-xl">Trocar senha</h2>
-              <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
-                Mantenha uma senha forte com pelo menos 8 caracteres.
-              </p>
-            </div>
-          </div>
+        <SettingRow title="Senha" description="Abra o formulário apenas quando precisar trocar sua senha.">
+          <Button type="button" variant="outline" className="gap-2" onClick={openPasswordDialog}>
+            <ShieldCheck size={17} aria-hidden="true" />
+            Trocar senha
+          </Button>
+        </SettingRow>
 
-          {passwordError ? <Alert tone="error">{passwordError}</Alert> : null}
-          {passwordSuccess ? <Alert tone="success">{passwordSuccess}</Alert> : null}
-
-          <form className="mt-5 grid gap-3 lg:grid-cols-3" onSubmit={handleChangePassword}>
-            <div className="block">
-              <Label htmlFor="currentPassword">Senha atual</Label>
-              <Input id="currentPassword" type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} placeholder="Senha atual" />
-            </div>
-            <div className="block">
-              <Label htmlFor="newPassword">Nova senha</Label>
-              <Input id="newPassword" type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} placeholder="Nova senha" />
-            </div>
-            <div className="block">
-              <Label htmlFor="confirmPassword">Confirmar senha</Label>
-              <Input id="confirmPassword" type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} placeholder="Confirmar senha" />
-            </div>
-
-            <div className="lg:col-span-3">
-              <Button type="submit" disabled={isChangingPassword} variant="primary" style={{ opacity: isChangingPassword ? 0.7 : 1 }}>
-                {isChangingPassword ? "Atualizando..." : "Atualizar senha"}
-              </Button>
-            </div>
-          </form>
-        </div>
+        {passwordSuccess ? <Alert tone="success">{passwordSuccess}</Alert> : null}
 
         <SettingRow title="Sessão" description="Também disponível no menu da conta no topo.">
           <Button
@@ -223,6 +208,74 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
           </Button>
         </SettingRow>
       </section>
+
+      {isPasswordDialogOpen ? (
+        <div
+          className="fixed inset-0 z-50 grid place-items-center px-4 py-8"
+          style={{ backgroundColor: "rgb(10 5 20 / 0.72)" }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="password-dialog-title"
+        >
+          <div
+            className="w-full max-w-xl rounded-[var(--radius-lg)] border p-5 shadow-[var(--shadow-md)] sm:p-6"
+            style={{
+              borderColor: "var(--color-border)",
+              backgroundColor: "var(--color-surface)",
+            }}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 id="password-dialog-title" className="text-2xl">Trocar senha</h2>
+                <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
+                  Use uma senha forte e diferente da senha atual.
+                </p>
+              </div>
+              <button
+                type="button"
+                className="grid size-9 shrink-0 place-items-center rounded-xl border"
+                style={{
+                  borderColor: "var(--color-border)",
+                  color: "var(--color-text-muted)",
+                  backgroundColor: "color-mix(in oklab, var(--color-surface-soft) 70%, transparent)",
+                }}
+                aria-label="Fechar troca de senha"
+                onClick={closePasswordDialog}
+              >
+                <X size={17} aria-hidden="true" />
+              </button>
+            </div>
+
+            {passwordError ? <Alert tone="error">{passwordError}</Alert> : null}
+
+            <form className="mt-5 grid gap-3" onSubmit={handleChangePassword}>
+              <div className="block">
+                <Label htmlFor="currentPassword">Senha atual</Label>
+                <Input id="currentPassword" type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} placeholder="Senha atual" />
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="block">
+                  <Label htmlFor="newPassword">Nova senha</Label>
+                  <Input id="newPassword" type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} placeholder="Nova senha" />
+                </div>
+                <div className="block">
+                  <Label htmlFor="confirmPassword">Confirmar senha</Label>
+                  <Input id="confirmPassword" type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} placeholder="Confirmar senha" />
+                </div>
+              </div>
+
+              <div className="mt-2 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                <Button type="button" variant="outline" onClick={closePasswordDialog}>
+                  Cancelar
+                </Button>
+                <Button type="submit" disabled={isChangingPassword} variant="primary" style={{ opacity: isChangingPassword ? 0.7 : 1 }}>
+                  {isChangingPassword ? "Atualizando..." : "Atualizar senha"}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

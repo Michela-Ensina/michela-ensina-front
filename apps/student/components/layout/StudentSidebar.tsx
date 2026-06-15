@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
+import { PanelLeftClose, PanelLeftOpen, type LucideIcon } from "lucide-react";
+import { useState } from "react";
 
 import { StudentBrandMark } from "@/components/brand/StudentBrandMark";
 import { cn } from "@/lib/utils/cn";
@@ -16,19 +19,41 @@ type StudentSidebarProps = {
 };
 
 export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
     <aside
-      className="hidden w-72 shrink-0 border-r px-4 py-6 lg:flex lg:flex-col"
+      className={cn(
+        "hidden shrink-0 border-r px-4 py-6 transition-[width] duration-200 ease-out lg:flex lg:flex-col",
+        isCollapsed ? "lg:w-20 xl:w-72" : "w-72",
+      )}
       style={{
         borderColor: "color-mix(in oklab, var(--color-border) 70%, transparent)",
         backgroundColor: "color-mix(in oklab, var(--color-surface) 72%, var(--color-background))",
       }}
     >
-      <div className="mb-7 flex items-center gap-3 px-2">
-        <StudentBrandMark variant="horizontal" className="h-8 w-auto" />
+      <div className="mb-7 flex items-center justify-between gap-3 px-2">
+        <StudentBrandMark
+          variant={isCollapsed ? "symbol" : "horizontal"}
+          className={cn("h-8 w-auto", isCollapsed ? "xl:hidden" : "")}
+        />
+        {isCollapsed ? <StudentBrandMark variant="horizontal" className="hidden h-8 w-auto xl:block" /> : null}
+        <button
+          type="button"
+          onClick={() => setIsCollapsed((current) => !current)}
+          className="hidden size-9 place-items-center rounded-xl border lg:grid xl:hidden"
+          style={{
+            borderColor: "var(--color-border)",
+            color: "var(--color-text-muted)",
+            backgroundColor: "color-mix(in oklab, var(--color-surface-soft) 70%, transparent)",
+          }}
+          aria-label={isCollapsed ? "Expandir navegação" : "Recolher navegação"}
+        >
+          {isCollapsed ? <PanelLeftOpen size={17} aria-hidden="true" /> : <PanelLeftClose size={17} aria-hidden="true" />}
+        </button>
       </div>
 
-      <p className="mb-2 px-3 text-xs font-bold" style={{ color: "var(--color-text-muted)" }}>
+      <p className={cn("mb-2 px-3 text-xs font-bold", isCollapsed ? "lg:hidden xl:block" : "")} style={{ color: "var(--color-text-muted)" }}>
         Área do aluno
       </p>
       <nav className="flex flex-col gap-1.5">
@@ -44,6 +69,7 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
               href={item.href}
               className={cn(
                 "flex min-h-10 items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition-colors",
+                isCollapsed ? "lg:justify-center lg:px-2 xl:justify-start xl:px-3" : "",
                 isActive ? "font-semibold" : "hover:opacity-100",
               )}
               style={{
@@ -55,7 +81,7 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
               }}
             >
               <Icon size={17} aria-hidden="true" />
-              {item.label}
+              <span className={cn(isCollapsed ? "lg:sr-only xl:not-sr-only" : "")}>{item.label}</span>
             </Link>
           );
         })}

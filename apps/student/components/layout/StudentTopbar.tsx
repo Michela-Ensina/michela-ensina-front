@@ -10,10 +10,10 @@ type StudentTopbarProps = {
 export function StudentTopbar({ title, subtitle }: StudentTopbarProps) {
   return (
     <header
-      className="sticky top-0 z-20 mb-6 border-b px-1 py-4 backdrop-blur"
+      className="sticky top-0 z-20 -mx-4 mb-6 border-b px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       style={{
         borderColor: "color-mix(in oklab, var(--color-border) 75%, transparent)",
-        backgroundColor: "color-mix(in oklab, var(--color-background) 82%, transparent)",
+        backgroundColor: "color-mix(in oklab, var(--color-background) 94%, var(--color-surface))",
       }}
     >
       <div className="flex items-center justify-between gap-4">
