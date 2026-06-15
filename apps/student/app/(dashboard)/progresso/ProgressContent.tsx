@@ -46,8 +46,9 @@ export function ProgressContent() {
     );
   }
 
-  const completedMaterials = data.materials.filter((material) => getMaterialStatus(material, data.progress.items).tone === "concluído");
-  const openMaterials = data.materials.filter((material) => getMaterialStatus(material, data.progress.items).tone !== "concluído");
+  const progress = data.progress;
+  const completedMaterials = data.materials.filter((material) => getMaterialStatus(material, progress.items).tone === "concluído");
+  const openMaterials = data.materials.filter((material) => getMaterialStatus(material, progress.items).tone !== "concluído");
 
   return (
     <div className="grid gap-5 xl:grid-cols-[360px_1fr]">
@@ -55,7 +56,7 @@ export function ProgressContent() {
         <SurfaceCard>
           <p className="text-sm font-semibold">Resumo da jornada</p>
           <div className="mt-5">
-            <ProgressBar value={data.progress.percentage} label="Progresso geral" />
+            <ProgressBar value={progress.percentage} label="Progresso geral" />
           </div>
           <div className="mt-5 grid grid-cols-2 gap-3">
             <div className="rounded-2xl border p-3" style={{ borderColor: "var(--color-border)" }}>
@@ -107,7 +108,7 @@ export function ProgressContent() {
           <div className="mt-1">
             {openMaterials.length > 0 ? (
               openMaterials.map((material) => (
-                <MaterialListItem key={material.id} material={material} progressItems={data.progress.items} density="compact" />
+                <MaterialListItem key={material.id} material={material} progressItems={progress.items} density="compact" />
               ))
             ) : (
               <p className="py-4 text-sm" style={{ color: "var(--color-text-muted)" }}>
@@ -125,7 +126,7 @@ export function ProgressContent() {
           <div className="mt-1">
             {completedMaterials.length > 0 ? (
               completedMaterials.map((material) => (
-                <MaterialListItem key={material.id} material={material} progressItems={data.progress.items} density="compact" />
+                <MaterialListItem key={material.id} material={material} progressItems={progress.items} density="compact" />
               ))
             ) : (
               <p className="py-4 text-sm" style={{ color: "var(--color-text-muted)" }}>
