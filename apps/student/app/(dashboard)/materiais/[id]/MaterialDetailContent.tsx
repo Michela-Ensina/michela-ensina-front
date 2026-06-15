@@ -175,8 +175,9 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
         <div
           className="overflow-hidden rounded-[var(--radius-lg)] border"
           style={{
-            borderColor: "var(--color-border)",
-            backgroundColor: "color-mix(in oklab, var(--color-surface) 72%, transparent)",
+            borderColor: "color-mix(in oklab, var(--color-border) 70%, var(--color-accent-soft))",
+            background:
+              "linear-gradient(135deg, color-mix(in oklab, var(--color-surface) 82%, var(--color-brand-lilac)), color-mix(in oklab, var(--color-surface) 82%, var(--color-brand-blue)))",
           }}
         >
           {material.type === "video" && embedUrl ? (
@@ -193,8 +194,9 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
                 <div
                   className="mx-auto grid size-16 place-items-center rounded-2xl"
                   style={{
-                    backgroundColor: "color-mix(in oklab, var(--color-primary) 14%, transparent)",
-                    color: "var(--color-primary)",
+                    background:
+                      "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 24%, transparent), color-mix(in oklab, var(--color-brand-blue) 18%, transparent))",
+                    color: "var(--color-accent-soft)",
                   }}
                 >
                   <MaterialFallbackIcon type={material.type} />

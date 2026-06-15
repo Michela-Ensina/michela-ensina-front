@@ -90,8 +90,9 @@ export function MaterialsContent() {
       <section
         className="rounded-[var(--radius-lg)] border p-5 sm:p-6"
         style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "color-mix(in oklab, var(--color-surface) 78%, transparent)",
+          borderColor: "color-mix(in oklab, var(--color-border) 68%, var(--color-accent-soft))",
+          background:
+            "linear-gradient(135deg, color-mix(in oklab, var(--color-surface) 84%, var(--color-brand-lilac)), color-mix(in oklab, var(--color-surface) 86%, var(--color-brand-blue)))",
         }}
       >
         <div className="grid gap-5 lg:grid-cols-[1fr_0.55fr] lg:items-end">
@@ -105,14 +106,26 @@ export function MaterialsContent() {
 
       <div className="grid gap-5 xl:grid-cols-[0.82fr_1.18fr]">
         <aside className="space-y-4">
-          <div className="rounded-[var(--radius-lg)] border p-4" style={{ borderColor: "var(--color-border)" }}>
+          <div
+            className="rounded-[var(--radius-lg)] border p-4"
+            style={{
+              borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
+              backgroundColor: "color-mix(in oklab, var(--color-surface) 78%, transparent)",
+            }}
+          >
             <p className="text-sm font-semibold">Status</p>
             <div className="mt-3">
               <SegmentedControl label="Filtrar por status" options={statusFilters} value={statusFilter} onChange={setStatusFilter} />
             </div>
           </div>
 
-          <div className="rounded-[var(--radius-lg)] border p-4" style={{ borderColor: "var(--color-border)" }}>
+          <div
+            className="rounded-[var(--radius-lg)] border p-4"
+            style={{
+              borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-brand-blue))",
+              backgroundColor: "color-mix(in oklab, var(--color-surface) 78%, transparent)",
+            }}
+          >
             <p className="text-sm font-semibold">Tipo de material</p>
             <div className="mt-3">
               <SegmentedControl label="Filtrar por tipo" options={typeFilters} value={typeFilter} onChange={setTypeFilter} />
@@ -132,8 +145,8 @@ export function MaterialsContent() {
         <section
           className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
           style={{
-            borderColor: "var(--color-border)",
-            backgroundColor: "color-mix(in oklab, var(--color-surface) 68%, transparent)",
+            borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
+            backgroundColor: "color-mix(in oklab, var(--color-surface) 76%, transparent)",
           }}
         >
           <div className="flex flex-col gap-2 border-b py-4 sm:flex-row sm:items-end sm:justify-between" style={{ borderColor: "var(--color-border)" }}>

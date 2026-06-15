@@ -59,18 +59,37 @@ export function ProgressContent() {
             <ProgressBar value={progress.percentage} label="Progresso geral" />
           </div>
           <div className="mt-5 grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border p-3" style={{ borderColor: "var(--color-border)" }}>
+            <div
+              className="rounded-2xl border p-3"
+              style={{
+                borderColor: "color-mix(in oklab, var(--color-border) 72%, #48b08c)",
+                backgroundColor: "color-mix(in oklab, #48b08c 12%, transparent)",
+              }}
+            >
               <p className="text-2xl font-bold">{completedMaterials.length}</p>
               <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>Concluídos</p>
             </div>
-            <div className="rounded-2xl border p-3" style={{ borderColor: "var(--color-border)" }}>
+            <div
+              className="rounded-2xl border p-3"
+              style={{
+                borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-brand-blue))",
+                backgroundColor: "color-mix(in oklab, var(--color-brand-blue) 12%, transparent)",
+              }}
+            >
               <p className="text-2xl font-bold">{openMaterials.length}</p>
               <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>Em aberto</p>
             </div>
           </div>
         </SurfaceCard>
 
-        <div className="rounded-[var(--radius-lg)] border p-4" style={{ borderColor: "var(--color-border)" }}>
+        <div
+          className="rounded-[var(--radius-lg)] border p-4"
+          style={{
+            borderColor: "color-mix(in oklab, var(--color-border) 70%, var(--color-accent-soft))",
+            background:
+              "linear-gradient(145deg, color-mix(in oklab, var(--color-surface) 78%, var(--color-brand-lilac)), color-mix(in oklab, var(--color-surface) 86%, var(--color-brand-blue)))",
+          }}
+        >
           <p className="flex items-center gap-2 text-sm font-semibold">
             <Clock3 size={16} aria-hidden="true" />
             Próximo passo
@@ -89,8 +108,8 @@ export function ProgressContent() {
       <section
         className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
         style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "color-mix(in oklab, var(--color-surface) 68%, transparent)",
+          borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
+          backgroundColor: "color-mix(in oklab, var(--color-surface) 76%, transparent)",
         }}
       >
         <div className="border-b py-4" style={{ borderColor: "var(--color-border)" }}>

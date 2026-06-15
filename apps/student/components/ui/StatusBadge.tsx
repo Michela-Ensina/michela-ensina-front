@@ -18,16 +18,16 @@ const toneClasses: Record<StatusBadgeTone, string> = {
 
 const toneStyles: Record<StatusBadgeTone, CSSProperties> = {
   novo: {
-    backgroundColor: "color-mix(in oklab, var(--color-primary) 16%, transparent)",
-    color: "var(--color-primary)",
+    backgroundColor: "color-mix(in oklab, var(--color-brand-lilac) 22%, transparent)",
+    color: "color-mix(in oklab, var(--color-primary) 84%, var(--color-text))",
   },
   "em-andamento": {
-    backgroundColor: "color-mix(in oklab, var(--color-accent) 18%, transparent)",
-    color: "color-mix(in oklab, var(--color-accent) 78%, var(--color-text))",
+    backgroundColor: "color-mix(in oklab, var(--color-brand-blue) 20%, transparent)",
+    color: "color-mix(in oklab, var(--color-brand-blue) 76%, var(--color-text))",
   },
   concluído: {
-    backgroundColor: "color-mix(in oklab, #48b08c 20%, transparent)",
-    color: "color-mix(in oklab, #2f9d77 78%, var(--color-text))",
+    backgroundColor: "color-mix(in oklab, #48b08c 22%, var(--color-surface))",
+    color: "color-mix(in oklab, #43c99a 72%, var(--color-text))",
   },
   bloqueado: {
     backgroundColor: "color-mix(in oklab, var(--color-text-muted) 20%, transparent)",

@@ -50,7 +50,7 @@ export function Button({
   if (variant === "primary") {
     mergedStyle.background =
       mergedStyle.background ??
-      "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 85%, #7e4ca5), color-mix(in oklab, var(--color-secondary) 80%, #4d2375))";
+      "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 86%, var(--color-brand-lilac)), color-mix(in oklab, var(--color-secondary) 74%, var(--color-brand-blue)))";
     mergedStyle.color = mergedStyle.color ?? "#fffefa";
   }
 

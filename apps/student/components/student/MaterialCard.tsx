@@ -16,13 +16,14 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
   const TypeIcon = type.icon;
 
   return (
-    <SurfaceCard className="flex min-h-56 flex-col border-transparent shadow-none">
+    <SurfaceCard className="flex min-h-56 flex-col shadow-none">
       <div className="flex items-start justify-between gap-3">
         <div
           className="flex size-10 shrink-0 items-center justify-center rounded-xl"
           style={{
-            backgroundColor: "color-mix(in oklab, var(--color-primary) 14%, transparent)",
-            color: "var(--color-primary)",
+            background:
+              "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 24%, transparent), color-mix(in oklab, var(--color-brand-blue) 18%, transparent))",
+            color: "var(--color-accent-soft)",
           }}
         >
           <TypeIcon size={18} aria-hidden="true" />
@@ -40,7 +41,7 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
         </p>
       </div>
 
-      <Link href={`/materiais/${material.id}`} className="mt-5 text-sm font-semibold" style={{ color: "var(--color-primary)" }}>
+      <Link href={`/materiais/${material.id}`} className="mt-5 text-sm font-semibold" style={{ color: "var(--color-accent-soft)" }}>
         {status.tone === "concluído" ? "Revisar material" : "Continuar estudando"}
       </Link>
     </SurfaceCard>

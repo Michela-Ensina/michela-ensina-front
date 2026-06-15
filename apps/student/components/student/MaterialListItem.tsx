@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FileText, Link2, Paperclip, PlayCircle } from "lucide-react";
 
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { cn } from "@/lib/utils/cn";
 import type { Material, ProgressItem } from "@/types/student";
 
 type MaterialTone = "novo" | "em-andamento" | "concluído";
@@ -40,14 +41,20 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
 
   return (
     <article
-      className="grid gap-3 border-b py-4 last:border-b-0 sm:grid-cols-[auto_1fr_auto] sm:items-center"
+      className={cn(
+        "grid gap-3 border-b py-4 last:border-b-0",
+        density === "compact"
+          ? "grid-cols-[auto_1fr] items-start"
+          : "sm:grid-cols-[auto_1fr_auto] sm:items-center",
+      )}
       style={{ borderColor: "color-mix(in oklab, var(--color-border) 72%, transparent)" }}
     >
       <div
         className="flex size-10 items-center justify-center rounded-xl"
         style={{
-          backgroundColor: "color-mix(in oklab, var(--color-primary) 13%, transparent)",
-          color: "var(--color-primary)",
+          background:
+            "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 20%, transparent), color-mix(in oklab, var(--color-brand-blue) 14%, transparent))",
+          color: "var(--color-accent-soft)",
         }}
       >
         <TypeIcon size={18} aria-hidden="true" />
@@ -70,10 +77,14 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
 
       <Link
         href={`/materiais/${material.id}`}
-        className="inline-flex min-h-9 items-center justify-center rounded-xl px-3 text-sm font-semibold"
+        className={cn(
+          "inline-flex min-h-9 items-center justify-center rounded-xl px-3 text-sm font-semibold",
+          density === "compact" ? "col-start-2 justify-self-start" : "",
+        )}
         style={{
-          color: "var(--color-primary)",
-          backgroundColor: "color-mix(in oklab, var(--color-primary) 10%, transparent)",
+          color: "var(--color-brand-cream)",
+          background:
+            "linear-gradient(135deg, color-mix(in oklab, var(--color-secondary) 72%, var(--color-accent)), color-mix(in oklab, var(--color-primary) 62%, var(--color-brand-blue)))",
         }}
       >
         {status.tone === "concluído" ? "Revisar" : "Continuar"}
