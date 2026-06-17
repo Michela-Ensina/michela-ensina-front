@@ -16,7 +16,7 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
   const TypeIcon = type.icon;
 
   return (
-    <SurfaceCard className="flex min-h-56 flex-col shadow-none">
+    <SurfaceCard className="student-hover-surface flex min-h-56 flex-col shadow-none transition-colors duration-200">
       <div className="flex items-start justify-between gap-3">
         <div
           className="flex size-10 shrink-0 items-center justify-center rounded-xl"

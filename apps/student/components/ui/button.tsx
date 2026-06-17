@@ -8,7 +8,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "text-[var(--color-background)]",
+        primary: "student-primary-action text-[var(--color-background)]",
         outline: "student-hover-surface border bg-transparent text-[var(--color-text)]",
         ghost: "student-hover-surface bg-transparent text-[var(--color-text-muted)]",
         danger: "student-hover-surface border",

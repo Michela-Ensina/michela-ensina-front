@@ -41,7 +41,7 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
         <button
           type="button"
           onClick={() => setIsCollapsed((current) => !current)}
-          className="hidden size-9 place-items-center rounded-xl border lg:grid xl:hidden"
+          className="student-action student-hover-surface hidden size-9 place-items-center rounded-xl border lg:grid xl:hidden"
           style={{
             borderColor: "var(--color-border)",
             color: "var(--color-text-muted)",

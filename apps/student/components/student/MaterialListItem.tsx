@@ -42,10 +42,10 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
   return (
     <article
       className={cn(
-        "grid gap-3 border-b py-4 last:border-b-0",
+        "grid gap-3 border-b py-4 transition-colors duration-200 last:border-b-0",
         density === "compact"
           ? "grid-cols-[auto_1fr] items-start"
-          : "sm:grid-cols-[auto_1fr_auto] sm:items-center",
+          : "student-hover-surface -mx-2 rounded-xl px-2 sm:grid-cols-[auto_1fr_auto] sm:items-center",
       )}
       style={{ borderColor: "color-mix(in oklab, var(--color-border) 72%, transparent)" }}
     >
@@ -77,7 +77,7 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
       <Link
         href={`/materiais/${material.id}`}
         className={cn(
-          "student-action inline-flex min-h-9 items-center justify-center rounded-xl px-3 text-sm font-semibold",
+          "student-action student-primary-action inline-flex min-h-9 items-center justify-center rounded-xl px-3 text-sm font-semibold",
           density === "compact" ? "col-start-2 justify-self-start" : "",
         )}
         style={{

@@ -162,7 +162,6 @@ a {
     border-color 180ms ease,
     box-shadow 180ms ease,
     color 180ms ease,
-    filter 180ms ease,
     transform 180ms ease;
 }
 
@@ -170,17 +169,27 @@ a {
   cursor: pointer;
   transition:
     background-color 180ms ease,
-    color 180ms ease,
-    filter 180ms ease;
+    color 180ms ease;
+}
+
+.student-input-control {
+  background-color: var(--color-surface-soft);
+  border-color: var(--color-border);
+  color: var(--color-text);
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
 }
 
 @media (hover: hover) {
-  .student-action:hover {
-    filter: brightness(1.08);
+  .student-primary-action:hover {
+    background-color: color-mix(in oklab, var(--color-secondary) 86%, var(--color-primary));
+    box-shadow: var(--shadow-sm);
   }
 
   .student-hover-surface:hover {
-    background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
+    background-color: color-mix(in oklab, var(--color-primary) 9%, var(--color-surface));
     border-color: color-mix(in oklab, var(--color-primary) 52%, var(--color-border));
   }
 
@@ -188,10 +197,32 @@ a {
     color: var(--color-text);
     background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
   }
+
+  .student-input-control:hover {
+    background-color: color-mix(in oklab, var(--color-surface-soft) 86%, var(--color-surface));
+    border-color: color-mix(in oklab, var(--color-primary) 50%, var(--color-border));
+  }
 }
 
 .student-action:active {
   transform: translateY(1px);
+}
+
+.student-input-control:focus {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-focus);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .student-action,
+  .student-text-action,
+  .student-input-control {
+    transition: none;
+  }
+
+  .student-action:active {
+    transform: none;
+  }
 }
 
 :focus-visible {
