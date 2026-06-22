@@ -19,7 +19,7 @@ import { PRE_INTEGRATION_PREVIEW_ENABLED } from "@/lib/pre-integration/student-p
 import { useTheme } from "@/lib/theme/use-theme";
 
 export default function LoginPage() {
-  const { isAuthenticated, isLoading, login } = useAuth();
+  const { isAuthenticated, isLoading, login, user } = useAuth();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
 
@@ -57,9 +57,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!PRE_INTEGRATION_PREVIEW_ENABLED && !isLoading && isAuthenticated) {
-      router.replace("/dashboard");
+      router.replace(user?.must_change_password ? "/alterar-senha" : "/dashboard");
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading, router, user?.must_change_password]);
 
   useEffect(() => {
     if (!motivoMessage || !motivoTone) {
@@ -107,8 +107,8 @@ export default function LoginPage() {
       const result = await login({ email: email.trim(), password });
 
       if (result.mustChangePassword) {
-        toast.info("Atualize sua senha em Configurações quando puder.");
-        router.replace("/dashboard");
+        toast.info("Atualize sua senha para continuar.");
+        router.replace("/alterar-senha");
         return;
       }
 

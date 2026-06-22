@@ -2,7 +2,11 @@
 
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 
-import { login as loginRequest, logout as logoutRequest } from "@/lib/api/auth";
+import {
+  changePassword as changePasswordRequest,
+  login as loginRequest,
+  logout as logoutRequest,
+} from "@/lib/api/auth";
 import { getCurrentStudent } from "@/lib/api/student";
 import {
   clearStoredSession,
@@ -18,7 +22,7 @@ import {
   PRE_INTEGRATION_PREVIEW_ENABLED,
   PRE_INTEGRATION_PREVIEW_TOKEN,
 } from "@/lib/pre-integration/student-preview";
-import type { AuthLoginPayload } from "@/types/auth";
+import type { AuthChangePasswordPayload, AuthLoginPayload } from "@/types/auth";
 import type { User } from "@/types/student";
 
 type AuthContextValue = {
@@ -27,6 +31,7 @@ type AuthContextValue = {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (payload: AuthLoginPayload) => Promise<{ mustChangePassword: boolean }>;
+  changePassword: (payload: AuthChangePasswordPayload) => Promise<User>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<User | null>;
   setUser: (user: User | null) => void;
@@ -133,6 +138,42 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [applySession, token]);
 
+  const changePassword = useCallback(
+    async (payload: AuthChangePasswordPayload) => {
+      const currentToken = token ?? getStoredToken();
+      const currentUser = user ?? getStoredUser();
+
+      if (!currentToken || !currentUser) {
+        throw new ApiClientError({
+          status: 401,
+          code: "UNAUTHORIZED",
+          message: "Sua sessão expirou. Faça login novamente.",
+        });
+      }
+
+      if (PRE_INTEGRATION_PREVIEW_ENABLED) {
+        const nextUser = { ...currentUser, must_change_password: false };
+        applySession(currentToken, nextUser);
+        return nextUser;
+      }
+
+      await changePasswordRequest(payload, currentToken);
+
+      try {
+        const nextSession = await loginRequest({
+          email: currentUser.email,
+          password: payload.password,
+        });
+        applySession(nextSession.token, nextSession.user);
+        return nextSession.user;
+      } catch (error) {
+        clearSession();
+        throw error;
+      }
+    },
+    [applySession, clearSession, token, user],
+  );
+
   useEffect(() => {
     async function hydrateSession() {
       if (PRE_INTEGRATION_PREVIEW_ENABLED) {
@@ -179,11 +220,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       isAuthenticated: Boolean(token && user),
       isLoading,
       login,
+      changePassword,
       logout,
       refreshUser,
       setUser: setUserInSession,
     }),
-    [isLoading, login, logout, refreshUser, setUserInSession, token, user],
+    [changePassword, isLoading, login, logout, refreshUser, setUserInSession, token, user],
   );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
