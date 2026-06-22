@@ -14,6 +14,7 @@ import { SettingRow } from "@/components/ui/SettingRow";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
+import { ApiClientError } from "@/lib/api/errors";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
 
@@ -30,7 +31,7 @@ const hiddenPasswordFields: Record<PasswordVisibilityField, boolean> = {
 };
 
 export function SettingsContent({ showMustChangePasswordAlert = false }: SettingsContentProps) {
-  const { user, logout, setUser } = useAuth();
+  const { changePassword, user, logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
 
@@ -104,10 +105,11 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
     setIsChangingPassword(true);
 
     try {
-      if (user?.must_change_password) {
-        setUser({ ...user, must_change_password: false });
-      }
-
+      await changePassword({
+        current_password: currentPassword,
+        password: newPassword,
+        password_confirmation: confirmPassword,
+      });
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -115,8 +117,11 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
       setPasswordSuccess(message);
       toast.success(message);
       closePasswordDialog();
-    } catch {
-      const message = "Não foi possível atualizar a senha no preview local.";
+    } catch (error) {
+      const message =
+        error instanceof ApiClientError
+          ? error.fields?.current_password?.[0] ?? error.fields?.password?.[0] ?? error.message
+          : "Não foi possível atualizar a senha agora.";
       setPasswordError(message);
       toast.error(message);
     } finally {

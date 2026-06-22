@@ -10,7 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { requestPreviewPasswordReset } from "@/lib/pre-integration/student-preview";
+import { forgotPassword } from "@/lib/api/auth";
+import { ApiClientError } from "@/lib/api/errors";
+import {
+  PRE_INTEGRATION_PREVIEW_ENABLED,
+  requestPreviewPasswordReset,
+} from "@/lib/pre-integration/student-preview";
 
 export default function EsqueciSenhaPage() {
   const [email, setEmail] = useState("");
@@ -44,11 +49,17 @@ export default function EsqueciSenhaPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await requestPreviewPasswordReset({ email: email.trim() });
+      const payload = { email: email.trim() };
+      const response = PRE_INTEGRATION_PREVIEW_ENABLED
+        ? await requestPreviewPasswordReset(payload)
+        : await forgotPassword(payload);
       setSuccessMessage(response.message);
       toast.success(response.message);
-    } catch {
-      const message = "Não foi possível simular o envio das instruções.";
+    } catch (error) {
+      const message =
+        error instanceof ApiClientError
+          ? error.message
+          : "Não foi possível enviar as instruções agora.";
       setErrorMessage(message);
       toast.error(message);
     } finally {
@@ -61,7 +72,7 @@ export default function EsqueciSenhaPage() {
       <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
         <h1 className="text-3xl">Esqueci minha senha</h1>
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Informe seu e-mail para validar o fluxo de recuperação.
+          Informe seu e-mail para receber as instruções de recuperação.
         </p>
 
         {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}

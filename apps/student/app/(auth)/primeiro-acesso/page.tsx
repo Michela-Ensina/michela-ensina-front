@@ -11,7 +11,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { completePreviewFirstAccess } from "@/lib/pre-integration/student-preview";
+import { firstAccess } from "@/lib/api/auth";
+import { ApiClientError } from "@/lib/api/errors";
+import {
+  completePreviewFirstAccess,
+  PRE_INTEGRATION_PREVIEW_ENABLED,
+} from "@/lib/pre-integration/student-preview";
 
 export default function PrimeiroAcessoPage() {
   const router = useRouter();
@@ -65,16 +70,22 @@ export default function PrimeiroAcessoPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await completePreviewFirstAccess({
+      const payload = {
         token: token.trim(),
         password,
         password_confirmation: passwordConfirmation,
-      });
+      };
+      const response = PRE_INTEGRATION_PREVIEW_ENABLED
+        ? await completePreviewFirstAccess(payload)
+        : await firstAccess(payload);
       setSuccessMessage(response.message);
       toast.success(response.message);
       router.replace("/login?motivo=primeiro-acesso");
-    } catch {
-      const message = "Não foi possível simular o primeiro acesso.";
+    } catch (error) {
+      const message =
+        error instanceof ApiClientError
+          ? error.fields?.token?.[0] ?? error.fields?.password?.[0] ?? error.message
+          : "Não foi possível concluir o primeiro acesso agora.";
       setErrorMessage(message);
       toast.error(message);
     } finally {
@@ -87,7 +98,7 @@ export default function PrimeiroAcessoPage() {
       <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
         <h1 className="text-3xl">Primeiro acesso</h1>
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Defina sua senha inicial para validar a entrada na área do aluno.
+          Defina sua senha inicial para entrar na área do aluno.
         </p>
 
         {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}

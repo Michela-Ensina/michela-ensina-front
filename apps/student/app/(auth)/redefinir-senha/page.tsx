@@ -11,7 +11,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { resetPreviewPassword } from "@/lib/pre-integration/student-preview";
+import { resetPassword } from "@/lib/api/auth";
+import { ApiClientError } from "@/lib/api/errors";
+import {
+  PRE_INTEGRATION_PREVIEW_ENABLED,
+  resetPreviewPassword,
+} from "@/lib/pre-integration/student-preview";
 
 export default function RedefinirSenhaPage() {
   const router = useRouter();
@@ -88,17 +93,23 @@ export default function RedefinirSenhaPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await resetPreviewPassword({
+      const payload = {
         email: email.trim(),
         token: token.trim(),
         password,
         password_confirmation: passwordConfirmation,
-      });
+      };
+      const response = PRE_INTEGRATION_PREVIEW_ENABLED
+        ? await resetPreviewPassword(payload)
+        : await resetPassword(payload);
       setSuccessMessage(response.message);
       toast.success(response.message);
       router.replace("/login?motivo=senha-redefinida");
-    } catch {
-      const message = "Não foi possível simular a redefinição da senha.";
+    } catch (error) {
+      const message =
+        error instanceof ApiClientError
+          ? error.fields?.token?.[0] ?? error.fields?.password?.[0] ?? error.message
+          : "Não foi possível redefinir a senha agora.";
       setErrorMessage(message);
       toast.error(message);
     } finally {
@@ -111,7 +122,7 @@ export default function RedefinirSenhaPage() {
       <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
         <h1 className="text-3xl">Redefinir senha</h1>
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Informe os dados para validar a redefinição da sua senha.
+          Informe os dados recebidos por e-mail para redefinir sua senha.
         </p>
 
         {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
