@@ -7,7 +7,8 @@ import type {
 } from "@/types/auth";
 import type { Material, ProgressItem, ProgressSummary, User } from "@/types/student";
 
-export const PRE_INTEGRATION_PREVIEW_ENABLED = true;
+export const PRE_INTEGRATION_PREVIEW_ENABLED =
+  process.env.NEXT_PUBLIC_STUDENT_PREVIEW_ENABLED === "true";
 export const PRE_INTEGRATION_PREVIEW_TOKEN = "student-preview-session-token";
 
 const previewStudent: User = {
