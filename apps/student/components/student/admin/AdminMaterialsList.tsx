@@ -1,0 +1,74 @@
+import { Edit3, Trash2 } from "lucide-react";
+
+import { SectionHeader } from "@/components/student/SectionHeader";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { StatusBadge } from "@/components/ui/StatusBadge";
+import type { AdminMaterial } from "@/types/admin";
+
+type AdminMaterialsListProps = {
+  materials: AdminMaterial[];
+  onEdit: (material: AdminMaterial) => void;
+  onDelete: (material: AdminMaterial) => void;
+};
+
+export function AdminMaterialsList({ materials, onEdit, onDelete }: AdminMaterialsListProps) {
+  return (
+    <section
+      className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
+      style={{
+        borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
+        backgroundColor: "color-mix(in oklab, var(--color-surface) 76%, transparent)",
+      }}
+    >
+      <div className="border-b py-4" style={{ borderColor: "var(--color-border)" }}>
+        <SectionHeader
+          title="Materiais cadastrados"
+          description="Gerencie apenas os materiais da fase 1."
+        />
+      </div>
+
+      {materials.length > 0 ? (
+        <div className="divide-y" style={{ borderColor: "var(--color-border)" }}>
+          {materials.map((material) => (
+            <article key={material.id} className="grid gap-3 py-4 md:grid-cols-[1fr_auto] md:items-center">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="text-lg leading-tight">{material.title}</h3>
+                  <StatusBadge
+                    label={material.is_active ? "Ativo" : "Inativo"}
+                    tone={material.is_active ? "concluído" : "bloqueado"}
+                  />
+                </div>
+                <p className="student-muted-text mt-1 text-sm">
+                  {material.type} · ordem {material.order}
+                </p>
+                {material.description ? (
+                  <p className="student-muted-text mt-2 line-clamp-2 text-sm">{material.description}</p>
+                ) : null}
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => onEdit(material)}>
+                  <Edit3 size={15} aria-hidden="true" />
+                  Editar
+                </Button>
+                <Button type="button" variant="danger" size="sm" className="gap-2" onClick={() => onDelete(material)}>
+                  <Trash2 size={15} aria-hidden="true" />
+                  Remover
+                </Button>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className="py-6">
+          <EmptyState
+            title="Nenhum material cadastrado"
+            description="Crie o primeiro material para liberar conteúdo aos alunos."
+          />
+        </div>
+      )}
+    </section>
+  );
+}

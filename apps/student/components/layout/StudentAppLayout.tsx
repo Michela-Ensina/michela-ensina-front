@@ -1,10 +1,13 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Image from "next/image";
-import { BarChart3, BookOpen, Home, Settings } from "lucide-react";
+import { BarChart3, BookOpen, FolderKanban, Home, Settings } from "lucide-react";
 
 import { StudentMobileNav } from "@/components/layout/StudentMobileNav";
 import { StudentSidebar, type StudentNavItem } from "@/components/layout/StudentSidebar";
 import { StudentTopbar } from "@/components/layout/StudentTopbar";
+import { useAuth } from "@/lib/auth/use-auth";
 
 type StudentAppLayoutProps = {
   children: ReactNode;
@@ -17,6 +20,12 @@ const NAV_ITEMS: StudentNavItem[] = [
   { href: "/progresso", label: "Progresso", icon: BarChart3 },
   { href: "/configuracoes", label: "Configurações", icon: Settings },
 ];
+
+const ADMIN_NAV_ITEM: StudentNavItem = {
+  href: "/admin/materiais",
+  label: "Admin",
+  icon: FolderKanban,
+};
 
 const PAGE_META: Record<string, { title: string; subtitle: string }> = {
   "/dashboard": {
@@ -35,6 +44,10 @@ const PAGE_META: Record<string, { title: string; subtitle: string }> = {
     title: "Configurações",
     subtitle: "Ajuste preferências do ambiente do aluno.",
   },
+  "/admin/materiais": {
+    title: "Admin",
+    subtitle: "Gerencie os materiais da fase 1.",
+  },
 };
 
 function getPageMeta(pathname: string) {
@@ -49,6 +62,8 @@ function getPageMeta(pathname: string) {
 }
 
 export function StudentAppLayout({ children, pathname }: StudentAppLayoutProps) {
+  const { user } = useAuth();
+  const navItems = user?.roles?.includes("admin") ? [...NAV_ITEMS, ADMIN_NAV_ITEM] : NAV_ITEMS;
   const page = getPageMeta(pathname);
 
   return (
@@ -69,14 +84,14 @@ export function StudentAppLayout({ children, pathname }: StudentAppLayoutProps) 
         aria-hidden="true"
         className="pointer-events-none absolute bottom-24 right-10 hidden opacity-[0.12] lg:block"
       />
-      <StudentSidebar items={NAV_ITEMS} currentPath={pathname} />
+      <StudentSidebar items={navItems} currentPath={pathname} />
 
       <div className="relative z-10 flex min-h-screen w-full flex-col px-4 pb-24 sm:px-6 lg:px-8 lg:pb-8">
         <StudentTopbar title={page.title} subtitle={page.subtitle} />
         <main className="w-full max-w-[1320px] flex-1">{children}</main>
       </div>
 
-      <StudentMobileNav items={NAV_ITEMS} currentPath={pathname} />
+      <StudentMobileNav items={navItems} currentPath={pathname} />
     </div>
   );
 }

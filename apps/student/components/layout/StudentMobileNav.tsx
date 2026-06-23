@@ -16,7 +16,7 @@ export function StudentMobileNav({ items, currentPath }: StudentMobileNavProps) 
         backgroundColor: "color-mix(in oklab, var(--color-surface) 92%, var(--color-background))",
       }}
     >
-      <ul className="grid grid-cols-4 gap-1.5">
+      <ul className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
         {items.map((item) => {
           const isActive =
             currentPath === item.href ||
