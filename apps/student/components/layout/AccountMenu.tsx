@@ -37,7 +37,7 @@ export function AccountMenu() {
   }
 
   return (
-    <details className="group relative">
+    <details className="group relative z-50">
       <summary
         className="student-action student-hover-surface student-menu-trigger flex min-h-11 list-none items-center gap-3 rounded-2xl border px-2.5 py-2 marker:hidden"
       >
@@ -52,7 +52,7 @@ export function AccountMenu() {
         </span>
       </summary>
 
-      <div className="student-menu-surface absolute right-0 top-[calc(100%+10px)] z-40 w-72 rounded-2xl border p-2 shadow-[var(--shadow-md)]">
+      <div className="student-menu-surface absolute right-0 top-[calc(100%+10px)] z-50 w-72 rounded-2xl border p-2 shadow-[var(--shadow-md)]">
         <div className="px-3 py-2">
           <p className="text-sm font-semibold">{user?.name ?? "Aluno"}</p>
           <p className="student-muted-text mt-0.5 truncate text-xs">
