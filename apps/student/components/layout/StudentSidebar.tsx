@@ -56,19 +56,38 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
           variant={isCollapsed ? "symbol" : "horizontal"}
           className={cn("h-8 w-auto", isCollapsed ? "xl:hidden" : "")}
         />
-        {isCollapsed ? <StudentBrandMark variant="horizontal" className="hidden h-8 w-auto xl:block" /> : null}
+        {isCollapsed ? (
+          <StudentBrandMark
+            variant="horizontal"
+            className="hidden h-8 w-auto xl:block"
+          />
+        ) : null}
         <button
           type="button"
           onClick={() => setIsCollapsed((current) => !current)}
-          className="student-sidebar-toggle student-action hidden size-8 place-items-center rounded-full lg:grid xl:hidden"
+          className="student-sidebar-toggle student-action hidden size-8 place-items-center rounded-full transition-transform hover:[&_svg]:translate-x-0.5 lg:grid xl:hidden"
           aria-label={isCollapsed ? "Expandir navegação" : "Recolher navegação"}
         >
-          {isCollapsed ? <ChevronRight size={17} aria-hidden="true" /> : <ChevronLeft size={17} aria-hidden="true" />}
+          {isCollapsed ? (
+            <ChevronRight size={17} aria-hidden="true" />
+          ) : (
+            <ChevronLeft size={17} aria-hidden="true" />
+          )}
         </button>
       </div>
 
-      <div className={cn("student-sidebar-nav-block", isCollapsed ? "lg:mt-3 xl:mt-0" : "")}>
-        <p className={cn("student-sidebar-section-label px-3 text-xs font-bold", isCollapsed ? "lg:hidden xl:block" : "")}>
+      <div
+        className={cn(
+          "student-sidebar-nav-block",
+          isCollapsed ? "lg:mt-3 xl:mt-0" : "",
+        )}
+      >
+        <p
+          className={cn(
+            "student-sidebar-section-label px-3 text-xs font-bold",
+            isCollapsed ? "lg:hidden xl:block" : "",
+          )}
+        >
           Área do aluno
         </p>
         <nav className="student-sidebar-nav flex flex-col gap-1.5">
@@ -84,17 +103,27 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
                 href={item.href}
                 className={cn(
                   "student-action flex min-h-10 items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium",
-                  isCollapsed ? "lg:justify-center lg:px-2 xl:justify-start xl:px-3" : "",
+                  isCollapsed
+                    ? "lg:justify-center lg:px-2 xl:justify-start xl:px-3"
+                    : "",
                   isActive ? "font-semibold" : "student-hover-surface",
                 )}
                 style={{
-                  color: isActive ? "var(--color-brand-cream)" : "var(--color-text-muted)",
-                  backgroundColor: isActive ? "var(--color-secondary)" : "transparent",
+                  color: isActive
+                    ? "var(--color-brand-cream)"
+                    : "var(--color-text-muted)",
+                  backgroundColor: isActive
+                    ? "var(--color-secondary)"
+                    : "transparent",
                   boxShadow: isActive ? "var(--shadow-sm)" : "none",
                 }}
               >
                 <Icon size={17} aria-hidden="true" />
-                <span className={cn(isCollapsed ? "lg:sr-only xl:not-sr-only" : "")}>{item.label}</span>
+                <span
+                  className={cn(isCollapsed ? "lg:sr-only xl:not-sr-only" : "")}
+                >
+                  {item.label}
+                </span>
               </Link>
             );
           })}
