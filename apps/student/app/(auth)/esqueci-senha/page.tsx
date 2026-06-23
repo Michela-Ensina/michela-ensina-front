@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { AuthCardHeader } from "@/components/auth/AuthCardHeader";
 import { AuthLoginLink, AuthSubmitButton } from "@/components/auth/AuthFormActions";
 import { StudentLayout } from "@/components/layout/StudentLayout";
 import { Alert } from "@/components/ui/alert";
@@ -11,16 +12,13 @@ import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { forgotPassword } from "@/lib/api/auth";
 import { ApiClientError } from "@/lib/api/errors";
+import { isValidEmail } from "@/lib/utils/validation";
 
 export default function EsqueciSenhaPage() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-  function isValidEmail(value: string) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -62,10 +60,10 @@ export default function EsqueciSenhaPage() {
   return (
     <StudentLayout>
       <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
-        <h1 className="text-3xl">Esqueci minha senha</h1>
-        <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Informe seu e-mail para receber as instruções de recuperação.
-        </p>
+        <AuthCardHeader
+          title="Esqueci minha senha"
+          description="Informe seu e-mail para receber as instruções de recuperação."
+        />
 
         {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
         {successMessage ? <Alert tone="success">{successMessage}</Alert> : null}

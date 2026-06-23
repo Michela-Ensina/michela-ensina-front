@@ -16,6 +16,7 @@ import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 import { ApiClientError } from "@/lib/api/errors";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
+import { isValidEmail } from "@/lib/utils/validation";
 
 export default function LoginPage() {
   const { isAuthenticated, isLoading, login, user } = useAuth();
@@ -72,10 +73,6 @@ export default function LoginPage() {
 
     toast.success(motivoMessage);
   }, [motivoMessage, motivoTone]);
-
-  function isValidEmail(value: string) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

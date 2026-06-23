@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { AuthCardHeader } from "@/components/auth/AuthCardHeader";
 import { AuthLoginLink, AuthSubmitButton } from "@/components/auth/AuthFormActions";
 import { StudentLayout } from "@/components/layout/StudentLayout";
 import { Alert } from "@/components/ui/alert";
@@ -12,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { resetPassword } from "@/lib/api/auth";
 import { ApiClientError } from "@/lib/api/errors";
+import { isValidEmail } from "@/lib/utils/validation";
 
 export default function RedefinirSenhaPage() {
   const router = useRouter();
@@ -26,10 +28,6 @@ export default function RedefinirSenhaPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-  function isValidEmail(value: string) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -113,10 +111,10 @@ export default function RedefinirSenhaPage() {
   return (
     <StudentLayout>
       <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
-        <h1 className="text-3xl">Redefinir senha</h1>
-        <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Informe os dados recebidos por e-mail para redefinir sua senha.
-        </p>
+        <AuthCardHeader
+          title="Redefinir senha"
+          description="Informe os dados recebidos por e-mail para redefinir sua senha."
+        />
 
         {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
         {successMessage ? <Alert tone="success">{successMessage}</Alert> : null}
