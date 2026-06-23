@@ -31,11 +31,11 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
       </div>
 
       <div className="mt-4 flex-1">
-        <p className="text-xs font-semibold uppercase tracking-[0.08em]" style={{ color: "var(--color-text-muted)" }}>
+        <p className="student-muted-text text-xs font-semibold uppercase tracking-[0.08em]">
           {type.label}
         </p>
         <h3 className="mt-2 text-xl leading-tight">{material.title}</h3>
-        <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
+        <p className="student-muted-text mt-2 text-sm">
           {material.description ?? "Material disponível para estudo."}
         </p>
       </div>

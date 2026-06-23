@@ -14,7 +14,7 @@ export function MetricTile({ label, value, detail, icon }: MetricTileProps) {
     <SurfaceCard className="min-h-32">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
+          <p className="student-muted-text text-sm">
             {label}
           </p>
           <p className="mt-2 text-3xl font-bold leading-none">{value}</p>
@@ -31,7 +31,7 @@ export function MetricTile({ label, value, detail, icon }: MetricTileProps) {
           </div>
         ) : null}
       </div>
-      <p className="mt-4 text-sm" style={{ color: "var(--color-text-muted)" }}>
+      <p className="student-muted-text mt-4 text-sm">
         {detail}
       </p>
     </SurfaceCard>

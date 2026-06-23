@@ -74,7 +74,7 @@ export function MaterialViewer({ material, typeLabel }: MaterialViewerProps) {
               <MaterialFallbackIcon type={material.type} />
             </div>
             <h3 className="mt-4 text-2xl">{typeLabel}</h3>
-            <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--color-text-muted)" }}>
+            <p className="student-muted-text mx-auto mt-2 max-w-md text-sm">
               Este conteúdo está disponível em uma referência externa.
             </p>
             <a href={material.url} target="_blank" rel="noreferrer" className="mt-5 inline-block">

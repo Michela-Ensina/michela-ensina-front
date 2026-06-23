@@ -61,14 +61,14 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
 
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
-          <p className="text-xs font-bold" style={{ color: "var(--color-text-muted)" }}>
+          <p className="student-muted-text text-xs font-bold">
             {type.label}
           </p>
           <StatusBadge label={status.label} tone={status.tone} />
         </div>
         <h3 className="mt-1 text-lg leading-tight">{material.title}</h3>
         {density === "comfortable" ? (
-          <p className="mt-1 max-w-2xl text-sm" style={{ color: "var(--color-text-muted)" }}>
+          <p className="student-muted-text mt-1 max-w-2xl text-sm">
             {material.description ?? "Material disponível para estudo."}
           </p>
         ) : null}
