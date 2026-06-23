@@ -13,9 +13,7 @@ export function EmptyState({ title, description }: EmptyStateProps) {
       }}
     >
       <p className="text-lg font-semibold">{title}</p>
-      <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-        {description}
-      </p>
+      <p className="student-muted-text mt-2 text-sm">{description}</p>
     </div>
   );
 }

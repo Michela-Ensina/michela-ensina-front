@@ -14,11 +14,7 @@ export function SettingRow({ title, description, children }: SettingRowProps) {
     >
       <div>
         <p className="text-sm font-semibold">{title}</p>
-        {description ? (
-          <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
-            {description}
-          </p>
-        ) : null}
+        {description ? <p className="student-muted-text mt-1 text-sm">{description}</p> : null}
       </div>
       <div>{children}</div>
     </div>
