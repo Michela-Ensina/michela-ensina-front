@@ -24,6 +24,7 @@ type AuthContextValue = {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  sessionExpired: boolean;
   login: (payload: AuthLoginPayload) => Promise<{ mustChangePassword: boolean }>;
   changePassword: (payload: AuthChangePasswordPayload) => Promise<User>;
   logout: () => Promise<void>;
@@ -41,15 +42,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   const applySession = useCallback((nextToken: string, nextUser: User) => {
+    setSessionExpired(false);
     setToken(nextToken);
     setUser(nextUser);
     setStoredToken(nextToken);
     setStoredUser(nextUser);
   }, []);
 
-  const clearSession = useCallback(() => {
+  const clearSession = useCallback((options?: { expired?: boolean }) => {
+    setSessionExpired(Boolean(options?.expired));
     setToken(null);
     setUser(null);
     clearStoredSession();
@@ -166,7 +170,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         applySession(storedToken, freshUser);
       } catch (error) {
         if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
-          clearSession();
+          clearSession({ expired: true });
         } else {
           clearSession();
         }
@@ -184,13 +188,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
       token,
       isAuthenticated: Boolean(token && user),
       isLoading,
+      sessionExpired,
       login,
       changePassword,
       logout,
       refreshUser,
       setUser: setUserInSession,
     }),
-    [changePassword, isLoading, login, logout, refreshUser, setUserInSession, token, user],
+    [changePassword, isLoading, login, logout, refreshUser, sessionExpired, setUserInSession, token, user],
   );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

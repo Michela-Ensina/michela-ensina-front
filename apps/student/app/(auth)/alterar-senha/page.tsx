@@ -18,7 +18,7 @@ import { useTheme } from "@/lib/theme/use-theme";
 type PasswordField = "current" | "next" | "confirm";
 
 export default function AlterarSenhaPage() {
-  const { changePassword, isAuthenticated, isLoading, user } = useAuth();
+  const { changePassword, isAuthenticated, isLoading, sessionExpired, user } = useAuth();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
   const [currentPassword, setCurrentPassword] = useState("");
@@ -36,14 +36,14 @@ export default function AlterarSenhaPage() {
     if (isLoading) return;
 
     if (!isAuthenticated) {
-      router.replace("/login?motivo=sessao-expirada");
+      router.replace(sessionExpired ? "/login?motivo=sessao-expirada" : "/login");
       return;
     }
 
     if (!user?.must_change_password) {
       router.replace("/dashboard");
     }
-  }, [isAuthenticated, isLoading, router, user?.must_change_password]);
+  }, [isAuthenticated, isLoading, router, sessionExpired, user?.must_change_password]);
 
   function toggleVisibility(field: PasswordField) {
     setVisibleFields((current) => ({ ...current, [field]: !current[field] }));

@@ -13,20 +13,20 @@ type DashboardLayoutProps = {
 };
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { isAuthenticated, isLoading, sessionExpired, user } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.replace("/login?motivo=sessao-expirada");
+      router.replace(sessionExpired ? "/login?motivo=sessao-expirada" : "/login");
       return;
     }
 
     if (!isLoading && isAuthenticated && user?.must_change_password) {
       router.replace("/alterar-senha");
     }
-  }, [isAuthenticated, isLoading, router, user?.must_change_password]);
+  }, [isAuthenticated, isLoading, router, sessionExpired, user?.must_change_password]);
 
   if (isLoading) {
     return (
