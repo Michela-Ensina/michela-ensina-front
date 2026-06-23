@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "sonner";
 
+import { useLoginForm } from "@/components/auth/use-login-form";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,22 +14,16 @@ import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
-import { ApiClientError } from "@/lib/api/errors";
 import { getLoginMotivoFeedback } from "@/lib/auth/login-motivo";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
-import { isValidEmail } from "@/lib/utils/validation";
 
 export default function LoginPage() {
   const { isAuthenticated, isLoading, login, user } = useAuth();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const loginForm = useLoginForm(login);
   const [motivo] = useState(() => {
     if (typeof window === "undefined") {
       return "";
@@ -58,68 +53,6 @@ export default function LoginPage() {
 
     toast.success(motivoFeedback.message);
   }, [motivoFeedback]);
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    setErrorMessage(null);
-
-    if (!email.trim()) {
-      setErrorMessage("Informe seu e-mail.");
-      toast.error("Informe seu e-mail para entrar.");
-      return;
-    }
-
-    if (!isValidEmail(email.trim())) {
-      setErrorMessage("Digite um e-mail válido.");
-      toast.error("Digite um e-mail válido.");
-      return;
-    }
-
-    if (!password) {
-      setErrorMessage("Informe sua senha.");
-      toast.error("Informe sua senha para entrar.");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const result = await login({ email: email.trim(), password });
-
-      if (result.mustChangePassword) {
-        toast.info("Atualize sua senha para continuar.");
-        router.replace("/alterar-senha");
-        return;
-      }
-
-      toast.success("Login realizado com sucesso.");
-      router.replace("/dashboard");
-    } catch (error) {
-      if (
-        error instanceof ApiClientError &&
-        (error.status === 401 || error.status === 422)
-      ) {
-        const message = "E-mail ou senha inválidos. Verifique os dados e tente novamente.";
-        setErrorMessage(message);
-        toast.error(message);
-      } else if (error instanceof ApiClientError && error.status >= 500) {
-        const message = "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.";
-        setErrorMessage(message);
-        toast.error(message);
-      } else if (error instanceof TypeError) {
-        const message = "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.";
-        setErrorMessage(message);
-        toast.error(message);
-      } else {
-        const message = "Ocorreu um erro inesperado. Tente novamente.";
-        setErrorMessage(message);
-        toast.error(message);
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
 
   if (isLoading) {
     return (
@@ -190,19 +123,19 @@ export default function LoginPage() {
           </Alert>
         ) : null}
 
-        {errorMessage ? (
-          <Alert tone="error">{errorMessage}</Alert>
+        {loginForm.errorMessage ? (
+          <Alert tone="error">{loginForm.errorMessage}</Alert>
         ) : null}
 
-        <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
+        <form className="mt-6 space-y-5" onSubmit={loginForm.handleSubmit}>
           <div className="block">
             <Label htmlFor="email">E-mail</Label>
             <Input
               id="email"
               type="email"
               name="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              value={loginForm.email}
+              onChange={(event) => loginForm.setEmail(event.target.value)}
               placeholder="seuemail@exemplo.com"
             />
           </div>
@@ -212,26 +145,26 @@ export default function LoginPage() {
             <PasswordInput
               id="password"
               name="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              value={loginForm.password}
+              onChange={(event) => loginForm.setPassword(event.target.value)}
               placeholder="Digite sua senha"
-              isVisible={isPasswordVisible}
-              onToggleVisibility={() => setIsPasswordVisible((current) => !current)}
+              isVisible={loginForm.isPasswordVisible}
+              onToggleVisibility={loginForm.togglePasswordVisibility}
             />
           </div>
 
           <Button
             type="submit"
-            disabled={isSubmitting}
+            disabled={loginForm.isSubmitting}
             variant="primary"
             fullWidth
             size="lg"
             className="mt-2"
             style={{
-              opacity: isSubmitting ? 0.75 : 1,
+              opacity: loginForm.isSubmitting ? 0.75 : 1,
             }}
           >
-            {isSubmitting ? "Entrando..." : "Entrar"}
+            {loginForm.isSubmitting ? "Entrando..." : "Entrar"}
           </Button>
         </form>
 
