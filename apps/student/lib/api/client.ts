@@ -1,6 +1,6 @@
 import { env } from "@/lib/config/env";
 import { ApiClientError, getApiErrorMessage } from "@/lib/api/errors";
-import type { ApiEnvelope, RequestOptions } from "@/lib/api/types";
+import type { ApiEnvelope, ApiErrorPayload, RequestOptions } from "@/lib/api/types";
 
 function buildUrl(path: string): string {
   const sanitizedBase = env.apiUrl.replace(/\/$/, "");
@@ -32,8 +32,12 @@ function unwrapResponseData<TData>(payload: unknown): TData {
   return payload as TData;
 }
 
-function getErrorPayload<TData>(payload: unknown): ApiEnvelope<TData>["error"] | undefined {
-  return isApiEnvelope<TData>(payload) ? payload.error : undefined;
+function getErrorPayload<TData>(payload: unknown): ApiErrorPayload | undefined {
+  if (!isApiEnvelope<TData>(payload) || payload.success !== false) {
+    return undefined;
+  }
+
+  return payload.error;
 }
 
 export async function apiRequest<TData, TBody = unknown>(
