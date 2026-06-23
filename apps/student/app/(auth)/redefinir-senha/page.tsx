@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { AuthLoginLink, AuthSubmitButton } from "@/components/auth/AuthFormActions";
 import { StudentLayout } from "@/components/layout/StudentLayout";
 import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
@@ -140,16 +139,12 @@ export default function RedefinirSenhaPage() {
             <Input id="passwordConfirmation" type="password" value={passwordConfirmation} onChange={(event) => setPasswordConfirmation(event.target.value)} placeholder="Confirmar nova senha" />
           </div>
 
-          <Button type="submit" disabled={isSubmitting} variant="primary" fullWidth style={{ opacity: isSubmitting ? 0.75 : 1 }}>
+          <AuthSubmitButton isSubmitting={isSubmitting}>
             {isSubmitting ? "Redefinindo..." : "Redefinir senha"}
-          </Button>
+          </AuthSubmitButton>
         </form>
 
-        <div className="mt-4 text-sm">
-          <Link href="/login" className="student-text-action rounded-lg px-2 py-1" style={{ color: "var(--color-text-muted)" }}>
-            Voltar para login
-          </Link>
-        </div>
+        <AuthLoginLink>Voltar para login</AuthLoginLink>
       </SurfaceCard>
     </StudentLayout>
   );
