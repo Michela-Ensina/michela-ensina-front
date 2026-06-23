@@ -1,0 +1,44 @@
+import { ProgressBar } from "@/components/ui/ProgressBar";
+
+type DashboardProgressSummaryProps = {
+  percentage: number;
+  viewedCount: number;
+  pendingCount: number;
+  totalMaterials: number;
+};
+
+function SummaryCount({ label, value, withDivider = false }: { label: string; value: number; withDivider?: boolean }) {
+  return (
+    <div
+      className={withDivider ? "border-x px-3 py-3" : "px-3 py-3"}
+      style={withDivider ? { borderColor: "var(--color-border)" } : undefined}
+    >
+      <p className="text-lg font-bold">{value}</p>
+      <p className="student-muted-text text-xs">{label}</p>
+    </div>
+  );
+}
+
+export function DashboardProgressSummary({
+  percentage,
+  viewedCount,
+  pendingCount,
+  totalMaterials,
+}: DashboardProgressSummaryProps) {
+  return (
+    <div>
+      <ProgressBar value={percentage} label="Progresso geral" />
+      <div
+        className="mt-4 grid grid-cols-3 overflow-hidden rounded-2xl border text-center"
+        style={{
+          borderColor: "color-mix(in oklab, var(--color-border) 70%, var(--color-accent-soft))",
+          backgroundColor: "color-mix(in oklab, var(--color-background) 58%, var(--color-surface))",
+        }}
+      >
+        <SummaryCount label="Concluídos" value={viewedCount} />
+        <SummaryCount label="Em aberto" value={pendingCount} withDivider />
+        <SummaryCount label="Materiais" value={totalMaterials} />
+      </div>
+    </div>
+  );
+}

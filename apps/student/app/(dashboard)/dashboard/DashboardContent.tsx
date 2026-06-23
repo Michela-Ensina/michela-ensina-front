@@ -7,9 +7,9 @@ import { LoadErrorCard } from "@/components/student/LoadErrorCard";
 import { MaterialCard } from "@/components/student/MaterialCard";
 import { MaterialListItem } from "@/components/student/MaterialListItem";
 import { SectionHeader } from "@/components/student/SectionHeader";
+import { DashboardProgressSummary } from "@/components/student/dashboard/DashboardProgressSummary";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { useDashboardData } from "@/lib/student/use-dashboard-data";
@@ -69,29 +69,12 @@ export function DashboardContent() {
             </p>
           </div>
 
-          <div>
-            <ProgressBar value={data.progress.percentage} label="Progresso geral" />
-            <div
-              className="mt-4 grid grid-cols-3 overflow-hidden rounded-2xl border text-center"
-              style={{
-                borderColor: "color-mix(in oklab, var(--color-border) 70%, var(--color-accent-soft))",
-                backgroundColor: "color-mix(in oklab, var(--color-background) 58%, var(--color-surface))",
-              }}
-            >
-              <div className="px-3 py-3">
-                <p className="text-lg font-bold">{data.progress.viewed_count}</p>
-                <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>Concluídos</p>
-              </div>
-              <div className="border-x px-3 py-3" style={{ borderColor: "var(--color-border)" }}>
-                <p className="text-lg font-bold">{pendingCount}</p>
-                <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>Em aberto</p>
-              </div>
-              <div className="px-3 py-3">
-                <p className="text-lg font-bold">{data.materials.length}</p>
-                <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>Materiais</p>
-              </div>
-            </div>
-          </div>
+          <DashboardProgressSummary
+            percentage={data.progress.percentage}
+            viewedCount={data.progress.viewed_count}
+            pendingCount={pendingCount}
+            totalMaterials={data.materials.length}
+          />
         </div>
       </section>
 
