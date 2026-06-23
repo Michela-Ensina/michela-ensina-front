@@ -39,49 +39,32 @@ export function AccountMenu() {
   return (
     <details className="group relative">
       <summary
-        className="student-action student-hover-surface flex min-h-11 list-none items-center gap-3 rounded-2xl border px-2.5 py-2 marker:hidden"
-        style={{
-          borderColor: "color-mix(in oklab, var(--color-border) 70%, transparent)",
-          backgroundColor: "color-mix(in oklab, var(--color-surface) 82%, transparent)",
-        }}
+        className="student-action student-hover-surface student-menu-trigger flex min-h-11 list-none items-center gap-3 rounded-2xl border px-2.5 py-2 marker:hidden"
       >
-        <span
-          className="grid size-8 place-items-center rounded-xl text-xs font-bold"
-          style={{
-            backgroundColor: "color-mix(in oklab, var(--color-primary) 18%, transparent)",
-            color: "var(--color-text)",
-          }}
-        >
+        <span className="student-account-avatar grid size-8 place-items-center rounded-xl text-xs font-bold">
           {getInitials(user?.name)}
         </span>
         <span className="hidden min-w-0 text-left sm:block">
           <span className="block max-w-36 truncate text-sm font-semibold">{user?.name ?? "Aluno"}</span>
-          <span className="block max-w-36 truncate text-xs" style={{ color: "var(--color-text-muted)" }}>
+          <span className="student-muted-text block max-w-36 truncate text-xs">
             {user?.email ?? "Área do aluno"}
           </span>
         </span>
       </summary>
 
-      <div
-        className="absolute right-0 top-[calc(100%+10px)] z-40 w-72 rounded-2xl border p-2 shadow-[var(--shadow-md)]"
-        style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "var(--color-surface)",
-        }}
-      >
+      <div className="student-menu-surface absolute right-0 top-[calc(100%+10px)] z-40 w-72 rounded-2xl border p-2 shadow-[var(--shadow-md)]">
         <div className="px-3 py-2">
           <p className="text-sm font-semibold">{user?.name ?? "Aluno"}</p>
-          <p className="mt-0.5 truncate text-xs" style={{ color: "var(--color-text-muted)" }}>
+          <p className="student-muted-text mt-0.5 truncate text-xs">
             {user?.email ?? "Modo Fluente"}
           </p>
         </div>
 
-        <div className="my-1 h-px" style={{ backgroundColor: "var(--color-border)" }} />
+        <div className="student-menu-divider my-1 h-px" />
 
         <Link
           href="/configuracoes"
-          className="student-action student-hover-surface flex min-h-10 items-center gap-2 rounded-xl px-3 text-sm font-semibold"
-          style={{ color: "var(--color-text)" }}
+          className="student-action student-hover-surface flex min-h-10 items-center gap-2 rounded-xl px-3 text-sm font-semibold text-[var(--color-text)]"
         >
           <Settings size={16} aria-hidden="true" />
           Configurações

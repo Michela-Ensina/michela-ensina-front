@@ -172,6 +172,29 @@ a {
     color 180ms ease;
 }
 
+.student-muted-text {
+  color: var(--color-text-muted);
+}
+
+.student-account-avatar {
+  background-color: color-mix(in oklab, var(--color-primary) 18%, transparent);
+  color: var(--color-text);
+}
+
+.student-menu-trigger {
+  border-color: color-mix(in oklab, var(--color-border) 70%, transparent);
+  background-color: color-mix(in oklab, var(--color-surface) 82%, transparent);
+}
+
+.student-menu-surface {
+  border-color: var(--color-border);
+  background-color: var(--color-surface);
+}
+
+.student-menu-divider {
+  background-color: var(--color-border);
+}
+
 .student-sidebar {
   border-right: 1px solid color-mix(in oklab, var(--color-border) 78%, var(--color-primary));
   background-color: color-mix(in oklab, var(--color-surface) 82%, var(--color-background));
