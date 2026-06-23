@@ -108,3 +108,41 @@ export function apiDelete<TData>(
 ) {
   return apiRequest<TData>(path, { ...options, method: "DELETE" });
 }
+
+export async function apiFormPost<TData>(
+  path: string,
+  body: FormData,
+  options: Omit<RequestOptions, "method" | "body"> = {},
+): Promise<TData> {
+  const { headers, token, signal } = options;
+
+  const requestHeaders = new Headers(headers);
+  requestHeaders.set("Accept", "application/json");
+
+  if (token) {
+    requestHeaders.set("Authorization", `Bearer ${token}`);
+  }
+
+  const response = await fetch(buildUrl(path), {
+    method: "POST",
+    headers: requestHeaders,
+    body,
+    signal,
+  });
+
+  const parsed = (await parseResponse(response)) as ApiEnvelope<TData> | unknown;
+
+  if (!response.ok) {
+    const errorPayload = getErrorPayload<TData>(parsed);
+
+    throw new ApiClientError({
+      status: response.status,
+      message: getApiErrorMessage(response.status, errorPayload),
+      code: errorPayload?.code,
+      fields: errorPayload?.fields,
+      payload: parsed,
+    });
+  }
+
+  return unwrapResponseData<TData>(parsed);
+}
