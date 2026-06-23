@@ -25,13 +25,9 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
   return (
     <aside
       className={cn(
-        "relative hidden shrink-0 overflow-hidden border-r px-4 py-6 transition-[width] duration-200 ease-out lg:flex lg:flex-col",
+        "student-sidebar relative hidden shrink-0 overflow-hidden px-4 py-6 transition-[width] duration-200 ease-out lg:flex lg:flex-col",
         isCollapsed ? "lg:w-20 xl:w-72" : "w-72",
       )}
-      style={{
-        borderColor: "color-mix(in oklab, var(--color-border) 78%, var(--color-primary))",
-        backgroundColor: "color-mix(in oklab, var(--color-surface) 82%, var(--color-background))",
-      }}
     >
       <Image
         src="/assets/brand/graphics/elemento-01-lilas.svg"
@@ -64,49 +60,46 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
         <button
           type="button"
           onClick={() => setIsCollapsed((current) => !current)}
-          className="student-action student-hover-surface hidden size-9 place-items-center rounded-xl border lg:grid xl:hidden"
-          style={{
-            borderColor: "var(--color-border)",
-            color: "var(--color-text-muted)",
-            backgroundColor: "color-mix(in oklab, var(--color-surface-soft) 70%, transparent)",
-          }}
+          className="student-sidebar-toggle student-action student-hover-surface hidden size-9 place-items-center rounded-xl lg:grid xl:hidden"
           aria-label={isCollapsed ? "Expandir navegação" : "Recolher navegação"}
         >
           {isCollapsed ? <PanelLeftOpen size={17} aria-hidden="true" /> : <PanelLeftClose size={17} aria-hidden="true" />}
         </button>
       </div>
 
-      <p className={cn("mb-3 px-3 text-xs font-bold", isCollapsed ? "lg:hidden xl:block" : "")} style={{ color: "var(--color-text-muted)" }}>
-        Área do aluno
-      </p>
-      <nav className="flex flex-col gap-1.5">
-        {items.map((item) => {
-          const isActive =
-            currentPath === item.href ||
-            (item.href !== "/dashboard" && currentPath.startsWith(item.href));
-          const Icon = item.icon;
+      <div className={cn("student-sidebar-nav-block", isCollapsed ? "lg:mt-3 xl:mt-0" : "")}>
+        <p className={cn("student-sidebar-section-label px-3 text-xs font-bold", isCollapsed ? "lg:hidden xl:block" : "")}>
+          Área do aluno
+        </p>
+        <nav className="student-sidebar-nav flex flex-col gap-1.5">
+          {items.map((item) => {
+            const isActive =
+              currentPath === item.href ||
+              (item.href !== "/dashboard" && currentPath.startsWith(item.href));
+            const Icon = item.icon;
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "student-action flex min-h-10 items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium",
-                isCollapsed ? "lg:justify-center lg:px-2 xl:justify-start xl:px-3" : "",
-                isActive ? "font-semibold" : "student-hover-surface",
-              )}
-              style={{
-                color: isActive ? "var(--color-brand-cream)" : "var(--color-text-muted)",
-                backgroundColor: isActive ? "var(--color-secondary)" : "transparent",
-                boxShadow: isActive ? "var(--shadow-sm)" : "none",
-              }}
-            >
-              <Icon size={17} aria-hidden="true" />
-              <span className={cn(isCollapsed ? "lg:sr-only xl:not-sr-only" : "")}>{item.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "student-action flex min-h-10 items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium",
+                  isCollapsed ? "lg:justify-center lg:px-2 xl:justify-start xl:px-3" : "",
+                  isActive ? "font-semibold" : "student-hover-surface",
+                )}
+                style={{
+                  color: isActive ? "var(--color-brand-cream)" : "var(--color-text-muted)",
+                  backgroundColor: isActive ? "var(--color-secondary)" : "transparent",
+                  boxShadow: isActive ? "var(--shadow-sm)" : "none",
+                }}
+              >
+                <Icon size={17} aria-hidden="true" />
+                <span className={cn(isCollapsed ? "lg:sr-only xl:not-sr-only" : "")}>{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
     </aside>
   );
 }
