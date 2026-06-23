@@ -18,6 +18,16 @@ const cherrySwash = Cherry_Swash({
 export const metadata: Metadata = {
   title: "Área do aluno | Michela Ensina",
   description: "Ambiente da área do aluno do Michela Ensina.",
+  manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon0.svg", type: "image/svg+xml" },
+      { url: "/icon1.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: ["/favicon.ico"],
+  },
 };
 
 export default function RootLayout({

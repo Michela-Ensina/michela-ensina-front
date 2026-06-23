@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { PanelLeftClose, PanelLeftOpen, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -24,7 +25,7 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
   return (
     <aside
       className={cn(
-        "hidden shrink-0 border-r px-4 py-6 transition-[width] duration-200 ease-out lg:flex lg:flex-col",
+        "relative hidden shrink-0 overflow-hidden border-r px-4 py-6 transition-[width] duration-200 ease-out lg:flex lg:flex-col",
         isCollapsed ? "lg:w-20 xl:w-72" : "w-72",
       )}
       style={{
@@ -32,6 +33,28 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
         backgroundColor: "color-mix(in oklab, var(--color-surface) 82%, var(--color-background))",
       }}
     >
+      <Image
+        src="/assets/brand/graphics/elemento-01-lilas.svg"
+        alt=""
+        width={82}
+        height={82}
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute -right-8 top-28 opacity-[0.10]",
+          isCollapsed ? "lg:hidden xl:block" : "",
+        )}
+      />
+      <Image
+        src="/assets/brand/graphics/estrela-lilas.svg"
+        alt=""
+        width={28}
+        height={28}
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute bottom-7 left-6 opacity-[0.18]",
+          isCollapsed ? "lg:hidden xl:block" : "",
+        )}
+      />
       <div className="mb-7 flex items-center justify-between gap-3 px-2">
         <StudentBrandMark
           variant={isCollapsed ? "symbol" : "horizontal"}
@@ -53,7 +76,7 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
         </button>
       </div>
 
-      <p className={cn("mb-2 px-3 text-xs font-bold", isCollapsed ? "lg:hidden xl:block" : "")} style={{ color: "var(--color-text-muted)" }}>
+      <p className={cn("mb-3 px-3 text-xs font-bold", isCollapsed ? "lg:hidden xl:block" : "")} style={{ color: "var(--color-text-muted)" }}>
         Área do aluno
       </p>
       <nav className="flex flex-col gap-1.5">
