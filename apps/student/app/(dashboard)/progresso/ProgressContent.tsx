@@ -5,6 +5,7 @@ import { CheckCircle2, CircleDashed, Clock3 } from "lucide-react";
 
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
 import { getMaterialStatus, MaterialListItem } from "@/components/student/MaterialListItem";
+import { ProgressCountTile } from "@/components/student/progress/ProgressCountTile";
 import { SectionHeader } from "@/components/student/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -50,26 +51,16 @@ export function ProgressContent() {
             <ProgressBar value={progress.percentage} label="Progresso geral" />
           </div>
           <div className="mt-5 grid grid-cols-2 gap-3">
-            <div
-              className="rounded-2xl border p-3"
-              style={{
-                borderColor: "color-mix(in oklab, var(--color-border) 72%, #48b08c)",
-                backgroundColor: "color-mix(in oklab, #48b08c 12%, transparent)",
-              }}
-            >
-              <p className="text-2xl font-bold">{completedMaterials.length}</p>
-              <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>Concluídos</p>
-            </div>
-            <div
-              className="rounded-2xl border p-3"
-              style={{
-                borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-brand-blue))",
-                backgroundColor: "color-mix(in oklab, var(--color-brand-blue) 12%, transparent)",
-              }}
-            >
-              <p className="text-2xl font-bold">{openMaterials.length}</p>
-              <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>Em aberto</p>
-            </div>
+            <ProgressCountTile
+              count={completedMaterials.length}
+              label="Concluídos"
+              accentColor="#48b08c"
+            />
+            <ProgressCountTile
+              count={openMaterials.length}
+              label="Em aberto"
+              accentColor="var(--color-brand-blue)"
+            />
           </div>
         </SurfaceCard>
 
@@ -84,7 +75,7 @@ export function ProgressContent() {
             <Clock3 size={16} aria-hidden="true" />
             Próximo passo
           </p>
-          <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
+          <p className="student-muted-text mt-2 text-sm">
             Continue pelo primeiro material em aberto para manter o ritmo sem procurar demais.
           </p>
           <Link href="/materiais" className="mt-4 inline-block">
@@ -120,7 +111,7 @@ export function ProgressContent() {
                 <MaterialListItem key={material.id} material={material} progressItems={progress.items} density="compact" />
               ))
             ) : (
-              <p className="py-4 text-sm" style={{ color: "var(--color-text-muted)" }}>
+              <p className="student-muted-text py-4 text-sm">
                 Não há materiais em aberto no momento.
               </p>
             )}
@@ -138,7 +129,7 @@ export function ProgressContent() {
                 <MaterialListItem key={material.id} material={material} progressItems={progress.items} density="compact" />
               ))
             ) : (
-              <p className="py-4 text-sm" style={{ color: "var(--color-text-muted)" }}>
+              <p className="student-muted-text py-4 text-sm">
                 Os materiais concluídos aparecerão aqui.
               </p>
             )}
