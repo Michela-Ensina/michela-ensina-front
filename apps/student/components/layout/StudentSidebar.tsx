@@ -65,7 +65,7 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
         <button
           type="button"
           onClick={() => setIsCollapsed((current) => !current)}
-          className="student-sidebar-toggle student-action hidden size-8 place-items-center rounded-full transition-transform hover:[&_svg]:translate-x-0.5 lg:grid xl:hidden"
+          className="student-sidebar-toggle student-action hidden size-8 place-items-center rounded-full lg:grid xl:hidden"
           aria-label={isCollapsed ? "Expandir navegação" : "Recolher navegação"}
         >
           {isCollapsed ? (
