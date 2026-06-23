@@ -1,36 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { KeyRound, ShieldCheck } from "lucide-react";
-import { toast } from "sonner";
 
 import { StudentBrandMark } from "@/components/brand/StudentBrandMark";
+import { useRequiredPasswordChangeForm } from "@/components/auth/use-required-password-change-form";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
-import { ApiClientError } from "@/lib/api/errors";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
-
-type PasswordField = "current" | "next" | "confirm";
 
 export default function AlterarSenhaPage() {
   const { changePassword, isAuthenticated, isLoading, sessionExpired, user } = useAuth();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [visibleFields, setVisibleFields] = useState<Record<PasswordField, boolean>>({
-    current: false,
-    next: false,
-    confirm: false,
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const passwordForm = useRequiredPasswordChangeForm(changePassword);
 
   useEffect(() => {
     if (isLoading) return;
@@ -44,56 +32,6 @@ export default function AlterarSenhaPage() {
       router.replace("/dashboard");
     }
   }, [isAuthenticated, isLoading, router, sessionExpired, user?.must_change_password]);
-
-  function toggleVisibility(field: PasswordField) {
-    setVisibleFields((current) => ({ ...current, [field]: !current[field] }));
-  }
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setErrorMessage(null);
-
-    if (!currentPassword || !newPassword || !passwordConfirmation) {
-      setErrorMessage("Preencha todos os campos de senha.");
-      return;
-    }
-
-    if (newPassword.length < 8) {
-      setErrorMessage("A nova senha deve ter pelo menos 8 caracteres.");
-      return;
-    }
-
-    if (newPassword === currentPassword) {
-      setErrorMessage("A nova senha deve ser diferente da senha atual.");
-      return;
-    }
-
-    if (newPassword !== passwordConfirmation) {
-      setErrorMessage("As senhas não coincidem.");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      await changePassword({
-        current_password: currentPassword,
-        password: newPassword,
-        password_confirmation: passwordConfirmation,
-      });
-      toast.success("Senha atualizada com sucesso.");
-      router.replace("/dashboard");
-    } catch (error) {
-      if (error instanceof ApiClientError) {
-        const fieldMessage = error.fields?.current_password?.[0] ?? error.fields?.password?.[0];
-        setErrorMessage(fieldMessage ?? error.message);
-      } else {
-        setErrorMessage("Não foi possível atualizar sua senha. Tente novamente.");
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
 
   if (isLoading || !isAuthenticated || !user?.must_change_password) {
     return (
@@ -156,19 +94,19 @@ export default function AlterarSenhaPage() {
             Use pelo menos 8 caracteres e escolha uma senha diferente da atual.
           </p>
 
-          {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
+          {passwordForm.errorMessage ? <Alert tone="error">{passwordForm.errorMessage}</Alert> : null}
 
-          <form className="mt-7 space-y-4" onSubmit={handleSubmit}>
+          <form className="mt-7 space-y-4" onSubmit={passwordForm.handleSubmit}>
             <div>
               <Label htmlFor="currentPassword">Senha atual</Label>
               <PasswordInput
                 id="currentPassword"
                 autoComplete="current-password"
-                value={currentPassword}
-                onChange={(event) => setCurrentPassword(event.target.value)}
+                value={passwordForm.currentPassword}
+                onChange={(event) => passwordForm.setCurrentPassword(event.target.value)}
                 placeholder="Digite sua senha atual"
-                isVisible={visibleFields.current}
-                onToggleVisibility={() => toggleVisibility("current")}
+                isVisible={passwordForm.visibleFields.current}
+                onToggleVisibility={() => passwordForm.toggleVisibility("current")}
               />
             </div>
             <div>
@@ -176,11 +114,11 @@ export default function AlterarSenhaPage() {
               <PasswordInput
                 id="newPassword"
                 autoComplete="new-password"
-                value={newPassword}
-                onChange={(event) => setNewPassword(event.target.value)}
+                value={passwordForm.newPassword}
+                onChange={(event) => passwordForm.setNewPassword(event.target.value)}
                 placeholder="Digite a nova senha"
-                isVisible={visibleFields.next}
-                onToggleVisibility={() => toggleVisibility("next")}
+                isVisible={passwordForm.visibleFields.next}
+                onToggleVisibility={() => passwordForm.toggleVisibility("next")}
               />
             </div>
             <div>
@@ -188,16 +126,16 @@ export default function AlterarSenhaPage() {
               <PasswordInput
                 id="passwordConfirmation"
                 autoComplete="new-password"
-                value={passwordConfirmation}
-                onChange={(event) => setPasswordConfirmation(event.target.value)}
+                value={passwordForm.passwordConfirmation}
+                onChange={(event) => passwordForm.setPasswordConfirmation(event.target.value)}
                 placeholder="Digite novamente"
-                isVisible={visibleFields.confirm}
-                onToggleVisibility={() => toggleVisibility("confirm")}
+                isVisible={passwordForm.visibleFields.confirm}
+                onToggleVisibility={() => passwordForm.toggleVisibility("confirm")}
               />
             </div>
 
-            <Button type="submit" variant="primary" size="lg" fullWidth disabled={isSubmitting}>
-              {isSubmitting ? "Atualizando senha..." : "Atualizar senha e continuar"}
+            <Button type="submit" variant="primary" size="lg" fullWidth disabled={passwordForm.isSubmitting}>
+              {passwordForm.isSubmitting ? "Atualizando senha..." : "Atualizar senha e continuar"}
             </Button>
           </form>
         </div>
