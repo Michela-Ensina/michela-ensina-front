@@ -178,9 +178,23 @@ a {
 }
 
 .student-sidebar-toggle {
-  border: 1px solid var(--color-border);
+  border: 0;
   color: var(--color-text-muted);
-  background-color: color-mix(in oklab, var(--color-surface-soft) 70%, transparent);
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.student-sidebar-toggle:focus-visible {
+  color: var(--color-primary);
+  background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
+  box-shadow: none;
+}
+
+@media (hover: hover) {
+  .student-sidebar-toggle:hover {
+    color: var(--color-primary);
+    background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
+  }
 }
 
 .student-sidebar-nav-block {

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { PanelLeftClose, PanelLeftOpen, type LucideIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 
 import { StudentBrandMark } from "@/components/brand/StudentBrandMark";
@@ -60,10 +60,10 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
         <button
           type="button"
           onClick={() => setIsCollapsed((current) => !current)}
-          className="student-sidebar-toggle student-action student-hover-surface hidden size-9 place-items-center rounded-xl lg:grid xl:hidden"
+          className="student-sidebar-toggle student-action hidden size-8 place-items-center rounded-full lg:grid xl:hidden"
           aria-label={isCollapsed ? "Expandir navegação" : "Recolher navegação"}
         >
-          {isCollapsed ? <PanelLeftOpen size={17} aria-hidden="true" /> : <PanelLeftClose size={17} aria-hidden="true" />}
+          {isCollapsed ? <ChevronRight size={17} aria-hidden="true" /> : <ChevronLeft size={17} aria-hidden="true" />}
         </button>
       </div>
 
