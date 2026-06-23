@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { getPreviewProgress } from "@/lib/pre-integration/student-preview";
+import { ApiClientError } from "@/lib/api/errors";
+import { getProgress } from "@/lib/api/progress";
+import { useAuth } from "@/lib/auth/use-auth";
 import type { ProgressSummary } from "@/types/student";
 
 type UseProgressDataResult = {
@@ -14,25 +16,44 @@ type UseProgressDataResult = {
 };
 
 export function useProgressData(): UseProgressDataResult {
+  const { token, isLoading: isAuthLoading, logout } = useAuth();
   const [data, setData] = useState<ProgressSummary | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
+    if (isAuthLoading) {
+      return;
+    }
+
     setIsLoading(true);
     setErrorMessage(null);
 
     try {
-      setData(getPreviewProgress());
-    } catch {
-      setErrorMessage("Não foi possível carregar o progresso de pré-integração.");
+      if (!token) {
+        throw new Error("Sua sessão não está disponível.");
+      }
+
+      setData(await getProgress(token));
+    } catch (error) {
+      if (error instanceof ApiClientError && error.status === 401) {
+        await logout();
+      }
+
+      setErrorMessage(
+        error instanceof Error ? error.message : "Não foi possível carregar o progresso.",
+      );
       setData(null);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [isAuthLoading, logout, token]);
 
   useEffect(() => {
+    if (isAuthLoading) {
+      return;
+    }
+
     const timer = window.setTimeout(() => {
       void fetchData();
     }, 0);
@@ -40,7 +61,7 @@ export function useProgressData(): UseProgressDataResult {
     return () => {
       window.clearTimeout(timer);
     };
-  }, [fetchData]);
+  }, [fetchData, isAuthLoading]);
 
   return {
     data,

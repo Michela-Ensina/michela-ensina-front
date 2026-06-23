@@ -13,10 +13,6 @@ import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { resetPassword } from "@/lib/api/auth";
 import { ApiClientError } from "@/lib/api/errors";
-import {
-  PRE_INTEGRATION_PREVIEW_ENABLED,
-  resetPreviewPassword,
-} from "@/lib/pre-integration/student-preview";
 
 export default function RedefinirSenhaPage() {
   const router = useRouter();
@@ -99,9 +95,7 @@ export default function RedefinirSenhaPage() {
         password,
         password_confirmation: passwordConfirmation,
       };
-      const response = PRE_INTEGRATION_PREVIEW_ENABLED
-        ? await resetPreviewPassword(payload)
-        : await resetPassword(payload);
+      const response = await resetPassword(payload);
       setSuccessMessage(response.message);
       toast.success(response.message);
       router.replace("/login?motivo=senha-redefinida");

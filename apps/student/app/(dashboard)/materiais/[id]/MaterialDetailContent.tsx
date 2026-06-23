@@ -11,11 +11,10 @@ import { Button } from "@/components/ui/button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import {
-  getPreviewMaterialById,
-  getPreviewProgress,
-  markPreviewMaterialCompleted,
-} from "@/lib/pre-integration/student-preview";
+import { ApiClientError } from "@/lib/api/errors";
+import { getMaterialById } from "@/lib/api/materials";
+import { getProgress, updateMaterialProgress } from "@/lib/api/progress";
+import { useAuth } from "@/lib/auth/use-auth";
 import type { Material, ProgressItem } from "@/types/student";
 
 type MaterialDetailContentProps = {
@@ -57,6 +56,7 @@ function MaterialFallbackIcon({ type }: { type: Material["type"] }) {
 }
 
 export function MaterialDetailContent({ materialId }: MaterialDetailContentProps) {
+  const { token, logout } = useAuth();
   const [material, setMaterial] = useState<Material | null>(null);
   const [progressItem, setProgressItem] = useState<ProgressItem | null>(null);
   const [progressPercentage, setProgressPercentage] = useState(0);
@@ -73,25 +73,37 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
     setNotFound(false);
 
     try {
-      const materialResponse = getPreviewMaterialById(materialId);
+      if (!token) {
+        throw new Error("Sua sessão não está disponível.");
+      }
 
-      if (!materialResponse) {
+      const [materialResponse, progress] = await Promise.all([
+        getMaterialById(materialId, token),
+        getProgress(token),
+      ]);
+
+      setMaterial(materialResponse);
+      setProgressPercentage(progress.percentage);
+      setProgressItem(progress.items.find((item) => item.material_id === materialId) ?? null);
+    } catch (error) {
+      if (error instanceof ApiClientError && error.status === 404) {
         setNotFound(true);
         setMaterial(null);
         setProgressItem(null);
         return;
       }
 
-      const progress = getPreviewProgress();
-      setMaterial(materialResponse);
-      setProgressPercentage(progress.percentage);
-      setProgressItem(progress.items.find((item) => item.material_id === materialId) ?? null);
-    } catch {
-      setErrorMessage("Não foi possível carregar este material de pré-integração.");
+      if (error instanceof ApiClientError && error.status === 401) {
+        await logout();
+      }
+
+      setErrorMessage(
+        error instanceof Error ? error.message : "Não foi possível carregar este material.",
+      );
     } finally {
       setIsLoading(false);
     }
-  }, [materialId]);
+  }, [logout, materialId, token]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -117,9 +129,22 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
     setProgressErrorMessage(null);
 
     try {
-      setProgressItem(markPreviewMaterialCompleted(material.id));
-    } catch {
-      setProgressErrorMessage("Não foi possível atualizar o progresso de pré-integração.");
+      if (!token) {
+        throw new Error("Sua sessão não está disponível.");
+      }
+
+      const updatedItem = await updateMaterialProgress(material.id, token);
+      const progress = await getProgress(token);
+      setProgressItem(updatedItem);
+      setProgressPercentage(progress.percentage);
+    } catch (error) {
+      if (error instanceof ApiClientError && error.status === 401) {
+        await logout();
+      }
+
+      setProgressErrorMessage(
+        error instanceof Error ? error.message : "Não foi possível atualizar o progresso.",
+      );
     } finally {
       setIsUpdatingProgress(false);
     }
@@ -148,7 +173,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
       <SurfaceCard>
         <h2 className="text-2xl">Material não encontrado</h2>
         <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          Este material não está disponível no preview local.
+          Este material não está disponível para a sua conta.
         </p>
         <Link href="/materiais" className="student-text-action mt-4 inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold" style={{ color: "var(--color-primary)" }}>
           <ArrowLeft size={16} aria-hidden="true" />
@@ -201,7 +226,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
                 </div>
                 <h3 className="mt-4 text-2xl">{type.label}</h3>
                 <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--color-text-muted)" }}>
-                  Este conteúdo abre em uma referência externa enquanto a integração final não está conectada.
+                  Este conteúdo está disponível em uma referência externa.
                 </p>
                 <a href={material.url} target="_blank" rel="noreferrer" className="mt-5 inline-block">
                   <Button type="button" variant="primary" className="gap-2">

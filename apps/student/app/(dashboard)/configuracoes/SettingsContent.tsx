@@ -18,10 +18,6 @@ import { ApiClientError } from "@/lib/api/errors";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
 
-type SettingsContentProps = {
-  showMustChangePasswordAlert?: boolean;
-};
-
 type PasswordVisibilityField = "current" | "next" | "confirm";
 
 const hiddenPasswordFields: Record<PasswordVisibilityField, boolean> = {
@@ -30,7 +26,7 @@ const hiddenPasswordFields: Record<PasswordVisibilityField, boolean> = {
   confirm: false,
 };
 
-export function SettingsContent({ showMustChangePasswordAlert = false }: SettingsContentProps) {
+export function SettingsContent() {
   const { changePassword, user, logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
@@ -163,18 +159,9 @@ export function SettingsContent({ showMustChangePasswordAlert = false }: Setting
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
             <StatusBadge label={userStatusLabel} tone={user?.is_active ? "concluído" : "bloqueado"} />
-            {user?.must_change_password ? <StatusBadge label="Senha recomendada" tone="em-andamento" /> : null}
+            {user?.must_change_password ? <StatusBadge label="Troca de senha obrigatória" tone="em-andamento" /> : null}
           </div>
         </SurfaceCard>
-
-        {(showMustChangePasswordAlert || user?.must_change_password) && (
-          <div className="rounded-[var(--radius-lg)] border p-4" style={{ borderColor: "var(--color-border)" }}>
-            <p className="text-sm font-semibold">Ação recomendada</p>
-            <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-              Atualize sua senha quando puder. O preview segue liberado para validação visual.
-            </p>
-          </div>
-        )}
       </aside>
 
       <section
