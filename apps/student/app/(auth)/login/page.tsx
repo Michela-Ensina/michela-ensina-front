@@ -15,7 +15,6 @@ import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 import { ApiClientError } from "@/lib/api/errors";
 import { useAuth } from "@/lib/auth/use-auth";
-import { PRE_INTEGRATION_PREVIEW_ENABLED } from "@/lib/pre-integration/student-preview";
 import { useTheme } from "@/lib/theme/use-theme";
 
 export default function LoginPage() {
@@ -56,7 +55,7 @@ export default function LoginPage() {
         : null;
 
   useEffect(() => {
-    if (!PRE_INTEGRATION_PREVIEW_ENABLED && !isLoading && isAuthenticated) {
+    if (!isLoading && isAuthenticated) {
       router.replace(user?.must_change_password ? "/alterar-senha" : "/dashboard");
     }
   }, [isAuthenticated, isLoading, router, user?.must_change_password]);
