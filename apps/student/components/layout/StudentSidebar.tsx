@@ -51,17 +51,31 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
           isCollapsed ? "lg:hidden xl:block" : "",
         )}
       />
-      <div className="mb-7 flex items-center justify-between gap-3 px-2">
-        <StudentBrandMark
-          variant={isCollapsed ? "symbol" : "horizontal"}
-          className={cn("h-8 w-auto", isCollapsed ? "xl:hidden" : "")}
-        />
-        {isCollapsed ? (
+      <div
+        className={cn(
+          "mb-7 flex gap-3 px-2",
+          isCollapsed
+            ? "lg:flex-col lg:items-center lg:justify-start xl:flex-row xl:items-center xl:justify-between"
+            : "items-center justify-between",
+        )}
+      >
+        <div
+          className={cn(
+            "flex h-8 shrink-0 items-center",
+            isCollapsed ? "lg:w-8 lg:justify-center xl:w-auto" : "",
+          )}
+        >
           <StudentBrandMark
-            variant="horizontal"
-            className="hidden h-8 w-auto xl:block"
+            variant={isCollapsed ? "symbol" : "horizontal"}
+            className={cn("shrink-0 object-contain", isCollapsed ? "h-7 w-7 xl:hidden" : "h-8 w-auto")}
           />
-        ) : null}
+          {isCollapsed ? (
+            <StudentBrandMark
+              variant="horizontal"
+              className="hidden h-8 w-auto shrink-0 xl:block"
+            />
+          ) : null}
+        </div>
         <button
           type="button"
           onClick={() => setIsCollapsed((current) => !current)}
