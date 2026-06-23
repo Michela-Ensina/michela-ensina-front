@@ -1,18 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut, Moon, ShieldCheck, UserRound, X } from "lucide-react";
 import { toast } from "sonner";
 
+import { SettingsAccountCard } from "@/components/student/settings/SettingsAccountCard";
 import { SectionHeader } from "@/components/student/SectionHeader";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { SettingRow } from "@/components/ui/SettingRow";
-import { StatusBadge } from "@/components/ui/StatusBadge";
-import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 import { ApiClientError } from "@/lib/api/errors";
 import { useAuth } from "@/lib/auth/use-auth";
@@ -40,11 +39,6 @@ export function SettingsContent() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const [visiblePasswordFields, setVisiblePasswordFields] = useState(hiddenPasswordFields);
-
-  const userStatusLabel = useMemo(() => {
-    if (!user) return "Sem dados";
-    return user.is_active ? "Ativo" : "Inativo";
-  }, [user]);
 
   function openPasswordDialog() {
     setPasswordError(null);
@@ -139,29 +133,7 @@ export function SettingsContent() {
   return (
     <div className="grid gap-5 xl:grid-cols-[340px_1fr]">
       <aside className="space-y-4">
-        <SurfaceCard>
-          <div className="flex items-start gap-3">
-            <div
-              className="grid size-12 shrink-0 place-items-center rounded-2xl text-sm font-bold"
-              style={{
-                backgroundColor: "color-mix(in oklab, var(--color-primary) 18%, transparent)",
-                color: "var(--color-text)",
-              }}
-            >
-              {user?.name?.slice(0, 2).toUpperCase() ?? "ME"}
-            </div>
-            <div className="min-w-0">
-              <p className="font-semibold">{user?.name ?? "Aluno"}</p>
-              <p className="truncate text-sm" style={{ color: "var(--color-text-muted)" }}>
-                {user?.email ?? "Área do aluno"}
-              </p>
-            </div>
-          </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <StatusBadge label={userStatusLabel} tone={user?.is_active ? "concluído" : "bloqueado"} />
-            {user?.must_change_password ? <StatusBadge label="Troca de senha obrigatória" tone="em-andamento" /> : null}
-          </div>
-        </SurfaceCard>
+        <SettingsAccountCard user={user} />
       </aside>
 
       <section
