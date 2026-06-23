@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from "react";
 
+import { LoadErrorCard } from "@/components/student/LoadErrorCard";
 import { MaterialCard } from "@/components/student/MaterialCard";
 import { getMaterialStatus, MaterialListItem } from "@/components/student/MaterialListItem";
 import { SectionHeader } from "@/components/student/SectionHeader";
-import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
@@ -61,17 +61,7 @@ export function MaterialsContent() {
   }
 
   if (errorMessage) {
-    return (
-      <SurfaceCard>
-        <h2 className="text-2xl">Não foi possível carregar</h2>
-        <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          {errorMessage}
-        </p>
-        <Button type="button" onClick={() => void refetch()} variant="outline" className="mt-4">
-          Tentar novamente
-        </Button>
-      </SurfaceCard>
-    );
+    return <LoadErrorCard message={errorMessage} onRetry={() => void refetch()} />;
   }
 
   if (!data || isEmpty) {

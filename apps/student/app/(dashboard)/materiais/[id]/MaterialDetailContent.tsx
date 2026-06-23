@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ExternalLink, FileText, Link2, Paperclip, PlayCircle } from "lucide-react";
 
+import { LoadErrorCard } from "@/components/student/LoadErrorCard";
 import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/MaterialListItem";
 import { SectionHeader } from "@/components/student/SectionHeader";
 import { Alert } from "@/components/ui/alert";
@@ -155,17 +156,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
   }
 
   if (errorMessage) {
-    return (
-      <SurfaceCard>
-        <h2 className="text-2xl">Não foi possível carregar</h2>
-        <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          {errorMessage}
-        </p>
-        <Button type="button" onClick={() => void fetchData()} variant="outline" className="mt-4">
-          Tentar novamente
-        </Button>
-      </SurfaceCard>
-    );
+    return <LoadErrorCard message={errorMessage} onRetry={() => void fetchData()} />;
   }
 
   if (notFound || !material || !type) {

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CheckCircle2, CircleDashed, Clock3 } from "lucide-react";
 
+import { LoadErrorCard } from "@/components/student/LoadErrorCard";
 import { getMaterialStatus, MaterialListItem } from "@/components/student/MaterialListItem";
 import { SectionHeader } from "@/components/student/SectionHeader";
 import { Button } from "@/components/ui/button";
@@ -24,17 +25,7 @@ export function ProgressContent() {
   }
 
   if (errorMessage) {
-    return (
-      <SurfaceCard>
-        <h2 className="text-2xl">Não foi possível carregar</h2>
-        <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-          {errorMessage}
-        </p>
-        <Button type="button" onClick={() => void refetch()} variant="outline" className="mt-4">
-          Tentar novamente
-        </Button>
-      </SurfaceCard>
-    );
+    return <LoadErrorCard message={errorMessage} onRetry={() => void refetch()} />;
   }
 
   if (!data || isEmpty || !data.progress) {
