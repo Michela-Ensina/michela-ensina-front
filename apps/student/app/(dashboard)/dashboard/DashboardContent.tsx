@@ -64,7 +64,7 @@ export function DashboardContent() {
               {data.student.must_change_password ? <StatusBadge label="Senha recomendada" tone="em-andamento" /> : null}
             </div>
             <h2 className="mt-4 text-3xl leading-tight">Olá, {data.student.name.split(" ")[0]}.</h2>
-            <p className="mt-2 max-w-2xl text-sm sm:text-base" style={{ color: "var(--color-text-muted)" }}>
+            <p className="student-muted-text mt-2 max-w-2xl text-sm sm:text-base">
               Seu espaço do Modo Fluente está pronto para continuar os estudos, revisar materiais e acompanhar o ritmo.
             </p>
           </div>
@@ -104,12 +104,12 @@ export function DashboardContent() {
               }}
             >
               <div className="p-5 sm:p-6">
-                <p className="flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--color-text-muted)" }}>
+                <p className="student-muted-text flex items-center gap-2 text-sm font-semibold">
                   <Clock3 size={16} aria-hidden="true" />
                   Próximo material
                 </p>
                 <h3 className="mt-3 text-2xl leading-tight">{nextMaterial?.title ?? "Sem sugestão disponível"}</h3>
-                <p className="mt-3 max-w-xl text-sm" style={{ color: "var(--color-text-muted)" }}>
+                <p className="student-muted-text mt-3 max-w-xl text-sm">
                   {nextMaterial?.description ?? "Assim que houver um material disponível, ele aparecerá aqui."}
                 </p>
                 <Link href={nextMaterial ? `/materiais/${nextMaterial.id}` : "/materiais"} className="mt-5 inline-block">
@@ -152,7 +152,7 @@ export function DashboardContent() {
                 <CheckCircle2 size={16} aria-hidden="true" />
                 Ritmo de estudo
               </p>
-              <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
+              <p className="student-muted-text mt-2 text-sm">
                 {pendingCount > 0
                   ? `${pendingCount} materiais ainda estão abertos para continuar.`
                   : "Todos os materiais liberados foram concluídos."}
