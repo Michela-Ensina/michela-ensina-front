@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -14,6 +14,7 @@ import { PasswordInput } from "@/components/ui/PasswordInput";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 import { ApiClientError } from "@/lib/api/errors";
+import { getLoginMotivoFeedback } from "@/lib/auth/login-motivo";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
 import { isValidEmail } from "@/lib/utils/validation";
@@ -37,23 +38,7 @@ export default function LoginPage() {
     return params.get("motivo") ?? "";
   });
 
-  const motivoMessage =
-    motivo === "sessao-expirada"
-      ? "Sua sessão expirou. Faça login novamente."
-      : motivo === "senha-redefinida"
-        ? "Senha redefinida com sucesso. Entre com sua nova senha."
-        : motivo === "primeiro-acesso"
-          ? "Senha configurada com sucesso. Faça login para continuar."
-          : motivo === "senha-atualizada"
-            ? "Senha atualizada com sucesso. Faça login novamente."
-            : null;
-
-  const motivoTone =
-    motivo === "sessao-expirada"
-      ? "info"
-      : motivoMessage
-        ? "success"
-        : null;
+  const motivoFeedback = useMemo(() => getLoginMotivoFeedback(motivo), [motivo]);
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
@@ -62,17 +47,17 @@ export default function LoginPage() {
   }, [isAuthenticated, isLoading, router, user?.must_change_password]);
 
   useEffect(() => {
-    if (!motivoMessage || !motivoTone) {
+    if (!motivoFeedback) {
       return;
     }
 
-    if (motivoTone === "info") {
-      toast.info(motivoMessage);
+    if (motivoFeedback.tone === "info") {
+      toast.info(motivoFeedback.message);
       return;
     }
 
-    toast.success(motivoMessage);
-  }, [motivoMessage, motivoTone]);
+    toast.success(motivoFeedback.message);
+  }, [motivoFeedback]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -199,7 +184,11 @@ export default function LoginPage() {
           Acesse sua conta para continuar seus estudos.
         </p>
 
-        {motivoMessage ? <Alert tone={motivoTone === "success" ? "success" : "default"}>{motivoMessage}</Alert> : null}
+        {motivoFeedback ? (
+          <Alert tone={motivoFeedback.tone === "success" ? "success" : "default"}>
+            {motivoFeedback.message}
+          </Alert>
+        ) : null}
 
         {errorMessage ? (
           <Alert tone="error">{errorMessage}</Alert>
