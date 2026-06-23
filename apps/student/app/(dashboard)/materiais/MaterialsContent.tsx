@@ -3,37 +3,22 @@
 import { useMemo, useState } from "react";
 
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
-import { MaterialCard } from "@/components/student/MaterialCard";
 import { getMaterialStatus, MaterialListItem } from "@/components/student/MaterialListItem";
 import { SectionHeader } from "@/components/student/SectionHeader";
+import {
+  MaterialsFilterSidebar,
+  type MaterialStatusFilter,
+  type MaterialTypeFilter,
+} from "@/components/student/materials/MaterialsFilterSidebar";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { useMaterialsData } from "@/lib/student/use-materials-data";
-import type { Material } from "@/types/student";
-
-type MaterialFilter = "todos" | "em-aberto" | "concluidos";
-type TypeFilter = "todos" | Material["type"];
-
-const statusFilters = [
-  { value: "todos", label: "Todos" },
-  { value: "em-aberto", label: "Em aberto" },
-  { value: "concluidos", label: "Concluídos" },
-] satisfies Array<{ value: MaterialFilter; label: string }>;
-
-const typeFilters = [
-  { value: "todos", label: "Todos" },
-  { value: "video", label: "Vídeo" },
-  { value: "pdf", label: "PDF" },
-  { value: "attachment", label: "Anexos" },
-  { value: "other", label: "Links" },
-] satisfies Array<{ value: TypeFilter; label: string }>;
 
 export function MaterialsContent() {
   const { data, isLoading, errorMessage, isEmpty, refetch } = useMaterialsData();
-  const [statusFilter, setStatusFilter] = useState<MaterialFilter>("todos");
-  const [typeFilter, setTypeFilter] = useState<TypeFilter>("todos");
+  const [statusFilter, setStatusFilter] = useState<MaterialStatusFilter>("todos");
+  const [typeFilter, setTypeFilter] = useState<MaterialTypeFilter>("todos");
 
   const progressItems = useMemo(() => data?.progress?.items ?? [], [data?.progress?.items]);
   const filteredMaterials = useMemo(() => {
@@ -94,42 +79,14 @@ export function MaterialsContent() {
       </section>
 
       <div className="grid gap-5 xl:grid-cols-[0.82fr_1.18fr]">
-        <aside className="space-y-4">
-          <div
-            className="rounded-[var(--radius-lg)] border p-4"
-            style={{
-              borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
-              backgroundColor: "color-mix(in oklab, var(--color-surface) 78%, transparent)",
-            }}
-          >
-            <p className="text-sm font-semibold">Status</p>
-            <div className="mt-3">
-              <SegmentedControl label="Filtrar por status" options={statusFilters} value={statusFilter} onChange={setStatusFilter} />
-            </div>
-          </div>
-
-          <div
-            className="rounded-[var(--radius-lg)] border p-4"
-            style={{
-              borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-brand-blue))",
-              backgroundColor: "color-mix(in oklab, var(--color-surface) 78%, transparent)",
-            }}
-          >
-            <p className="text-sm font-semibold">Tipo de material</p>
-            <div className="mt-3">
-              <SegmentedControl label="Filtrar por tipo" options={typeFilters} value={typeFilter} onChange={setTypeFilter} />
-            </div>
-          </div>
-
-          {featuredMaterial ? (
-            <div>
-              <p className="mb-3 text-sm font-semibold" style={{ color: "var(--color-text-muted)" }}>
-                Em destaque
-              </p>
-              <MaterialCard material={featuredMaterial} progressItems={progressItems} />
-            </div>
-          ) : null}
-        </aside>
+        <MaterialsFilterSidebar
+          featuredMaterial={featuredMaterial}
+          progressItems={progressItems}
+          statusFilter={statusFilter}
+          typeFilter={typeFilter}
+          onStatusFilterChange={setStatusFilter}
+          onTypeFilterChange={setTypeFilter}
+        />
 
         <section
           className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
