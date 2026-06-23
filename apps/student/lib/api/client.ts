@@ -20,6 +20,22 @@ async function parseResponse(response: Response): Promise<unknown> {
   return text ? { raw: text } : null;
 }
 
+function isApiEnvelope<TData>(payload: unknown): payload is ApiEnvelope<TData> {
+  return Boolean(payload && typeof payload === "object" && "success" in payload);
+}
+
+function unwrapResponseData<TData>(payload: unknown): TData {
+  if (isApiEnvelope<TData>(payload) && payload.success === true && "data" in payload) {
+    return payload.data;
+  }
+
+  return payload as TData;
+}
+
+function getErrorPayload<TData>(payload: unknown): ApiEnvelope<TData>["error"] | undefined {
+  return isApiEnvelope<TData>(payload) ? payload.error : undefined;
+}
+
 export async function apiRequest<TData, TBody = unknown>(
   path: string,
   options: RequestOptions<TBody> = {},
@@ -48,9 +64,7 @@ export async function apiRequest<TData, TBody = unknown>(
   const parsed = (await parseResponse(response)) as ApiEnvelope<TData> | unknown;
 
   if (!response.ok) {
-    const payload = (parsed ?? undefined) as ApiEnvelope<TData> | undefined;
-    const errorPayload =
-      payload && typeof payload === "object" && "error" in payload ? payload.error : undefined;
+    const errorPayload = getErrorPayload<TData>(parsed);
 
     throw new ApiClientError({
       status: response.status,
@@ -61,18 +75,7 @@ export async function apiRequest<TData, TBody = unknown>(
     });
   }
 
-  if (
-    parsed &&
-    typeof parsed === "object" &&
-    "success" in parsed &&
-    parsed.success === true &&
-    "data" in parsed
-  ) {
-    return parsed.data as TData;
-  }
-
-  // TODO: confirmar com Marco se todo endpoint retornará envelope { success, data }.
-  return parsed as TData;
+  return unwrapResponseData<TData>(parsed);
 }
 
 export function apiGet<TData>(path: string, options?: Omit<RequestOptions, "method" | "body">) {
