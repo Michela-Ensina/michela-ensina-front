@@ -4,7 +4,8 @@ import Link from "next/link";
 import { CheckCircle2, CircleDashed, Clock3 } from "lucide-react";
 
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
-import { getMaterialStatus, MaterialListItem } from "@/components/student/MaterialListItem";
+import { getMaterialStatus } from "@/components/student/MaterialListItem";
+import { ProgressMaterialSection } from "@/components/student/progress/ProgressMaterialSection";
 import { ProgressCountTile } from "@/components/student/progress/ProgressCountTile";
 import { SectionHeader } from "@/components/student/SectionHeader";
 import { Button } from "@/components/ui/button";
@@ -100,40 +101,23 @@ export function ProgressContent() {
           />
         </div>
 
-        <div className="py-4">
-          <div className="flex items-center gap-2">
-            <CircleDashed size={16} aria-hidden="true" />
-            <h3 className="text-lg">Em aberto</h3>
-          </div>
-          <div className="mt-1">
-            {openMaterials.length > 0 ? (
-              openMaterials.map((material) => (
-                <MaterialListItem key={material.id} material={material} progressItems={progress.items} density="compact" />
-              ))
-            ) : (
-              <p className="student-muted-text py-4 text-sm">
-                Não há materiais em aberto no momento.
-              </p>
-            )}
-          </div>
-        </div>
+        <ProgressMaterialSection
+          title="Em aberto"
+          icon={<CircleDashed size={16} aria-hidden="true" />}
+          materials={openMaterials}
+          progressItems={progress.items}
+          emptyMessage="Não há materiais em aberto no momento."
+        />
 
         <div className="border-t py-4" style={{ borderColor: "var(--color-border)" }}>
-          <div className="flex items-center gap-2">
-            <CheckCircle2 size={16} aria-hidden="true" />
-            <h3 className="text-lg">Concluídos</h3>
-          </div>
-          <div className="mt-1">
-            {completedMaterials.length > 0 ? (
-              completedMaterials.map((material) => (
-                <MaterialListItem key={material.id} material={material} progressItems={progress.items} density="compact" />
-              ))
-            ) : (
-              <p className="student-muted-text py-4 text-sm">
-                Os materiais concluídos aparecerão aqui.
-              </p>
-            )}
-          </div>
+          <ProgressMaterialSection
+            title="Concluídos"
+            icon={<CheckCircle2 size={16} aria-hidden="true" />}
+            materials={completedMaterials}
+            progressItems={progress.items}
+            emptyMessage="Os materiais concluídos aparecerão aqui."
+            className=""
+          />
         </div>
       </section>
     </div>
