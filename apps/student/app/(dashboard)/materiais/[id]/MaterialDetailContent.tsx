@@ -2,15 +2,13 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ArrowLeft, PlayCircle } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
+import { MaterialDetailSidebar } from "@/components/student/materials/MaterialDetailSidebar";
 import { MaterialViewer } from "@/components/student/materials/MaterialViewer";
 import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/MaterialListItem";
 import { SectionHeader } from "@/components/student/SectionHeader";
-import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ApiClientError } from "@/lib/api/errors";
@@ -157,58 +155,15 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
         <MaterialViewer material={material} typeLabel={type.label} />
       </section>
 
-      <aside className="space-y-4 xl:sticky xl:top-24 xl:self-start">
-        <SurfaceCard>
-          <p className="flex items-center gap-2 text-sm font-semibold">
-            <PlayCircle size={16} aria-hidden="true" />
-            Informações do material
-          </p>
-          <dl className="mt-4 space-y-3 text-sm">
-            <div className="flex items-center justify-between gap-4">
-              <dt style={{ color: "var(--color-text-muted)" }}>Tipo</dt>
-              <dd className="font-semibold">{type.label}</dd>
-            </div>
-            <div className="flex items-center justify-between gap-4">
-              <dt style={{ color: "var(--color-text-muted)" }}>Status</dt>
-              <dd><StatusBadge label={status.label} tone={status.tone} /></dd>
-            </div>
-            <div className="flex items-center justify-between gap-4">
-              <dt style={{ color: "var(--color-text-muted)" }}>Ordem</dt>
-              <dd className="font-semibold">{material.order}</dd>
-            </div>
-          </dl>
-        </SurfaceCard>
-
-        <SurfaceCard>
-          <p className="text-sm font-semibold">Progresso da jornada</p>
-          <div className="mt-4">
-            <ProgressBar value={progressPercentage} label="Conclusão geral" />
-          </div>
-          <p className="mt-3 text-sm" style={{ color: "var(--color-text-muted)" }}>
-            Marque este conteúdo como concluído quando terminar de estudar.
-          </p>
-
-          {progressErrorMessage ? <Alert tone="error">{progressErrorMessage}</Alert> : null}
-
-          <Button
-            type="button"
-            onClick={() => void handleMarkAsCompleted()}
-            disabled={isUpdatingProgress || status.tone === "concluído"}
-            variant={status.tone === "concluído" ? "outline" : "primary"}
-            fullWidth
-            className="mt-4"
-            style={{
-              opacity: isUpdatingProgress || status.tone === "concluído" ? 0.75 : 1,
-            }}
-          >
-            {isUpdatingProgress
-              ? "Atualizando..."
-              : status.tone === "concluído"
-                ? "Material concluído"
-                : "Marcar como concluído"}
-          </Button>
-        </SurfaceCard>
-      </aside>
+      <MaterialDetailSidebar
+        material={material}
+        typeLabel={type.label}
+        status={status}
+        progressPercentage={progressPercentage}
+        progressErrorMessage={progressErrorMessage}
+        isUpdatingProgress={isUpdatingProgress}
+        onMarkAsCompleted={() => void handleMarkAsCompleted()}
+      />
     </div>
   );
 }
