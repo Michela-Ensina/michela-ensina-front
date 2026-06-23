@@ -3,13 +3,14 @@
 import { useMemo, useState } from "react";
 
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
-import { getMaterialStatus, MaterialListItem } from "@/components/student/MaterialListItem";
+import { getMaterialStatus } from "@/components/student/MaterialListItem";
 import { SectionHeader } from "@/components/student/SectionHeader";
 import {
   MaterialsFilterSidebar,
   type MaterialStatusFilter,
   type MaterialTypeFilter,
 } from "@/components/student/materials/MaterialsFilterSidebar";
+import { MaterialsStudyList } from "@/components/student/materials/MaterialsStudyList";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
@@ -88,35 +89,11 @@ export function MaterialsContent() {
           onTypeFilterChange={setTypeFilter}
         />
 
-        <section
-          className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
-          style={{
-            borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
-            backgroundColor: "color-mix(in oklab, var(--color-surface) 76%, transparent)",
-          }}
-        >
-          <div className="flex flex-col gap-2 border-b py-4 sm:flex-row sm:items-end sm:justify-between" style={{ borderColor: "var(--color-border)" }}>
-            <div>
-              <h2 className="text-xl">Lista de estudo</h2>
-              <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
-                {filteredMaterials.length} de {data.materials.length} materiais exibidos.
-              </p>
-            </div>
-          </div>
-
-          {filteredMaterials.length > 0 ? (
-            filteredMaterials.map((material) => (
-              <MaterialListItem key={material.id} material={material} progressItems={progressItems} />
-            ))
-          ) : (
-            <div className="py-6">
-              <EmptyState
-                title="Nenhum material nesse filtro"
-                description="Ajuste os filtros para ver outros conteúdos liberados."
-              />
-            </div>
-          )}
-        </section>
+        <MaterialsStudyList
+          materials={filteredMaterials}
+          totalMaterials={data.materials.length}
+          progressItems={progressItems}
+        />
       </div>
     </div>
   );
