@@ -5,7 +5,9 @@ import { SectionHeader } from "@/components/student/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
+import { Textarea } from "@/components/ui/textarea";
 import {
   adminMaterialTypes,
   type MaterialFormState,
@@ -66,30 +68,28 @@ export function AdminMaterialForm({
 
         <div>
           <Label htmlFor="materialDescription">Descrição</Label>
-          <textarea
+          <Textarea
             id="materialDescription"
             value={form.description}
             onChange={(event) => onFieldChange("description", event.target.value)}
             placeholder="Descrição curta"
-            className="student-input-control min-h-24 w-full rounded-[12px] border px-3 py-2 text-sm outline-none placeholder:text-[var(--color-text-muted)]"
           />
         </div>
 
         <div className="grid gap-3 sm:grid-cols-[1fr_112px]">
           <div>
             <Label htmlFor="materialType">Tipo</Label>
-            <select
+            <Select
               id="materialType"
               value={form.type}
               onChange={(event) => onFieldChange("type", event.target.value as MaterialType)}
-              className="student-input-control min-h-11 w-full rounded-[12px] border px-3 py-2 text-sm outline-none"
             >
               {adminMaterialTypes.map((type) => (
                 <option key={type.value} value={type.value}>
                   {type.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div>
             <Label htmlFor="materialOrder">Ordem</Label>
