@@ -61,7 +61,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="grid min-h-screen bg-[var(--color-background)] lg:grid-cols-[minmax(0,1.08fr)_minmax(420px,0.92fr)]">
+    <main className="grid min-h-screen bg-[var(--color-background)] lg:h-dvh lg:min-h-0 lg:overflow-hidden lg:grid-cols-[minmax(0,1.08fr)_minmax(420px,0.92fr)]">
       <LoginBrandPanel />
       <LoginFormPanel
         email={loginForm.email}

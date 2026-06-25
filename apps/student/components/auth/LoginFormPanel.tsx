@@ -42,7 +42,7 @@ export function LoginFormPanel({
   theme,
 }: LoginFormPanelProps) {
   return (
-    <section className="relative flex min-h-screen flex-1 flex-col bg-[var(--color-background)] px-5 py-6">
+    <section className="relative flex min-h-screen flex-1 flex-col bg-(--color-background) px-5 py-6 lg:h-dvh lg:min-h-0 lg:overflow-hidden lg:[@media_(max-height:760px)]:py-4">
       <div className="flex justify-end">
         <ThemeToggleButton theme={theme} mode="icon" onToggle={onThemeToggle} />
       </div>
@@ -53,10 +53,10 @@ export function LoginFormPanel({
         width={42}
         height={42}
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[22%] hidden -translate-x-1/2 opacity-55 sm:block"
+        className="pointer-events-none absolute left-1/2 top-[5%] hidden -translate-x-1/2 opacity-35 sm:block lg:[@media_(max-height:760px)]:hidden xl:top-[15%]"
       />
 
-      <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center py-8">
+      <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center py-8 lg:[@media_(max-height:760px)]:py-3">
         <Image
           src={
             theme === "dark"
@@ -71,26 +71,29 @@ export function LoginFormPanel({
         />
 
         <SurfaceCard
-          className="w-full rounded-[24px] p-6 shadow-[var(--shadow-brand)] sm:p-8"
+          className="w-full rounded-3xl p-6 shadow-(--shadow-brand) sm:p-8 lg:[@media_(max-height:760px)]:p-6"
           style={{
-            borderColor: "color-mix(in oklab, var(--color-border) 78%, var(--color-primary))",
+            borderColor:
+              "color-mix(in oklab, var(--color-border) 78%, var(--color-primary))",
             backgroundColor: "var(--color-surface)",
           }}
         >
-          <h2 className="text-center text-4xl leading-tight">Entrar</h2>
+          <h2 className="text-center text-4xl leading-tight lg:[@media_(max-height:760px)]:text-3xl">Entrar</h2>
           <p className="student-muted-text mt-2 text-center text-sm">
             Acesse sua conta para continuar seus estudos.
           </p>
 
           {motivoFeedback ? (
-            <Alert tone={motivoFeedback.tone === "success" ? "success" : "default"}>
+            <Alert
+              tone={motivoFeedback.tone === "success" ? "success" : "default"}
+            >
               {motivoFeedback.message}
             </Alert>
           ) : null}
 
           {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
 
-          <form className="mt-7 space-y-5" onSubmit={onSubmit}>
+          <form className="mt-7 space-y-5 lg:[@media_(max-height:760px)]:mt-5 lg:[@media_(max-height:760px)]:space-y-4" onSubmit={onSubmit}>
             <div>
               <Label htmlFor="email">E-mail</Label>
               <Input
@@ -122,9 +125,10 @@ export function LoginFormPanel({
               variant="primary"
               fullWidth
               size="lg"
-              className="mt-1 shadow-[0_8px_18px_rgb(77_35_117_/_0.28)]"
+              className="mt-1 shadow-[0_8px_18px_rgb(77_35_117/0.28)]"
               style={{
-                backgroundImage: "linear-gradient(135deg, var(--me-purple-dark), var(--me-purple))",
+                backgroundImage:
+                  "linear-gradient(135deg, var(--me-purple-dark), var(--me-purple))",
                 opacity: isSubmitting ? 0.75 : 1,
               }}
             >
@@ -132,24 +136,27 @@ export function LoginFormPanel({
             </Button>
           </form>
 
-          <div className="mt-6 flex flex-col items-center gap-3 text-sm">
+          <div className="mt-6 flex flex-col items-center gap-3 text-sm lg:[@media_(max-height:760px)]:mt-4 lg:[@media_(max-height:760px)]:gap-2">
             <Link
               href="/esqueci-senha"
-              className="student-text-action rounded-lg px-2 py-1 font-semibold text-[var(--color-text-muted)]"
+              className="student-text-action rounded-lg px-2 py-1 font-semibold text-(--color-text-muted)"
             >
               Esqueci minha senha
             </Link>
-            <span aria-hidden="true" className="h-px w-32 bg-[var(--color-border)]" />
+            <span
+              aria-hidden="true"
+              className="h-px w-32 bg-(--color-border)"
+            />
             <Link
               href="/primeiro-acesso"
-              className="student-text-action rounded-lg px-2 py-1 font-bold text-[var(--color-primary)]"
+              className="student-text-action rounded-lg px-2 py-1 font-bold text-(--color-primary)"
             >
               Primeiro acesso
             </Link>
           </div>
         </SurfaceCard>
 
-        <p className="student-muted-text mt-6 text-center text-xs">
+        <p className="student-muted-text pt-6 text-center text-xs lg:[@media_(max-height:760px)]:pt-4">
           © 2024 Michela Ensina · Todos os direitos reservados
         </p>
       </div>
