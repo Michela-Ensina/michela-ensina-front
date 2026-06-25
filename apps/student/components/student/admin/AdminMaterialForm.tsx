@@ -6,24 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
+import {
+  adminMaterialTypes,
+  type MaterialFormState,
+} from "@/components/student/admin/admin-material-form-model";
 import type { AdminMaterial, AdminUploadType } from "@/types/admin";
 import type { MaterialType } from "@/types/student";
-
-export type MaterialFormState = {
-  title: string;
-  description: string;
-  type: MaterialType;
-  url: string;
-  order: string;
-  isActive: boolean;
-};
-
-const materialTypes = [
-  { value: "video", label: "Vídeo" },
-  { value: "pdf", label: "PDF" },
-  { value: "attachment", label: "Anexo" },
-  { value: "other", label: "Link" },
-] satisfies Array<{ value: MaterialType; label: string }>;
 
 type AdminMaterialFormProps = {
   form: MaterialFormState;
@@ -96,7 +84,7 @@ export function AdminMaterialForm({
               onChange={(event) => onFieldChange("type", event.target.value as MaterialType)}
               className="student-input-control min-h-11 w-full rounded-[12px] border px-3 py-2 text-sm outline-none"
             >
-              {materialTypes.map((type) => (
+              {adminMaterialTypes.map((type) => (
                 <option key={type.value} value={type.value}>
                   {type.label}
                 </option>

@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 
-import type { MaterialFormState } from "@/components/student/admin/AdminMaterialForm";
+import {
+  emptyMaterialForm,
+  getAdminUploadType,
+  toAdminMaterialFormState,
+  toAdminMaterialPayload,
+  type MaterialFormState,
+} from "@/components/student/admin/admin-material-form-model";
 import {
   createAdminMaterial,
   deleteAdminMaterial,
@@ -10,58 +16,19 @@ import {
   uploadAdminMaterialFile,
 } from "@/lib/api/admin-materials";
 import { ApiClientError } from "@/lib/api/errors";
-import type { AdminMaterial, AdminMaterialPayload, AdminUploadType } from "@/types/admin";
-import type { MaterialType } from "@/types/student";
-
-const emptyForm: MaterialFormState = {
-  title: "",
-  description: "",
-  type: "video",
-  url: "",
-  order: "0",
-  isActive: true,
-};
-
-function getUploadType(type: MaterialType): AdminUploadType | null {
-  if (type === "pdf") return "pdf";
-  if (type === "attachment") return "attachment";
-  if (type === "other") return "other";
-  return null;
-}
-
-function toPayload(form: MaterialFormState): AdminMaterialPayload {
-  return {
-    title: form.title.trim(),
-    description: form.description.trim() || null,
-    type: form.type,
-    url: form.url.trim(),
-    order: Number(form.order || 0),
-    is_active: form.isActive,
-  };
-}
-
-function toFormState(material: AdminMaterial): MaterialFormState {
-  return {
-    title: material.title,
-    description: material.description ?? "",
-    type: material.type,
-    url: material.url,
-    order: String(material.order),
-    isActive: material.is_active,
-  };
-}
+import type { AdminMaterial } from "@/types/admin";
 
 export function useAdminMaterialsManager(token: string | null, isAdmin: boolean) {
   const [materials, setMaterials] = useState<AdminMaterial[]>([]);
   const [selectedMaterial, setSelectedMaterial] = useState<AdminMaterial | null>(null);
-  const [form, setForm] = useState<MaterialFormState>(emptyForm);
+  const [form, setForm] = useState<MaterialFormState>(emptyMaterialForm);
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const uploadType = useMemo(() => getUploadType(form.type), [form.type]);
+  const uploadType = useMemo(() => getAdminUploadType(form.type), [form.type]);
 
   const loadMaterials = useCallback(async () => {
     if (!token || !isAdmin) return;
@@ -95,13 +62,13 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
 
   function resetForm() {
     setSelectedMaterial(null);
-    setForm(emptyForm);
+    setForm(emptyMaterialForm);
     setFile(null);
   }
 
   function selectMaterial(material: AdminMaterial) {
     setSelectedMaterial(material);
-    setForm(toFormState(material));
+    setForm(toAdminMaterialFormState(material));
     setFile(null);
   }
 
@@ -128,7 +95,7 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     event.preventDefault();
     if (!token) return;
 
-    const payload = toPayload(form);
+    const payload = toAdminMaterialPayload(form);
 
     if (!payload.title || !payload.url) {
       const message = "Informe título e URL do material.";
