@@ -53,7 +53,7 @@ export function LoginFormPanel({
         width={42}
         height={42}
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[5%] hidden -translate-x-1/2 opacity-35 sm:block lg:[@media_(max-height:760px)]:hidden xl:top-[15%]"
+        className="pointer-events-none absolute left-1/2 top-[5%] hidden -translate-x-1/2 opacity-15 sm:block lg:[@media_(max-height:760px)]:hidden xl:top-[15%]"
       />
 
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center py-8 lg:[@media_(max-height:760px)]:py-3">
@@ -78,7 +78,9 @@ export function LoginFormPanel({
             backgroundColor: "var(--color-surface)",
           }}
         >
-          <h2 className="text-center text-4xl leading-tight lg:[@media_(max-height:760px)]:text-3xl">Entrar</h2>
+          <h2 className="text-center text-4xl leading-tight lg:[@media_(max-height:760px)]:text-3xl">
+            Entrar
+          </h2>
           <p className="student-muted-text mt-2 text-center text-sm">
             Acesse sua conta para continuar seus estudos.
           </p>
@@ -93,7 +95,10 @@ export function LoginFormPanel({
 
           {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
 
-          <form className="mt-7 space-y-5 lg:[@media_(max-height:760px)]:mt-5 lg:[@media_(max-height:760px)]:space-y-4" onSubmit={onSubmit}>
+          <form
+            className="mt-7 space-y-5 lg:[@media_(max-height:760px)]:mt-5 lg:[@media_(max-height:760px)]:space-y-4"
+            onSubmit={onSubmit}
+          >
             <div>
               <Label htmlFor="email">E-mail</Label>
               <Input
@@ -156,7 +161,7 @@ export function LoginFormPanel({
           </div>
         </SurfaceCard>
 
-        <p className="student-muted-text pt-6 text-center text-xs lg:[@media_(max-height:760px)]:pt-4">
+        <p className="student-muted-text mt-6 text-center text-xs lg:[@media_(max-height:760px)]:mt-4">
           © 2024 Michela Ensina · Todos os direitos reservados
         </p>
       </div>
