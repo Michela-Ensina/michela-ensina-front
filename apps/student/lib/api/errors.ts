@@ -23,6 +23,10 @@ export class ApiClientError extends Error {
 }
 
 export function getApiErrorMessage(status: number, error?: ApiErrorPayload): string {
+  if (status === 403 && error?.code === "ACCESS_DENIED") {
+    return "Entre em contato com a Michela ou tente novamente mais tarde.";
+  }
+
   if (error?.message) {
     return error.message;
   }

@@ -6,8 +6,8 @@ import { toast } from "sonner";
 
 import { LoginBrandPanel } from "@/components/auth/LoginBrandPanel";
 import { LoginFormPanel } from "@/components/auth/LoginFormPanel";
+import { LoginLoadingState } from "@/components/auth/LoginLoadingState";
 import { useLoginForm } from "@/components/auth/use-login-form";
-import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { getLoginMotivoFeedback } from "@/lib/auth/login-motivo";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
@@ -49,15 +49,7 @@ export default function LoginPage() {
   }, [motivoFeedback]);
 
   if (isLoading) {
-    return (
-      <main className="mx-auto flex min-h-screen w-full max-w-lg flex-col items-center justify-center px-4 py-10">
-        <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
-          <p style={{ color: "var(--color-text-muted)" }}>
-            Verificando sessão...
-          </p>
-        </SurfaceCard>
-      </main>
-    );
+    return <LoginLoadingState />;
   }
 
   return (

@@ -169,8 +169,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         const freshUser = await getCurrentStudent(storedToken);
         applySession(storedToken, freshUser);
       } catch (error) {
-        if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
+        if (error instanceof ApiClientError && error.status === 401) {
           clearSession({ expired: true });
+        } else if (error instanceof ApiClientError && error.status === 403 && storedUser) {
+          setSessionExpired(false);
+          setToken(storedToken);
+          setUser(storedUser);
         } else {
           clearSession();
         }

@@ -2,10 +2,17 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react";
+import {
+  Camera,
+  ChevronLeft,
+  ChevronRight,
+  MessageCircle,
+  type LucideIcon,
+} from "lucide-react";
 import { useState } from "react";
 
 import { StudentBrandMark } from "@/components/brand/StudentBrandMark";
+import { STUDENT_BRAND_LINKS } from "@/constants/brand-links";
 import { cn } from "@/lib/utils/cn";
 
 export type StudentNavItem = {
@@ -142,6 +149,47 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
             );
           })}
         </nav>
+      </div>
+
+      <div
+        className={cn(
+          "relative z-10 mt-auto pt-6",
+          isCollapsed ? "lg:flex lg:justify-center xl:block" : "",
+        )}
+      >
+        <div
+          className={cn(
+            "flex items-center gap-2",
+            isCollapsed ? "lg:flex-col xl:flex-row" : "",
+          )}
+        >
+          <Link
+            href={STUDENT_BRAND_LINKS.whatsappChannel}
+            target="_blank"
+            rel="noreferrer"
+            className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[var(--color-text-muted)]"
+            aria-label="Canal do Whatsapp da Michela"
+          >
+            <MessageCircle size={17} aria-hidden="true" />
+          </Link>
+          <Link
+            href={STUDENT_BRAND_LINKS.instagram}
+            target="_blank"
+            rel="noreferrer"
+            className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[var(--color-text-muted)]"
+            aria-label="Instagram da Michela"
+          >
+            <Camera size={17} aria-hidden="true" />
+          </Link>
+          <span
+            className={cn(
+              "student-muted-text ml-1 text-xs font-semibold",
+              isCollapsed ? "lg:sr-only xl:not-sr-only" : "",
+            )}
+          >
+            Michela Ensina
+          </span>
+        </div>
       </div>
     </aside>
   );

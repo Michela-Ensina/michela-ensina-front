@@ -1,5 +1,8 @@
 import Image from "next/image";
-import { CheckCircle2, FileText, Settings } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, CheckCircle2, FileText, Settings } from "lucide-react";
+
+import { STUDENT_BRAND_LINKS } from "@/constants/brand-links";
 
 const loginHighlights = [
   {
@@ -91,6 +94,24 @@ export function LoginBrandPanel() {
               <span>{label}</span>
             </div>
           ))}
+        </div>
+
+        <div className="mt-8 w-full max-w-xs rounded-md border border-white/18 bg-white/10 p-4 text-left lg:[@media_(max-height:760px)]:mt-5">
+          <p className="text-sm font-semibold text-white">
+            Ainda não possui acesso ao material?
+          </p>
+          <p className="mt-1 text-sm leading-5 text-white/72">
+            Conheça o planner e veja como começar seus estudos com a Michela.
+          </p>
+          <Link
+            href={STUDENT_BRAND_LINKS.planner}
+            target="_blank"
+            rel="noreferrer"
+            className="student-action mt-3 inline-flex min-h-9 items-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-[var(--me-purple-dark)]"
+          >
+            Garantir meu planner
+            <ArrowRight size={15} aria-hidden="true" />
+          </Link>
         </div>
       </div>
 
