@@ -7,6 +7,23 @@ function isBrowser() {
   return typeof window !== "undefined";
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object";
+}
+
+function isStoredUser(value: unknown): value is User {
+  if (!isRecord(value)) return false;
+
+  return (
+    typeof value.id === "string" &&
+    typeof value.name === "string" &&
+    typeof value.email === "string" &&
+    typeof value.is_active === "boolean" &&
+    typeof value.must_change_password === "boolean" &&
+    Array.isArray(value.roles)
+  );
+}
+
 export function getStoredToken(): string | null {
   if (!isBrowser()) {
     return null;
@@ -42,7 +59,8 @@ export function getStoredUser(): User | null {
   }
 
   try {
-    return JSON.parse(raw) as User;
+    const parsedUser: unknown = JSON.parse(raw);
+    return isStoredUser(parsedUser) ? parsedUser : null;
   } catch {
     return null;
   }
