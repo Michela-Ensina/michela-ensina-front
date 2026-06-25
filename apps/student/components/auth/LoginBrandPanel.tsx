@@ -19,9 +19,9 @@ const loginHighlights = [
   },
 ];
 
-export function LoginBrandPanel() {
+function LoginBrandDecor() {
   return (
-    <aside className="relative hidden min-h-screen overflow-hidden bg-[linear-gradient(145deg,var(--me-purple-dark)_0%,var(--me-purple)_48%,var(--me-lavender)_100%)] px-12 py-14 text-white lg:flex lg:h-dvh lg:min-h-0 lg:flex-col lg:items-center lg:justify-center lg:[@media_(max-height:760px)]:py-8">
+    <>
       <Image
         src="/assets/brand/logos/SIMBOLO-BRANCO.svg"
         alt=""
@@ -54,6 +54,69 @@ export function LoginBrandPanel() {
         aria-hidden="true"
         className="pointer-events-none absolute bottom-16 right-8 opacity-35"
       />
+    </>
+  );
+}
+
+function LoginBrandDivider() {
+  return (
+    <div className="mt-8 flex items-center gap-3 text-white/65 lg:[@media_(max-height:760px)]:mt-6">
+      <span className="h-px w-16 bg-current" />
+      <Image
+        src="/assets/brand/graphics/estrela-lilas.svg"
+        alt=""
+        width={22}
+        height={22}
+        aria-hidden="true"
+        className="brightness-0 invert"
+      />
+      <span className="h-px w-16 bg-current" />
+    </div>
+  );
+}
+
+function LoginHighlightList() {
+  return (
+    <div className="mt-10 grid w-full max-w-xs gap-3 lg:[@media_(max-height:760px)]:mt-7 lg:[@media_(max-height:760px)]:gap-2.5">
+      {loginHighlights.map(({ icon: Icon, label }) => (
+        <div
+          key={label}
+          className="flex items-center gap-3 rounded-md bg-white/12 px-4 py-3 text-left text-sm font-semibold text-white/90"
+        >
+          <Icon size={18} aria-hidden="true" className="text-white/80" />
+          <span>{label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PlannerCta() {
+  return (
+    <div className="mt-8 w-full max-w-xs rounded-md border border-white/18 bg-white/10 p-4 text-left lg:[@media_(max-height:760px)]:mt-5">
+      <p className="text-sm font-semibold text-white">
+        Ainda não possui acesso ao material?
+      </p>
+      <p className="mt-1 text-sm leading-5 text-white/72">
+        Conheça o planner e veja como começar seus estudos com a Michela.
+      </p>
+      <Link
+        href={STUDENT_BRAND_LINKS.planner}
+        target="_blank"
+        rel="noreferrer"
+        className="student-action mt-3 inline-flex min-h-9 items-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-[var(--me-purple-dark)]"
+      >
+        Garantir meu planner
+        <ArrowRight size={15} aria-hidden="true" />
+      </Link>
+    </div>
+  );
+}
+
+export function LoginBrandPanel() {
+  return (
+    <aside className="relative hidden min-h-screen overflow-hidden bg-[linear-gradient(145deg,var(--me-purple-dark)_0%,var(--me-purple)_48%,var(--me-lavender)_100%)] px-12 py-14 text-white lg:flex lg:h-dvh lg:min-h-0 lg:flex-col lg:items-center lg:justify-center lg:[@media_(max-height:760px)]:py-8">
+      <LoginBrandDecor />
 
       <div className="relative z-10 flex w-full max-w-md flex-col items-center text-center">
         <Image
@@ -64,18 +127,7 @@ export function LoginBrandPanel() {
           priority
         />
 
-        <div className="mt-8 flex items-center gap-3 text-white/65 lg:[@media_(max-height:760px)]:mt-6">
-          <span className="h-px w-16 bg-current" />
-          <Image
-            src="/assets/brand/graphics/estrela-lilas.svg"
-            alt=""
-            width={22}
-            height={22}
-            aria-hidden="true"
-            className="brightness-0 invert"
-          />
-          <span className="h-px w-16 bg-current" />
-        </div>
+        <LoginBrandDivider />
 
         <h1 className="mt-8 text-3xl leading-tight text-white! lg:[@media_(max-height:760px)]:mt-6">
           Bem-vindo à área do aluno
@@ -84,35 +136,8 @@ export function LoginBrandPanel() {
           Acesse sua conta e continue seus estudos.
         </p>
 
-        <div className="mt-10 grid w-full max-w-xs gap-3 lg:[@media_(max-height:760px)]:mt-7 lg:[@media_(max-height:760px)]:gap-2.5">
-          {loginHighlights.map(({ icon: Icon, label }) => (
-            <div
-              key={label}
-              className="flex items-center gap-3 rounded-md bg-white/12 px-4 py-3 text-left text-sm font-semibold text-white/90"
-            >
-              <Icon size={18} aria-hidden="true" className="text-white/80" />
-              <span>{label}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-8 w-full max-w-xs rounded-md border border-white/18 bg-white/10 p-4 text-left lg:[@media_(max-height:760px)]:mt-5">
-          <p className="text-sm font-semibold text-white">
-            Ainda não possui acesso ao material?
-          </p>
-          <p className="mt-1 text-sm leading-5 text-white/72">
-            Conheça o planner e veja como começar seus estudos com a Michela.
-          </p>
-          <Link
-            href={STUDENT_BRAND_LINKS.planner}
-            target="_blank"
-            rel="noreferrer"
-            className="student-action mt-3 inline-flex min-h-9 items-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-[var(--me-purple-dark)]"
-          >
-            Garantir meu planner
-            <ArrowRight size={15} aria-hidden="true" />
-          </Link>
-        </div>
+        <LoginHighlightList />
+        <PlannerCta />
       </div>
 
       <p className="absolute bottom-8 left-0 right-0 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-white/55 lg:[@media_(max-height:760px)]:bottom-5">
