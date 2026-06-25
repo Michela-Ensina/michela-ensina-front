@@ -4,13 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { AuthCardHeader } from "@/components/auth/AuthCardHeader";
-import { AuthLoginLink, AuthSubmitButton } from "@/components/auth/AuthFormActions";
-import { StudentLayout } from "@/components/layout/StudentLayout";
-import { Alert } from "@/components/ui/alert";
+import { AuthFormCard } from "@/components/auth/AuthFormCard";
+import { AuthSubmitButton } from "@/components/auth/AuthFormActions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { firstAccess } from "@/lib/api/auth";
 import { ApiClientError } from "@/lib/api/errors";
 
@@ -88,37 +85,31 @@ export default function PrimeiroAcessoPage() {
   }
 
   return (
-    <StudentLayout>
-      <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
-        <AuthCardHeader
-          title="Primeiro acesso"
-          description="Defina sua senha inicial para entrar na área do aluno."
-        />
+    <AuthFormCard
+      title="Primeiro acesso"
+      description="Defina sua senha inicial para entrar na área do aluno."
+      errorMessage={errorMessage}
+      successMessage={successMessage}
+      loginLinkLabel="Ir para login"
+    >
+      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <div className="block">
+          <Label htmlFor="token">Token de primeiro acesso</Label>
+          <Input id="token" type="text" value={token} onChange={(event) => setToken(event.target.value)} placeholder="Token recebido por e-mail" />
+        </div>
+        <div className="block">
+          <Label htmlFor="password">Nova senha</Label>
+          <Input id="password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Nova senha" />
+        </div>
+        <div className="block">
+          <Label htmlFor="passwordConfirmation">Confirmar nova senha</Label>
+          <Input id="passwordConfirmation" type="password" value={passwordConfirmation} onChange={(event) => setPasswordConfirmation(event.target.value)} placeholder="Confirmar nova senha" />
+        </div>
 
-        {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
-        {successMessage ? <Alert tone="success">{successMessage}</Alert> : null}
-
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-          <div className="block">
-            <Label htmlFor="token">Token de primeiro acesso</Label>
-            <Input id="token" type="text" value={token} onChange={(event) => setToken(event.target.value)} placeholder="Token recebido por e-mail" />
-          </div>
-          <div className="block">
-            <Label htmlFor="password">Nova senha</Label>
-            <Input id="password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Nova senha" />
-          </div>
-          <div className="block">
-            <Label htmlFor="passwordConfirmation">Confirmar nova senha</Label>
-            <Input id="passwordConfirmation" type="password" value={passwordConfirmation} onChange={(event) => setPasswordConfirmation(event.target.value)} placeholder="Confirmar nova senha" />
-          </div>
-
-          <AuthSubmitButton isSubmitting={isSubmitting}>
-            {isSubmitting ? "Concluindo..." : "Concluir primeiro acesso"}
-          </AuthSubmitButton>
-        </form>
-
-        <AuthLoginLink>Ir para login</AuthLoginLink>
-      </SurfaceCard>
-    </StudentLayout>
+        <AuthSubmitButton isSubmitting={isSubmitting}>
+          {isSubmitting ? "Concluindo..." : "Concluir primeiro acesso"}
+        </AuthSubmitButton>
+      </form>
+    </AuthFormCard>
   );
 }

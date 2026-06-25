@@ -1,6 +1,6 @@
 export type LoginMotivoTone = "info" | "success";
 
-type LoginMotivoFeedback = {
+export type LoginMotivoFeedback = {
   message: string;
   tone: LoginMotivoTone;
 };

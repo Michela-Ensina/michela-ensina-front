@@ -3,13 +3,10 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { AuthCardHeader } from "@/components/auth/AuthCardHeader";
-import { AuthLoginLink, AuthSubmitButton } from "@/components/auth/AuthFormActions";
-import { StudentLayout } from "@/components/layout/StudentLayout";
-import { Alert } from "@/components/ui/alert";
+import { AuthFormCard } from "@/components/auth/AuthFormCard";
+import { AuthSubmitButton } from "@/components/auth/AuthFormActions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { forgotPassword } from "@/lib/api/auth";
 import { ApiClientError } from "@/lib/api/errors";
 import { isValidEmail } from "@/lib/utils/validation";
@@ -58,35 +55,29 @@ export default function EsqueciSenhaPage() {
   }
 
   return (
-    <StudentLayout>
-      <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
-        <AuthCardHeader
-          title="Esqueci minha senha"
-          description="Informe seu e-mail para receber as instruções de recuperação."
-        />
+    <AuthFormCard
+      title="Esqueci minha senha"
+      description="Informe seu e-mail para receber as instruções de recuperação."
+      errorMessage={errorMessage}
+      successMessage={successMessage}
+      loginLinkLabel="Voltar para login"
+    >
+      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <div className="block">
+          <Label htmlFor="email">E-mail</Label>
+          <Input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="seuemail@exemplo.com"
+          />
+        </div>
 
-        {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
-        {successMessage ? <Alert tone="success">{successMessage}</Alert> : null}
-
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-          <div className="block">
-            <Label htmlFor="email">E-mail</Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="seuemail@exemplo.com"
-            />
-          </div>
-
-          <AuthSubmitButton isSubmitting={isSubmitting}>
-            {isSubmitting ? "Enviando..." : "Enviar instruções"}
-          </AuthSubmitButton>
-        </form>
-
-        <AuthLoginLink>Voltar para login</AuthLoginLink>
-      </SurfaceCard>
-    </StudentLayout>
+        <AuthSubmitButton isSubmitting={isSubmitting}>
+          {isSubmitting ? "Enviando..." : "Enviar instruções"}
+        </AuthSubmitButton>
+      </form>
+    </AuthFormCard>
   );
 }
