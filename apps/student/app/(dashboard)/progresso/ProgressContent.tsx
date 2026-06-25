@@ -13,6 +13,29 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { useMaterialsData } from "@/lib/student/use-materials-data";
+import type { Material, ProgressItem } from "@/types/student";
+
+type ProgressMaterialGroups = {
+  completedMaterials: Material[];
+  openMaterials: Material[];
+};
+
+function groupMaterialsByProgress(materials: Material[], progressItems: ProgressItem[]): ProgressMaterialGroups {
+  return materials.reduce<ProgressMaterialGroups>(
+    (groups, material) => {
+      const isCompleted = getMaterialStatus(material, progressItems).tone === "concluído";
+
+      if (isCompleted) {
+        groups.completedMaterials.push(material);
+      } else {
+        groups.openMaterials.push(material);
+      }
+
+      return groups;
+    },
+    { completedMaterials: [], openMaterials: [] },
+  );
+}
 
 export function ProgressContent() {
   const { data, isLoading, errorMessage, isEmpty, refetch } = useMaterialsData();
@@ -40,8 +63,7 @@ export function ProgressContent() {
   }
 
   const progress = data.progress;
-  const completedMaterials = data.materials.filter((material) => getMaterialStatus(material, progress.items).tone === "concluído");
-  const openMaterials = data.materials.filter((material) => getMaterialStatus(material, progress.items).tone !== "concluído");
+  const { completedMaterials, openMaterials } = groupMaterialsByProgress(data.materials, progress.items);
 
   return (
     <div className="grid gap-5 xl:grid-cols-[360px_1fr]">
@@ -116,7 +138,6 @@ export function ProgressContent() {
             materials={completedMaterials}
             progressItems={progress.items}
             emptyMessage="Os materiais concluídos aparecerão aqui."
-            className=""
           />
         </div>
       </section>
