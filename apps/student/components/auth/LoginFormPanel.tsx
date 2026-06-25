@@ -161,7 +161,7 @@ export function LoginFormPanel({
           </div>
         </SurfaceCard>
 
-        <p className="student-muted-text mt-6 text-center text-xs lg:[@media_(max-height:760px)]:mt-4">
+        <p className="student-muted-text mt- pt-6 text-center text-xs lg:[@media_(max-height:760px)]:mt-4">
           © 2024 Michela Ensina · Todos os direitos reservados
         </p>
       </div>
