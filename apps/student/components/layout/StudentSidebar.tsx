@@ -2,18 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Camera,
-  ChevronLeft,
-  ChevronRight,
-  MessageCircle,
-  type LucideIcon,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 
 import { StudentBrandMark } from "@/components/brand/StudentBrandMark";
 import { STUDENT_BRAND_LINKS } from "@/constants/brand-links";
 import { cn } from "@/lib/utils/cn";
+import { SiInstagram, SiWhatsapp } from "react-icons/si";
 
 export type StudentNavItem = {
   href: string;
@@ -81,7 +76,10 @@ function SidebarHeader({ isCollapsed, onToggle }: SidebarHeaderProps) {
       >
         <StudentBrandMark
           variant={isCollapsed ? "symbol" : "horizontal"}
-          className={cn("shrink-0 object-contain", isCollapsed ? "h-7 w-7 xl:hidden" : "h-8 w-auto")}
+          className={cn(
+            "shrink-0 object-contain",
+            isCollapsed ? "h-7 w-7 xl:hidden" : "h-8 w-auto",
+          )}
         />
         {isCollapsed ? (
           <StudentBrandMark
@@ -190,7 +188,7 @@ function SidebarSocialLinks({ isCollapsed }: CollapsibleSidebarPartProps) {
           className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[var(--color-text-muted)]"
           aria-label="Canal do Whatsapp da Michela"
         >
-          <MessageCircle size={17} aria-hidden="true" />
+          <SiWhatsapp size={17} aria-hidden="true" />
         </Link>
         <Link
           href={STUDENT_BRAND_LINKS.instagram}
@@ -199,7 +197,7 @@ function SidebarSocialLinks({ isCollapsed }: CollapsibleSidebarPartProps) {
           className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[var(--color-text-muted)]"
           aria-label="Instagram da Michela"
         >
-          <Camera size={17} aria-hidden="true" />
+          <SiInstagram size={17} aria-hidden="true" />
         </Link>
         <span
           className={cn(
