@@ -2,11 +2,11 @@
 
 import type { ReactNode } from "react";
 import Image from "next/image";
-import { BarChart3, BookOpen, FolderKanban, Home, Settings } from "lucide-react";
 
 import { StudentMobileNav } from "@/components/layout/StudentMobileNav";
-import { StudentSidebar, type StudentNavItem } from "@/components/layout/StudentSidebar";
+import { StudentSidebar } from "@/components/layout/StudentSidebar";
 import { StudentTopbar } from "@/components/layout/StudentTopbar";
+import { getStudentNavItems, getStudentPageMeta } from "@/components/layout/student-navigation";
 import { useAuth } from "@/lib/auth/use-auth";
 
 type StudentAppLayoutProps = {
@@ -14,57 +14,10 @@ type StudentAppLayoutProps = {
   pathname: string;
 };
 
-const NAV_ITEMS: StudentNavItem[] = [
-  { href: "/dashboard", label: "Dashboard", icon: Home },
-  { href: "/materiais", label: "Materiais", icon: BookOpen },
-  { href: "/progresso", label: "Progresso", icon: BarChart3 },
-  { href: "/configuracoes", label: "Configurações", icon: Settings },
-];
-
-const ADMIN_NAV_ITEM: StudentNavItem = {
-  href: "/admin/materiais",
-  label: "Admin",
-  icon: FolderKanban,
-};
-
-const PAGE_META: Record<string, { title: string; subtitle: string }> = {
-  "/dashboard": {
-    title: "Dashboard",
-    subtitle: "Visão geral da sua jornada de estudos.",
-  },
-  "/materiais": {
-    title: "Materiais",
-    subtitle: "Aulas e conteúdos organizados para você.",
-  },
-  "/progresso": {
-    title: "Progresso",
-    subtitle: "Acompanhe sua evolução no curso.",
-  },
-  "/configuracoes": {
-    title: "Configurações",
-    subtitle: "Ajuste preferências do ambiente do aluno.",
-  },
-  "/admin/materiais": {
-    title: "Admin",
-    subtitle: "Gerencie os materiais da fase 1.",
-  },
-};
-
-function getPageMeta(pathname: string) {
-  if (pathname.startsWith("/materiais/")) {
-    return {
-      title: "Material",
-      subtitle: "Estude, revise e atualize seu progresso.",
-    };
-  }
-
-  return PAGE_META[pathname] ?? PAGE_META["/dashboard"];
-}
-
 export function StudentAppLayout({ children, pathname }: StudentAppLayoutProps) {
   const { user } = useAuth();
-  const navItems = user?.roles?.includes("admin") ? [...NAV_ITEMS, ADMIN_NAV_ITEM] : NAV_ITEMS;
-  const page = getPageMeta(pathname);
+  const navItems = getStudentNavItems(Boolean(user?.roles?.includes("admin")));
+  const page = getStudentPageMeta(pathname);
 
   return (
     <div className="relative flex min-h-screen overflow-hidden bg-transparent">
