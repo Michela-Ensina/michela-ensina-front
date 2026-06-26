@@ -71,6 +71,7 @@ export function AdminMaterialsContent() {
           isUploading={manager.isUploading}
           onFieldChange={manager.updateField}
           onFileChange={manager.setFile}
+          onFileRejected={manager.rejectFile}
           onReset={manager.resetForm}
           onSubmit={manager.handleSubmit}
           onUpload={() => void manager.handleUpload()}

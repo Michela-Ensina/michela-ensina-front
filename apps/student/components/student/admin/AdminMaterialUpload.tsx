@@ -1,10 +1,14 @@
-import type { ChangeEvent } from "react";
+import { useEffect, useRef, type ChangeEvent } from "react";
 import { FileUp, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getAdminUploadAcceptValue, getAdminUploadHelpText } from "@/lib/student/admin-upload-validation";
+import {
+  getAdminUploadAcceptValue,
+  getAdminUploadHelpText,
+  validateAdminUploadFile,
+} from "@/lib/student/admin-upload-validation";
 import type { AdminUploadType } from "@/types/admin";
 import type { MaterialAttachment, MaterialType } from "@/types/student";
 
@@ -15,6 +19,7 @@ type AdminMaterialUploadProps = {
   uploadType: AdminUploadType | null;
   materialType: MaterialType;
   onFileChange: (file: File | null) => void;
+  onFileRejected: (message: string) => void;
   onUpload: () => void;
   onRemoveAttachment: (attachmentId: string) => void;
 };
@@ -26,19 +31,45 @@ export function AdminMaterialUpload({
   uploadType,
   materialType,
   onFileChange,
+  onFileRejected,
   onUpload,
   onRemoveAttachment,
 }: AdminMaterialUploadProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!file && inputRef.current) {
+      inputRef.current.value = "";
+    }
+  }, [file]);
+
   if (!uploadType) {
     return null;
   }
 
+  const activeUploadType = uploadType;
+
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
-    onFileChange(event.target.files?.[0] ?? null);
+    const nextFile = event.target.files?.[0] ?? null;
+
+    if (!nextFile) {
+      onFileChange(null);
+      return;
+    }
+
+    const validationMessage = validateAdminUploadFile(nextFile, activeUploadType);
+    if (validationMessage) {
+      onFileChange(null);
+      event.target.value = "";
+      onFileRejected(validationMessage);
+      return;
+    }
+
+    onFileChange(nextFile);
   }
 
   const replacesPrimaryFile = materialType === "pdf" || materialType === "attachment";
-  const uploadHelpText = getAdminUploadHelpText(uploadType);
+  const uploadHelpText = getAdminUploadHelpText(activeUploadType);
 
   return (
     <div
@@ -57,8 +88,9 @@ export function AdminMaterialUpload({
       </Label>
       <Input
         id="materialFile"
+        ref={inputRef}
         type="file"
-        accept={getAdminUploadAcceptValue(uploadType)}
+        accept={getAdminUploadAcceptValue(activeUploadType)}
         onChange={handleFileChange}
       />
       {attachedFiles.length > 0 ? (

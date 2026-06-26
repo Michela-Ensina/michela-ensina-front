@@ -23,6 +23,7 @@ type AdminMaterialFormProps = {
   isUploading: boolean;
   onFieldChange: <TField extends keyof MaterialFormState>(field: TField, value: MaterialFormState[TField]) => void;
   onFileChange: (file: File | null) => void;
+  onFileRejected: (message: string) => void;
   onReset: () => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onUpload: () => void;
@@ -40,6 +41,7 @@ export function AdminMaterialForm({
   isUploading,
   onFieldChange,
   onFileChange,
+  onFileRejected,
   onReset,
   onSubmit,
   onUpload,
@@ -85,6 +87,7 @@ export function AdminMaterialForm({
           isUploading={isUploading}
           onFieldChange={onFieldChange}
           onFileChange={onFileChange}
+          onFileRejected={onFileRejected}
           onUpload={onUpload}
           onRemoveAttachment={onRemoveAttachment}
         />

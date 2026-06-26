@@ -20,6 +20,7 @@ type AdminMaterialTypeFieldsProps = {
     value: MaterialFormState[TField],
   ) => void;
   onFileChange: (file: File | null) => void;
+  onFileRejected: (message: string) => void;
   onUpload: () => void;
   onRemoveAttachment: (attachmentId: string) => void;
 };
@@ -32,6 +33,7 @@ export function AdminMaterialTypeFields({
   isUploading,
   onFieldChange,
   onFileChange,
+  onFileRejected,
   onUpload,
   onRemoveAttachment,
 }: AdminMaterialTypeFieldsProps) {
@@ -71,6 +73,7 @@ export function AdminMaterialTypeFields({
         uploadType={uploadType}
         materialType={form.type}
         onFileChange={onFileChange}
+        onFileRejected={onFileRejected}
         onUpload={onUpload}
         onRemoveAttachment={onRemoveAttachment}
       />

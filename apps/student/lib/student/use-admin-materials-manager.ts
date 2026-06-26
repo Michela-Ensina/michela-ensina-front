@@ -142,6 +142,11 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     });
   }
 
+  function rejectFile(message: string) {
+    setErrorMessage(message);
+    toast.error(message);
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!token) return;
@@ -235,6 +240,7 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     handleUpload,
     loadMaterials,
     removeAttachedFile,
+    rejectFile,
     resetForm,
     selectMaterial,
     setFile,
