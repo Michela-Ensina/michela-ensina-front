@@ -41,6 +41,7 @@ export function AdminMaterialsContent() {
         form={manager.form}
         selectedMaterial={manager.selectedMaterial}
         file={manager.file}
+        attachedFiles={manager.attachedFiles}
         errorMessage={manager.errorMessage}
         uploadType={manager.uploadType}
         isSaving={manager.isSaving}

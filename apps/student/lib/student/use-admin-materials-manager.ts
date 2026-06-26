@@ -16,13 +16,16 @@ import {
   uploadAdminMaterialFile,
 } from "@/lib/api/admin-materials";
 import { ApiClientError } from "@/lib/api/errors";
+import { resolveYoutubeEmbedUrl } from "@/lib/student/material-media";
 import type { AdminMaterial } from "@/types/admin";
+import type { MaterialAttachment } from "@/types/student";
 
 export function useAdminMaterialsManager(token: string | null, isAdmin: boolean) {
   const [materials, setMaterials] = useState<AdminMaterial[]>([]);
   const [selectedMaterial, setSelectedMaterial] = useState<AdminMaterial | null>(null);
   const [form, setForm] = useState<MaterialFormState>(emptyMaterialForm);
   const [file, setFile] = useState<File | null>(null);
+  const [attachedFiles, setAttachedFiles] = useState<MaterialAttachment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -57,19 +60,35 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
   }, [loadMaterials]);
 
   function updateField<TField extends keyof MaterialFormState>(field: TField, value: MaterialFormState[TField]) {
-    setForm((current) => ({ ...current, [field]: value }));
+    if (field === "type" && form.type !== value) {
+      setFile(null);
+      setAttachedFiles([]);
+      setForm((current) => ({
+        ...current,
+        [field]: value,
+        url: "",
+        attachmentIds: [],
+      }));
+      return;
+    }
+
+    setForm((current) => {
+      return { ...current, [field]: value };
+    });
   }
 
   function resetForm() {
     setSelectedMaterial(null);
     setForm(emptyMaterialForm);
     setFile(null);
+    setAttachedFiles([]);
   }
 
   function selectMaterial(material: AdminMaterial) {
     setSelectedMaterial(material);
     setForm(toAdminMaterialFormState(material));
     setFile(null);
+    setAttachedFiles(material.attachments ?? []);
   }
 
   async function handleUpload() {
@@ -81,6 +100,8 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     try {
       const upload = await uploadAdminMaterialFile(file, uploadType, token);
       updateField("url", upload.url);
+      updateField("attachmentIds", [upload.id]);
+      setAttachedFiles([upload]);
       toast.success("Arquivo enviado com sucesso.");
     } catch (error) {
       const message = error instanceof ApiClientError ? error.message : "Não foi possível enviar o arquivo.";
@@ -97,8 +118,29 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
 
     const payload = toAdminMaterialPayload(form);
 
-    if (!payload.title || !payload.url) {
-      const message = "Informe título e URL do material.";
+    if (!payload.title) {
+      const message = "Informe o título do material.";
+      setErrorMessage(message);
+      toast.error(message);
+      return;
+    }
+
+    if (payload.type === "video" && !resolveYoutubeEmbedUrl(payload.url)) {
+      const message = "Informe uma URL válida do YouTube para o vídeo.";
+      setErrorMessage(message);
+      toast.error(message);
+      return;
+    }
+
+    if ((payload.type === "pdf" || payload.type === "attachment") && payload.attachment_ids?.length === 0) {
+      const message = payload.type === "pdf" ? "Envie o PDF do material." : "Envie o arquivo do anexo.";
+      setErrorMessage(message);
+      toast.error(message);
+      return;
+    }
+
+    if (payload.type === "other" && !payload.url) {
+      const message = "Informe o link do material.";
       setErrorMessage(message);
       toast.error(message);
       return;
@@ -152,6 +194,7 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     selectedMaterial,
     form,
     file,
+    attachedFiles,
     isLoading,
     isSaving,
     isUploading,

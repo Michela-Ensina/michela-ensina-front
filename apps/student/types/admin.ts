@@ -7,6 +7,8 @@ export type AdminMaterialPayload = {
   url: string;
   order?: number | null;
   is_active?: boolean;
+  released_at?: string | null;
+  attachment_ids?: string[];
 };
 
 export type AdminUploadType = "pdf" | "attachment" | "other";

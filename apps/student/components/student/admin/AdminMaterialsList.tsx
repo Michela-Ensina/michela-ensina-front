@@ -1,6 +1,7 @@
-import { Edit3, Trash2 } from "lucide-react";
+import { CalendarClock, Edit3, Paperclip, Trash2 } from "lucide-react";
 
 import { SectionHeader } from "@/components/student/SectionHeader";
+import { getMaterialTypeMeta } from "@/components/student/materials/material-display";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -11,6 +12,15 @@ type AdminMaterialsListProps = {
   onEdit: (material: AdminMaterial) => void;
   onDelete: (material: AdminMaterial) => void;
 };
+
+function formatReleaseDate(value: string | null): string | null {
+  if (!value) return null;
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(new Date(value));
+}
 
 export function AdminMaterialsList({ materials, onEdit, onDelete }: AdminMaterialsListProps) {
   return (
@@ -40,9 +50,21 @@ export function AdminMaterialsList({ materials, onEdit, onDelete }: AdminMateria
                     tone={material.is_active ? "concluído" : "bloqueado"}
                   />
                 </div>
-                <p className="student-muted-text mt-1 text-sm">
-                  {material.type} · ordem {material.order}
-                </p>
+                <div className="student-muted-text mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+                  <span>{getMaterialTypeMeta(material.type).label} · ordem {material.order}</span>
+                  {material.attachments?.length ? (
+                    <span className="inline-flex items-center gap-1">
+                      <Paperclip size={14} aria-hidden="true" />
+                      {material.attachments.length} anexo{material.attachments.length > 1 ? "s" : ""}
+                    </span>
+                  ) : null}
+                  {formatReleaseDate(material.released_at) ? (
+                    <span className="inline-flex items-center gap-1">
+                      <CalendarClock size={14} aria-hidden="true" />
+                      {formatReleaseDate(material.released_at)}
+                    </span>
+                  ) : null}
+                </div>
                 {material.description ? (
                   <p className="student-muted-text mt-2 line-clamp-2 text-sm">{material.description}</p>
                 ) : null}

@@ -14,12 +14,13 @@ import {
   type MaterialFormState,
 } from "@/lib/student/admin-material-form";
 import type { AdminMaterial, AdminUploadType } from "@/types/admin";
-import type { MaterialType } from "@/types/student";
+import type { MaterialAttachment, MaterialType } from "@/types/student";
 
 type AdminMaterialFormProps = {
   form: MaterialFormState;
   selectedMaterial: AdminMaterial | null;
   file: File | null;
+  attachedFiles: MaterialAttachment[];
   errorMessage: string | null;
   uploadType: AdminUploadType | null;
   isSaving: boolean;
@@ -35,6 +36,7 @@ export function AdminMaterialForm({
   form,
   selectedMaterial,
   file,
+  attachedFiles,
   errorMessage,
   uploadType,
   isSaving,
@@ -49,7 +51,7 @@ export function AdminMaterialForm({
     <SurfaceCard>
       <SectionHeader
         title={selectedMaterial ? "Editar material" : "Novo material"}
-        description="Cadastre vídeos por URL ou envie arquivos para usar a URL retornada."
+        description="Cadastre vídeos do YouTube, PDFs de leitura ou anexos da fase 1."
       />
 
       {errorMessage ? (
@@ -106,20 +108,46 @@ export function AdminMaterialForm({
 
         <AdminMaterialUpload
           file={file}
+          attachedFiles={attachedFiles}
           isUploading={isUploading}
           uploadType={uploadType}
           onFileChange={onFileChange}
           onUpload={onUpload}
         />
 
+        {form.type === "video" ? (
+          <div>
+            <Label htmlFor="materialUrl">URL do YouTube</Label>
+            <Input
+              id="materialUrl"
+              value={form.url}
+              onChange={(event) => onFieldChange("url", event.target.value)}
+              placeholder="https://www.youtube.com/watch?v=..."
+            />
+          </div>
+        ) : null}
+
+        {form.type === "other" ? (
+          <div>
+            <Label htmlFor="materialUrl">Link do material</Label>
+            <Input
+              id="materialUrl"
+              value={form.url}
+              onChange={(event) => onFieldChange("url", event.target.value)}
+              placeholder="https://..."
+            />
+          </div>
+        ) : null}
+
         <div>
-          <Label htmlFor="materialUrl">URL</Label>
+          <Label htmlFor="materialReleasedAt">Liberar em</Label>
           <Input
-            id="materialUrl"
-            value={form.url}
-            onChange={(event) => onFieldChange("url", event.target.value)}
-            placeholder="https://..."
+            id="materialReleasedAt"
+            type="datetime-local"
+            value={form.releasedAt}
+            onChange={(event) => onFieldChange("releasedAt", event.target.value)}
           />
+          <p className="student-muted-text mt-1 text-xs">Deixe em branco para liberar imediatamente.</p>
         </div>
 
         <label className="student-action flex w-fit items-center gap-2 rounded-lg py-1 text-sm font-semibold">
