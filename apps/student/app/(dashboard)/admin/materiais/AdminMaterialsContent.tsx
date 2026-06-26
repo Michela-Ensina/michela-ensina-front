@@ -1,5 +1,7 @@
 "use client";
 
+import { FilePlus2 } from "lucide-react";
+
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
 import { AdminMaterialForm } from "@/components/student/admin/AdminMaterialForm";
 import { AdminMaterialsList } from "@/components/student/admin/AdminMaterialsList";
@@ -36,28 +38,50 @@ export function AdminMaterialsContent() {
   }
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[380px_1fr]">
-      <AdminMaterialForm
-        form={manager.form}
-        selectedMaterial={manager.selectedMaterial}
-        file={manager.file}
-        attachedFiles={manager.attachedFiles}
-        errorMessage={manager.errorMessage}
-        uploadType={manager.uploadType}
-        isSaving={manager.isSaving}
-        isUploading={manager.isUploading}
-        onFieldChange={manager.updateField}
-        onFileChange={manager.setFile}
-        onReset={manager.resetForm}
-        onSubmit={manager.handleSubmit}
-        onUpload={() => void manager.handleUpload()}
-      />
+    <div className="space-y-5">
+      <section
+        className="rounded-[var(--radius-lg)] border p-5 sm:p-6"
+        style={{
+          borderColor: "color-mix(in oklab, var(--color-border) 78%, var(--color-primary))",
+          backgroundColor: "color-mix(in oklab, var(--color-surface) 88%, var(--color-brand-blue))",
+        }}
+      >
+        <div className="flex flex-wrap items-center gap-4">
+          <span className="grid size-11 place-items-center rounded-[var(--radius-md)] bg-[var(--color-surface-soft)] text-[var(--color-primary)]">
+            <FilePlus2 size={20} aria-hidden="true" />
+          </span>
+          <div className="max-w-2xl">
+            <h2 className="text-2xl">Materiais da fase 1</h2>
+            <p className="student-muted-text mt-1 text-sm">
+              Cadastre vídeos, PDFs e anexos usando apenas os campos aceitos pelo backend.
+            </p>
+          </div>
+        </div>
+      </section>
 
-      <AdminMaterialsList
-        materials={manager.materials}
-        onEdit={manager.selectMaterial}
-        onDelete={(material) => void manager.handleDelete(material)}
-      />
+      <div className="grid gap-5 xl:grid-cols-[400px_1fr]">
+        <AdminMaterialForm
+          form={manager.form}
+          selectedMaterial={manager.selectedMaterial}
+          file={manager.file}
+          attachedFiles={manager.attachedFiles}
+          errorMessage={manager.errorMessage}
+          uploadType={manager.uploadType}
+          isSaving={manager.isSaving}
+          isUploading={manager.isUploading}
+          onFieldChange={manager.updateField}
+          onFileChange={manager.setFile}
+          onReset={manager.resetForm}
+          onSubmit={manager.handleSubmit}
+          onUpload={() => void manager.handleUpload()}
+        />
+
+        <AdminMaterialsList
+          materials={manager.materials}
+          onEdit={manager.selectMaterial}
+          onDelete={(material) => void manager.handleDelete(material)}
+        />
+      </div>
     </div>
   );
 }

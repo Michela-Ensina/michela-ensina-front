@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowLeft, FileText, Maximize2, Menu, Minimize2, Paperclip } from "lucide-react";
+import { ArrowLeft, Maximize2, Menu, Minimize2 } from "lucide-react";
 
 import { getStudentNavItems } from "@/components/layout/student-navigation";
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
+import { MaterialAttachmentsList } from "@/components/student/materials/MaterialAttachmentsList";
 import { MaterialDetailSidebar } from "@/components/student/materials/MaterialDetailSidebar";
 import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/materials/material-display";
 import { MaterialViewer } from "@/components/student/materials/MaterialViewer";
@@ -13,10 +14,9 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { useAuth } from "@/lib/auth/use-auth";
-import { formatFileSize, getPrimaryMaterialFile } from "@/lib/student/material-media";
+import { getPrimaryMaterialFile } from "@/lib/student/material-media";
 import { useMaterialDetail } from "@/lib/student/use-material-detail";
 import { cn } from "@/lib/utils/cn";
-import type { MaterialAttachment } from "@/types/student";
 
 type MaterialDetailContentProps = {
   materialId: string;
@@ -37,32 +37,6 @@ function MaterialDetailSkeleton() {
       <div className="aspect-video animate-pulse rounded-[var(--radius-lg)] bg-[var(--color-surface)]" />
       <div className="h-28 animate-pulse rounded-[var(--radius-md)] bg-[var(--color-surface)]" />
     </section>
-  );
-}
-
-function AttachmentCard({ attachment }: { attachment: MaterialAttachment }) {
-  const size = formatFileSize(attachment.size);
-  const Icon = attachment.type === "pdf" ? FileText : Paperclip;
-
-  return (
-    <a
-      href={attachment.url}
-      target="_blank"
-      rel="noreferrer"
-      className="student-action student-hover-surface flex min-w-0 items-center gap-3 rounded-[var(--radius-sm)] border p-3"
-      style={{
-        borderColor: "var(--color-border)",
-        backgroundColor: "var(--color-surface)",
-      }}
-    >
-      <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-[var(--color-surface-soft)] text-[var(--color-primary)]">
-        <Icon size={18} aria-hidden="true" />
-      </span>
-      <span className="min-w-0">
-        <span className="block truncate text-sm font-semibold">{attachment.original_name}</span>
-        <span className="student-muted-text block text-xs">{size ?? attachment.mime_type ?? "Arquivo de apoio"}</span>
-      </span>
-    </a>
   );
 }
 
@@ -180,21 +154,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
         <MaterialViewer material={detail.material} typeLabel={type.label} isTheaterMode={isTheaterMode} />
       </div>
 
-      {attachments.length > 0 ? (
-        <section className="border-t pt-6" style={{ borderColor: "var(--color-border)" }}>
-          <div className="flex flex-wrap items-end justify-between gap-2">
-            <div>
-              <h2 className="text-xl">Materiais de apoio</h2>
-              <p className="student-muted-text mt-1 text-sm">Arquivos anexados a este conteúdo.</p>
-            </div>
-          </div>
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            {attachments.map((attachment) => (
-              <AttachmentCard key={attachment.id} attachment={attachment} />
-            ))}
-          </div>
-        </section>
-      ) : null}
+      <MaterialAttachmentsList attachments={attachments} />
     </section>
   );
 }
