@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import {
-  getMaterialStatus,
-  getMaterialTypeMeta,
-} from "@/components/student/MaterialListItem";
+import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/materials/material-display";
 import { ApiClientError } from "@/lib/api/errors";
 import { getMaterialById } from "@/lib/api/materials";
 import { getProgress, updateMaterialProgress } from "@/lib/api/progress";

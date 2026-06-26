@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/MaterialListItem";
+import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/materials/material-display";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { Material, ProgressItem } from "@/types/student";

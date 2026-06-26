@@ -4,7 +4,7 @@ import Link from "next/link";
 import { CheckCircle2, CircleDashed, Clock3 } from "lucide-react";
 
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
-import { getMaterialStatus } from "@/components/student/MaterialListItem";
+import { getMaterialStatus } from "@/components/student/materials/material-display";
 import { ProgressMaterialSection } from "@/components/student/progress/ProgressMaterialSection";
 import { ProgressCountTile } from "@/components/student/progress/ProgressCountTile";
 import { SectionHeader } from "@/components/student/SectionHeader";

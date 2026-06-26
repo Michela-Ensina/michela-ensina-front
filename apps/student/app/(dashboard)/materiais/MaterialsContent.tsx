@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
-import { getMaterialStatus } from "@/components/student/MaterialListItem";
+import { getMaterialStatus } from "@/components/student/materials/material-display";
 import { SectionHeader } from "@/components/student/SectionHeader";
 import {
   MaterialsFilterSidebar,
