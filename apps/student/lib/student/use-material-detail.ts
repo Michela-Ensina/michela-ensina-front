@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/materials/material-display";
 import { ApiClientError } from "@/lib/api/errors";
 import { getMaterialById } from "@/lib/api/materials";
 import { getProgress, updateMaterialProgress } from "@/lib/api/progress";
@@ -67,13 +66,6 @@ export function useMaterialDetail(materialId: string) {
     };
   }, [fetchData]);
 
-  const status = useMemo(() => {
-    if (!material) return { label: "Ainda não iniciado", tone: "novo" as const };
-    return getMaterialStatus(material, progressItem ? [progressItem] : []);
-  }, [material, progressItem]);
-
-  const type = material ? getMaterialTypeMeta(material.type) : null;
-
   async function markAsCompleted() {
     if (!material) return;
 
@@ -111,8 +103,7 @@ export function useMaterialDetail(materialId: string) {
     material,
     notFound,
     progressErrorMessage,
+    progressItem,
     progressPercentage,
-    status,
-    type,
   };
 }

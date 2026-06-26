@@ -5,11 +5,12 @@ import { ArrowLeft } from "lucide-react";
 
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
 import { MaterialDetailSidebar } from "@/components/student/materials/MaterialDetailSidebar";
+import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/materials/material-display";
 import { MaterialViewer } from "@/components/student/materials/MaterialViewer";
-import { useMaterialDetail } from "@/components/student/materials/use-material-detail";
 import { SectionHeader } from "@/components/student/SectionHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
+import { useMaterialDetail } from "@/lib/student/use-material-detail";
 
 type MaterialDetailContentProps = {
   materialId: string;
@@ -17,6 +18,15 @@ type MaterialDetailContentProps = {
 
 export function MaterialDetailContent({ materialId }: MaterialDetailContentProps) {
   const materialDetail = useMaterialDetail(materialId);
+  const materialType = materialDetail.material
+    ? getMaterialTypeMeta(materialDetail.material.type)
+    : null;
+  const materialStatus = materialDetail.material
+    ? getMaterialStatus(
+        materialDetail.material,
+        materialDetail.progressItem ? [materialDetail.progressItem] : [],
+      )
+    : null;
 
   if (materialDetail.isLoading) {
     return <SurfaceCard className="min-h-80 animate-pulse" />;
@@ -31,7 +41,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
     );
   }
 
-  if (materialDetail.notFound || !materialDetail.material || !materialDetail.type) {
+  if (materialDetail.notFound || !materialDetail.material || !materialType || !materialStatus) {
     return (
       <SurfaceCard>
         <h2 className="text-2xl">Material não encontrado</h2>
@@ -57,19 +67,19 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
         <SectionHeader
           title={materialDetail.material.title}
           description={materialDetail.material.description ?? "Material disponível para estudo."}
-          action={<StatusBadge label={materialDetail.status.label} tone={materialDetail.status.tone} />}
+          action={<StatusBadge label={materialStatus.label} tone={materialStatus.tone} />}
         />
 
         <MaterialViewer
           material={materialDetail.material}
-          typeLabel={materialDetail.type.label}
+          typeLabel={materialType.label}
         />
       </section>
 
       <MaterialDetailSidebar
         material={materialDetail.material}
-        typeLabel={materialDetail.type.label}
-        status={materialDetail.status}
+        typeLabel={materialType.label}
+        status={materialStatus}
         progressPercentage={materialDetail.progressPercentage}
         progressErrorMessage={materialDetail.progressErrorMessage}
         isUpdatingProgress={materialDetail.isUpdatingProgress}
