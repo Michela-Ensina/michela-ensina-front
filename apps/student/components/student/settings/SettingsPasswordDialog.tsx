@@ -5,14 +5,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/PasswordInput";
-
-export type PasswordVisibilityField = "current" | "next" | "confirm";
-
-export const hiddenPasswordFields: Record<PasswordVisibilityField, boolean> = {
-  current: false,
-  next: false,
-  confirm: false,
-};
+import type { PasswordVisibilityField } from "@/lib/auth/password-change";
 
 type SettingsPasswordDialogProps = {
   currentPassword: string;

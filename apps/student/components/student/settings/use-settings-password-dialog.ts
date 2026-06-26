@@ -2,16 +2,12 @@ import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 
 import {
-  hiddenPasswordFields,
+  createHiddenPasswordFields,
+  getPasswordChangeApiErrorMessage,
+  getPasswordChangeValidationError,
+  type ChangePassword,
   type PasswordVisibilityField,
-} from "@/components/student/settings/SettingsPasswordDialog";
-import { ApiClientError } from "@/lib/api/errors";
-
-type ChangePassword = (payload: {
-  current_password: string;
-  password: string;
-  password_confirmation: string;
-}) => Promise<unknown>;
+} from "@/lib/auth/password-change";
 
 export function useSettingsPasswordDialog(changePassword: ChangePassword) {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -21,17 +17,17 @@ export function useSettingsPasswordDialog(changePassword: ChangePassword) {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
-  const [visiblePasswordFields, setVisiblePasswordFields] = useState(hiddenPasswordFields);
+  const [visiblePasswordFields, setVisiblePasswordFields] = useState(createHiddenPasswordFields);
 
   function openPasswordDialog() {
     setPasswordError(null);
     setPasswordSuccess(null);
-    setVisiblePasswordFields(hiddenPasswordFields);
+    setVisiblePasswordFields(createHiddenPasswordFields());
     setIsPasswordDialogOpen(true);
   }
 
   function closePasswordDialog() {
-    setVisiblePasswordFields(hiddenPasswordFields);
+    setVisiblePasswordFields(createHiddenPasswordFields());
     setIsPasswordDialogOpen(false);
   }
 
@@ -47,31 +43,16 @@ export function useSettingsPasswordDialog(changePassword: ChangePassword) {
     setPasswordError(null);
     setPasswordSuccess(null);
 
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      const message = "Preencha todos os campos de senha.";
-      setPasswordError(message);
-      toast.error(message);
-      return;
-    }
+    const validationError = getPasswordChangeValidationError({
+      currentPassword,
+      newPassword,
+      passwordConfirmation: confirmPassword,
+      minimumLengthMessage: "A senha deve ter pelo menos 8 caracteres.",
+    });
 
-    if (newPassword.length < 8) {
-      const message = "A senha deve ter pelo menos 8 caracteres.";
-      setPasswordError(message);
-      toast.error(message);
-      return;
-    }
-
-    if (newPassword === currentPassword) {
-      const message = "A nova senha deve ser diferente da senha atual.";
-      setPasswordError(message);
-      toast.error(message);
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      const message = "As senhas não coincidem.";
-      setPasswordError(message);
-      toast.error(message);
+    if (validationError) {
+      setPasswordError(validationError);
+      toast.error(validationError);
       return;
     }
 
@@ -91,10 +72,7 @@ export function useSettingsPasswordDialog(changePassword: ChangePassword) {
       toast.success(message);
       closePasswordDialog();
     } catch (error) {
-      const message =
-        error instanceof ApiClientError
-          ? error.fields?.current_password?.[0] ?? error.fields?.password?.[0] ?? error.message
-          : "Não foi possível atualizar a senha agora.";
+      const message = getPasswordChangeApiErrorMessage(error, "Não foi possível atualizar a senha agora.");
       setPasswordError(message);
       toast.error(message);
     } finally {
