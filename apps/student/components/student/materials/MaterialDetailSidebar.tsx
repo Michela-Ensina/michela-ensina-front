@@ -1,4 +1,4 @@
-import { PlayCircle } from "lucide-react";
+import { ChevronDown, PlayCircle } from "lucide-react";
 
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -22,72 +22,32 @@ type MaterialDetailSidebarProps = {
   onMarkAsCompleted: () => void;
 };
 
-export function MaterialDetailSidebar({
-  material,
-  typeLabel,
-  status,
-  progressPercentage,
-  progressErrorMessage,
-  isUpdatingProgress,
-  onMarkAsCompleted,
-}: MaterialDetailSidebarProps) {
+export function MaterialDetailSidebar({ material, typeLabel, status, progressPercentage, progressErrorMessage, isUpdatingProgress, onMarkAsCompleted }: MaterialDetailSidebarProps) {
   const isCompleted = status.tone === "concluído";
-  const isButtonDisabled = isUpdatingProgress || isCompleted;
 
   return (
-    <aside className="space-y-4 xl:sticky xl:top-24 xl:self-start">
-      <SurfaceCard>
-        <p className="flex items-center gap-2 text-sm font-semibold">
-          <PlayCircle size={16} aria-hidden="true" />
-          Informações do material
-        </p>
-        <dl className="mt-4 space-y-3 text-sm">
-          <div className="flex items-center justify-between gap-4">
-            <dt className="student-muted-text">Tipo</dt>
-            <dd className="font-semibold">{typeLabel}</dd>
-          </div>
-          <div className="flex items-center justify-between gap-4">
-            <dt className="student-muted-text">Status</dt>
-            <dd>
-              <StatusBadge label={status.label} tone={status.tone} />
-            </dd>
-          </div>
-          <div className="flex items-center justify-between gap-4">
-            <dt className="student-muted-text">Ordem</dt>
-            <dd className="font-semibold">{material.order}</dd>
-          </div>
-        </dl>
-      </SurfaceCard>
-
-      <SurfaceCard>
-        <p className="text-sm font-semibold">Progresso da jornada</p>
-        <div className="mt-4">
+    <details className="group relative">
+      <summary className="student-action flex list-none items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold marker:content-none" style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
+        <PlayCircle size={16} aria-hidden="true" />
+        Progresso e detalhes
+        <ChevronDown size={16} className="ml-auto transition-transform group-open:rotate-180" aria-hidden="true" />
+      </summary>
+      <div className="absolute right-0 z-20 mt-2 w-[min(22rem,calc(100vw-2.5rem))] space-y-3 rounded-[var(--radius-md)] border p-3 shadow-[var(--shadow-md)]" style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
+        <SurfaceCard>
+          <dl className="space-y-3 text-sm">
+            <div className="flex items-center justify-between gap-4"><dt className="student-muted-text">Tipo</dt><dd className="font-semibold">{typeLabel}</dd></div>
+            <div className="flex items-center justify-between gap-4"><dt className="student-muted-text">Status</dt><dd><StatusBadge label={status.label} tone={status.tone} /></dd></div>
+            <div className="flex items-center justify-between gap-4"><dt className="student-muted-text">Ordem</dt><dd className="font-semibold">{material.order}</dd></div>
+          </dl>
+        </SurfaceCard>
+        <SurfaceCard>
           <ProgressBar value={progressPercentage} label="Conclusão geral" />
-        </div>
-        <p className="student-muted-text mt-3 text-sm">
-          Marque este conteúdo como concluído quando terminar de estudar.
-        </p>
-
-        {progressErrorMessage ? <Alert tone="error">{progressErrorMessage}</Alert> : null}
-
-        <Button
-          type="button"
-          onClick={onMarkAsCompleted}
-          disabled={isButtonDisabled}
-          variant={isCompleted ? "outline" : "primary"}
-          fullWidth
-          className="mt-4"
-          style={{
-            opacity: isButtonDisabled ? 0.75 : 1,
-          }}
-        >
-          {isUpdatingProgress
-            ? "Atualizando..."
-            : isCompleted
-              ? "Material concluído"
-              : "Marcar como concluído"}
-        </Button>
-      </SurfaceCard>
-    </aside>
+          {progressErrorMessage ? <Alert tone="error">{progressErrorMessage}</Alert> : null}
+          <Button type="button" onClick={onMarkAsCompleted} disabled={isUpdatingProgress || isCompleted} variant={isCompleted ? "outline" : "primary"} fullWidth className="mt-4">
+            {isUpdatingProgress ? "Atualizando..." : isCompleted ? "Material concluído" : "Marcar como concluído"}
+          </Button>
+        </SurfaceCard>
+      </div>
+    </details>
   );
 }

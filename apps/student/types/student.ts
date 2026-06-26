@@ -20,7 +20,15 @@ export type Material = {
   url: string;
   order: number;
   is_active: boolean;
+  attachments?: MaterialAttachment[];
   created_at: string | null;
+};
+
+export type MaterialAttachment = {
+  id: string;
+  original_name: string;
+  url: string;
+  type: "pdf" | "attachment" | "other";
 };
 
 export type ProgressItem = {
