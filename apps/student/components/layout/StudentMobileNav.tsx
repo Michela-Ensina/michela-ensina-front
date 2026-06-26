@@ -10,7 +10,7 @@ type StudentMobileNavProps = {
 export function StudentMobileNav({ items, currentPath }: StudentMobileNavProps) {
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-30 border-t px-2 py-1.5 lg:hidden"
+      className="student-mobile-nav fixed inset-x-0 bottom-0 z-30 border-t px-2 py-1.5 lg:hidden"
       style={{
         borderColor: "var(--color-border)",
         backgroundColor: "var(--color-surface)",

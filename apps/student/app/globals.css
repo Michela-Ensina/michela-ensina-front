@@ -238,6 +238,10 @@ body[data-material-theater="true"] .student-sidebar {
   display: none;
 }
 
+body[data-material-theater="true"] .student-mobile-nav {
+  display: none;
+}
+
 body[data-material-theater="true"] .student-app-content {
   padding: 16px;
 }
