@@ -26,6 +26,7 @@ type AdminMaterialFormProps = {
   onReset: () => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onUpload: () => void;
+  onRemoveAttachment: (attachmentId: string) => void;
 };
 
 export function AdminMaterialForm({
@@ -42,6 +43,7 @@ export function AdminMaterialForm({
   onReset,
   onSubmit,
   onUpload,
+  onRemoveAttachment,
 }: AdminMaterialFormProps) {
   return (
     <SurfaceCard>
@@ -84,6 +86,7 @@ export function AdminMaterialForm({
           onFieldChange={onFieldChange}
           onFileChange={onFileChange}
           onUpload={onUpload}
+          onRemoveAttachment={onRemoveAttachment}
         />
 
         <label className="student-action flex w-fit items-center gap-2 rounded-lg py-1 text-sm font-semibold">

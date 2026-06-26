@@ -15,6 +15,7 @@ type PdfMaterialViewerProps = {
 type PdfLoadState =
   | { status: "loading"; objectUrl: null; message: null }
   | { status: "ready"; objectUrl: string; message: null }
+  | { status: "fallback"; objectUrl: null; message: string }
   | { status: "error"; objectUrl: null; message: string };
 
 export function PdfMaterialViewer({ title, url, isTheaterMode = false }: PdfMaterialViewerProps) {
@@ -37,9 +38,12 @@ export function PdfMaterialViewer({ title, url, isTheaterMode = false }: PdfMate
         if (controller.signal.aborted) return;
 
         setLoadState({
-          status: "error",
+          status: "fallback",
           objectUrl: null,
-          message: error instanceof Error ? error.message : "Não foi possível abrir este PDF.",
+          message:
+            error instanceof Error
+              ? error.message
+              : "Não foi possível preparar o PDF em modo protegido.",
         });
       });
 
@@ -70,6 +74,21 @@ export function PdfMaterialViewer({ title, url, isTheaterMode = false }: PdfMate
         <div className="max-w-md">
           <Alert tone="error">{loadState.message}</Alert>
         </div>
+      </div>
+    );
+  }
+
+  if (loadState.status === "fallback") {
+    return (
+      <div>
+        <div className="border-b px-4 py-3 text-xs text-[var(--color-text-muted)]" style={{ borderColor: "var(--color-border)" }}>
+          {loadState.message} O conteúdo segue disponível na visualização interna.
+        </div>
+        <iframe
+          title={title}
+          src={`${url}#toolbar=0&navpanes=0&scrollbar=1`}
+          className={isTheaterMode ? "h-[calc(100vh-224px)] min-h-[620px] w-full bg-white" : "h-[70vh] min-h-[500px] w-full bg-white"}
+        />
       </div>
     );
   }

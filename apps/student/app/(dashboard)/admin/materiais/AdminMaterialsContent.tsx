@@ -74,6 +74,7 @@ export function AdminMaterialsContent() {
           onReset={manager.resetForm}
           onSubmit={manager.handleSubmit}
           onUpload={() => void manager.handleUpload()}
+          onRemoveAttachment={manager.removeAttachedFile}
         />
 
         <AdminMaterialsList

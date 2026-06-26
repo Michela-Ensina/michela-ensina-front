@@ -21,6 +21,7 @@ type AdminMaterialTypeFieldsProps = {
   ) => void;
   onFileChange: (file: File | null) => void;
   onUpload: () => void;
+  onRemoveAttachment: (attachmentId: string) => void;
 };
 
 export function AdminMaterialTypeFields({
@@ -32,6 +33,7 @@ export function AdminMaterialTypeFields({
   onFieldChange,
   onFileChange,
   onUpload,
+  onRemoveAttachment,
 }: AdminMaterialTypeFieldsProps) {
   return (
     <>
@@ -70,6 +72,7 @@ export function AdminMaterialTypeFields({
         materialType={form.type}
         onFileChange={onFileChange}
         onUpload={onUpload}
+        onRemoveAttachment={onRemoveAttachment}
       />
 
       {form.type === "video" ? (

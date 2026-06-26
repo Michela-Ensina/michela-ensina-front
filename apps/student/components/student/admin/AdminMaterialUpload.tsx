@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import { FileUp } from "lucide-react";
+import { FileUp, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ type AdminMaterialUploadProps = {
   materialType: MaterialType;
   onFileChange: (file: File | null) => void;
   onUpload: () => void;
+  onRemoveAttachment: (attachmentId: string) => void;
 };
 
 export function AdminMaterialUpload({
@@ -25,6 +26,7 @@ export function AdminMaterialUpload({
   materialType,
   onFileChange,
   onUpload,
+  onRemoveAttachment,
 }: AdminMaterialUploadProps) {
   if (!uploadType) {
     return null;
@@ -33,6 +35,8 @@ export function AdminMaterialUpload({
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     onFileChange(event.target.files?.[0] ?? null);
   }
+
+  const replacesPrimaryFile = materialType === "pdf" || materialType === "attachment";
 
   return (
     <div
@@ -57,14 +61,27 @@ export function AdminMaterialUpload({
       />
       {attachedFiles.length > 0 ? (
         <div className="mt-3 rounded-[var(--radius-sm)] border px-3 py-2 text-sm" style={{ borderColor: "var(--color-border)" }}>
-          <p className="font-semibold">Arquivo vinculado</p>
+          <p className="font-semibold">{replacesPrimaryFile ? "Arquivo principal" : "Anexos vinculados"}</p>
           {attachedFiles.map((attachment) => (
-            <p key={attachment.id} className="student-muted-text mt-1 truncate">
-              {attachment.original_name}
-            </p>
+            <div key={attachment.id} className="mt-1 flex items-center justify-between gap-2">
+              <p className="student-muted-text min-w-0 truncate">{attachment.original_name}</p>
+              <button
+                type="button"
+                className="student-action student-hover-surface grid size-7 shrink-0 place-items-center rounded-lg text-[var(--color-text-muted)]"
+                onClick={() => onRemoveAttachment(attachment.id)}
+                aria-label={`Remover ${attachment.original_name}`}
+              >
+                <X size={14} aria-hidden="true" />
+              </button>
+            </div>
           ))}
         </div>
       ) : null}
+      <p className="student-muted-text mt-3 text-xs">
+        {replacesPrimaryFile
+          ? "Enviar outro arquivo substitui o arquivo principal deste material."
+          : "Você pode adicionar arquivos de apoio ao vídeo antes de salvar."}
+      </p>
       <Button
         type="button"
         variant="outline"

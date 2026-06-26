@@ -99,13 +99,14 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
 
     try {
       const upload = await uploadAdminMaterialFile(file, uploadType, token);
-      const nextAttachmentIds = [...form.attachmentIds, upload.id];
+      const shouldReplacePrimaryFile = form.type === "pdf" || form.type === "attachment";
+      const nextAttachmentIds = shouldReplacePrimaryFile ? [upload.id] : [...form.attachmentIds, upload.id];
 
-      if ((form.type === "pdf" || form.type === "attachment") && form.attachmentIds.length === 0) {
+      if (shouldReplacePrimaryFile) {
         updateField("url", upload.url);
       }
       updateField("attachmentIds", nextAttachmentIds);
-      setAttachedFiles((current) => [...current, upload]);
+      setAttachedFiles((current) => (shouldReplacePrimaryFile ? [upload] : [...current, upload]));
       setFile(null);
       toast.success("Arquivo enviado com sucesso.");
     } catch (error) {
@@ -115,6 +116,22 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     } finally {
       setIsUploading(false);
     }
+  }
+
+  function removeAttachedFile(attachmentId: string) {
+    setAttachedFiles((current) => current.filter((attachment) => attachment.id !== attachmentId));
+    setForm((current) => {
+      const nextAttachmentIds = current.attachmentIds.filter((id) => id !== attachmentId);
+
+      return {
+        ...current,
+        attachmentIds: nextAttachmentIds,
+        url:
+          (current.type === "pdf" || current.type === "attachment") && nextAttachmentIds.length === 0
+            ? ""
+            : current.url,
+      };
+    });
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -209,6 +226,7 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     handleSubmit,
     handleUpload,
     loadMaterials,
+    removeAttachedFile,
     resetForm,
     selectMaterial,
     setFile,
