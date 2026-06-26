@@ -72,7 +72,6 @@ export function SettingsContent() {
             disabled={isLoggingOut}
             variant="danger"
             className="gap-2"
-            style={{ opacity: isLoggingOut ? 0.7 : 1 }}
           >
             <LogOut size={16} aria-hidden="true" />
             {isLoggingOut ? "Saindo..." : "Sair da conta"}

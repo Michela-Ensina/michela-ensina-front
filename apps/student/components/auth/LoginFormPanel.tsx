@@ -130,11 +130,10 @@ export function LoginFormPanel({
               variant="primary"
               fullWidth
               size="lg"
-              className="mt-1 shadow-[0_8px_18px_rgb(77_35_117/0.28)]"
+              className="mt-1 shadow-[0_8px_18px_rgb(77_35_117/0.28)] disabled:opacity-75"
               style={{
                 backgroundImage:
                   "linear-gradient(135deg, var(--me-purple-dark), var(--me-purple))",
-                opacity: isSubmitting ? 0.75 : 1,
               }}
             >
               {isSubmitting ? "Entrando..." : "Entrar"}

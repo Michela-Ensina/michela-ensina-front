@@ -15,7 +15,7 @@ export function AuthSubmitButton({ children, isSubmitting }: AuthSubmitButtonPro
       disabled={isSubmitting}
       variant="primary"
       fullWidth
-      style={{ opacity: isSubmitting ? 0.75 : 1 }}
+      className="disabled:opacity-75"
     >
       {children}
     </Button>

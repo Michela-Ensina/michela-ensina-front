@@ -122,7 +122,6 @@ export function SettingsPasswordDialog({
               type="submit"
               disabled={isSubmitting}
               variant="primary"
-              style={{ opacity: isSubmitting ? 0.7 : 1 }}
             >
               {isSubmitting ? "Atualizando..." : "Atualizar senha"}
             </Button>
