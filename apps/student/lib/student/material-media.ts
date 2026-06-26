@@ -48,6 +48,20 @@ export function getPrimaryMaterialFile(material: Material): MaterialAttachment |
   return null;
 }
 
+export function getSupportingMaterialAttachments(material: Material): MaterialAttachment[] {
+  const primaryFile = getPrimaryMaterialFile(material);
+  const seenIds = new Set<string>();
+
+  return (material.attachments ?? []).filter((attachment) => {
+    if (attachment.id === primaryFile?.id || seenIds.has(attachment.id)) {
+      return false;
+    }
+
+    seenIds.add(attachment.id);
+    return true;
+  });
+}
+
 export function getMaterialFileUrl(material: Material): string {
   return getPrimaryMaterialFile(material)?.url ?? material.url;
 }

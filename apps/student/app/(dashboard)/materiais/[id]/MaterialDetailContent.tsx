@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { useAuth } from "@/lib/auth/use-auth";
-import { getPrimaryMaterialFile } from "@/lib/student/material-media";
+import { getSupportingMaterialAttachments } from "@/lib/student/material-media";
 import { useMaterialDetail } from "@/lib/student/use-material-detail";
 import { cn } from "@/lib/utils/cn";
 
@@ -66,8 +66,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
     );
   }
 
-  const primaryFile = getPrimaryMaterialFile(detail.material);
-  const attachments = (detail.material.attachments ?? []).filter((attachment) => attachment.id !== primaryFile?.id);
+  const attachments = getSupportingMaterialAttachments(detail.material);
   const actions = (
     <div className="flex flex-wrap items-center gap-2">
       <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => setIsTheaterMode((current) => !current)}>
