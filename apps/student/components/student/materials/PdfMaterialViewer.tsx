@@ -9,6 +9,7 @@ import { createObjectUrlFromRemoteFile } from "@/lib/student/material-media";
 type PdfMaterialViewerProps = {
   title: string;
   url: string;
+  isTheaterMode?: boolean;
 };
 
 type PdfLoadState =
@@ -16,7 +17,7 @@ type PdfLoadState =
   | { status: "ready"; objectUrl: string; message: null }
   | { status: "error"; objectUrl: null; message: string };
 
-export function PdfMaterialViewer({ title, url }: PdfMaterialViewerProps) {
+export function PdfMaterialViewer({ title, url, isTheaterMode = false }: PdfMaterialViewerProps) {
   const [loadState, setLoadState] = useState<PdfLoadState>({
     status: "loading",
     objectUrl: null,
@@ -77,7 +78,7 @@ export function PdfMaterialViewer({ title, url }: PdfMaterialViewerProps) {
     <iframe
       title={title}
       src={`${loadState.objectUrl}#toolbar=0&navpanes=0&scrollbar=1`}
-      className="h-[72vh] min-h-[520px] w-full bg-white"
+      className={isTheaterMode ? "h-[calc(100vh-190px)] min-h-[640px] w-full bg-white" : "h-[72vh] min-h-[520px] w-full bg-white"}
     />
   );
 }

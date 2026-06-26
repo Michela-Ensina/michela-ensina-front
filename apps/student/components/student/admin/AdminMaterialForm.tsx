@@ -111,6 +111,7 @@ export function AdminMaterialForm({
           attachedFiles={attachedFiles}
           isUploading={isUploading}
           uploadType={uploadType}
+          materialType={form.type}
           onFileChange={onFileChange}
           onUpload={onUpload}
         />

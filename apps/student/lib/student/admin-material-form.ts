@@ -31,6 +31,7 @@ export const adminMaterialTypes = [
 ] satisfies Array<{ value: MaterialType; label: string }>;
 
 export function getAdminUploadType(type: MaterialType): AdminUploadType | null {
+  if (type === "video") return "attachment";
   if (type === "pdf") return "pdf";
   if (type === "attachment") return "attachment";
   return null;

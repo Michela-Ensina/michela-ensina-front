@@ -235,6 +235,19 @@ a {
   z-index: 1;
 }
 
+body[data-material-theater="true"] .student-sidebar,
+body[data-material-theater="true"] .student-topbar {
+  display: none;
+}
+
+body[data-material-theater="true"] .student-app-content {
+  padding: 16px;
+}
+
+body[data-material-theater="true"] main {
+  max-width: none;
+}
+
 .student-input-control {
   background-color: var(--color-surface-soft);
   border-color: var(--color-border);

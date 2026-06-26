@@ -12,7 +12,7 @@ type StudentTopbarProps = {
 export function StudentTopbar({ title, subtitle }: StudentTopbarProps) {
   return (
     <header
-      className="sticky top-0 z-50 -mx-4 mb-6 overflow-visible border-b px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+      className="student-topbar sticky top-0 z-50 -mx-4 mb-6 overflow-visible border-b px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       style={{
         borderColor: "color-mix(in oklab, var(--color-border) 80%, var(--color-primary))",
         backgroundColor: "color-mix(in oklab, var(--color-background) 92%, var(--color-surface))",

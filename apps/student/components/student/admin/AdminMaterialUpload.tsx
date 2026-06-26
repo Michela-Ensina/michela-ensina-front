@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { AdminUploadType } from "@/types/admin";
-import type { MaterialAttachment } from "@/types/student";
+import type { MaterialAttachment, MaterialType } from "@/types/student";
 
 type AdminMaterialUploadProps = {
   file: File | null;
   attachedFiles: MaterialAttachment[];
   isUploading: boolean;
   uploadType: AdminUploadType | null;
+  materialType: MaterialType;
   onFileChange: (file: File | null) => void;
   onUpload: () => void;
 };
@@ -21,6 +22,7 @@ export function AdminMaterialUpload({
   attachedFiles,
   isUploading,
   uploadType,
+  materialType,
   onFileChange,
   onUpload,
 }: AdminMaterialUploadProps) {
@@ -41,7 +43,11 @@ export function AdminMaterialUpload({
       }}
     >
       <Label htmlFor="materialFile">
-        {uploadType === "pdf" ? "PDF do material" : "Arquivo do anexo"}
+        {materialType === "pdf"
+          ? "PDF do material"
+          : materialType === "video"
+            ? "Anexo de apoio ao vídeo"
+            : "Arquivo do anexo"}
       </Label>
       <Input
         id="materialFile"

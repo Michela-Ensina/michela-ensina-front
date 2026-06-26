@@ -99,9 +99,14 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
 
     try {
       const upload = await uploadAdminMaterialFile(file, uploadType, token);
-      updateField("url", upload.url);
-      updateField("attachmentIds", [upload.id]);
-      setAttachedFiles([upload]);
+      const nextAttachmentIds = [...form.attachmentIds, upload.id];
+
+      if ((form.type === "pdf" || form.type === "attachment") && form.attachmentIds.length === 0) {
+        updateField("url", upload.url);
+      }
+      updateField("attachmentIds", nextAttachmentIds);
+      setAttachedFiles((current) => [...current, upload]);
+      setFile(null);
       toast.success("Arquivo enviado com sucesso.");
     } catch (error) {
       const message = error instanceof ApiClientError ? error.message : "Não foi possível enviar o arquivo.";

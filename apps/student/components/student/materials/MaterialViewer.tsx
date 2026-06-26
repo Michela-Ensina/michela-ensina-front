@@ -9,6 +9,7 @@ import type { Material } from "@/types/student";
 type MaterialViewerProps = {
   material: Material;
   typeLabel: string;
+  isTheaterMode?: boolean;
 };
 
 function MaterialFallbackIcon({ type }: { type: Material["type"] }) {
@@ -17,7 +18,7 @@ function MaterialFallbackIcon({ type }: { type: Material["type"] }) {
   return <Link2 size={28} aria-hidden="true" />;
 }
 
-export function MaterialViewer({ material, typeLabel }: MaterialViewerProps) {
+export function MaterialViewer({ material, typeLabel, isTheaterMode = false }: MaterialViewerProps) {
   const fileUrl = getMaterialFileUrl(material);
 
   return (
@@ -31,7 +32,7 @@ export function MaterialViewer({ material, typeLabel }: MaterialViewerProps) {
       {material.type === "video" ? (
         <VideoMaterialViewer title={material.title} url={material.url} />
       ) : material.type === "pdf" ? (
-        <PdfMaterialViewer key={fileUrl} title={material.title} url={fileUrl} />
+        <PdfMaterialViewer key={fileUrl} title={material.title} url={fileUrl} isTheaterMode={isTheaterMode} />
       ) : (
         <div className="grid min-h-[360px] place-items-center p-8 text-center">
           <div>
