@@ -8,6 +8,7 @@ import {
   toAdminMaterialPayload,
   type MaterialFormState,
 } from "@/lib/student/admin-material-form";
+import { validateAdminUploadFile } from "@/lib/student/admin-upload-validation";
 import {
   createAdminMaterial,
   deleteAdminMaterial,
@@ -93,6 +94,13 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
 
   async function handleUpload() {
     if (!file || !token || !uploadType) return;
+
+    const validationMessage = validateAdminUploadFile(file, uploadType);
+    if (validationMessage) {
+      setErrorMessage(validationMessage);
+      toast.error(validationMessage);
+      return;
+    }
 
     setIsUploading(true);
     setErrorMessage(null);

@@ -4,6 +4,7 @@ import { FileUp, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getAdminUploadAcceptValue, getAdminUploadHelpText } from "@/lib/student/admin-upload-validation";
 import type { AdminUploadType } from "@/types/admin";
 import type { MaterialAttachment, MaterialType } from "@/types/student";
 
@@ -37,6 +38,7 @@ export function AdminMaterialUpload({
   }
 
   const replacesPrimaryFile = materialType === "pdf" || materialType === "attachment";
+  const uploadHelpText = getAdminUploadHelpText(uploadType);
 
   return (
     <div
@@ -56,7 +58,7 @@ export function AdminMaterialUpload({
       <Input
         id="materialFile"
         type="file"
-        accept={uploadType === "pdf" ? "application/pdf" : undefined}
+        accept={getAdminUploadAcceptValue(uploadType)}
         onChange={handleFileChange}
       />
       {attachedFiles.length > 0 ? (
@@ -82,6 +84,7 @@ export function AdminMaterialUpload({
           ? "Enviar outro arquivo substitui o arquivo principal deste material."
           : "Você pode adicionar arquivos de apoio ao vídeo antes de salvar."}
       </p>
+      <p className="student-muted-text mt-1 text-xs">{uploadHelpText}</p>
       <Button
         type="button"
         variant="outline"
