@@ -2,6 +2,7 @@ import { CheckCircle2 } from "lucide-react";
 
 import { MaterialCard } from "@/components/student/MaterialCard";
 import { SectionHeader } from "@/components/student/SectionHeader";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { Material, ProgressItem } from "@/types/student";
 
 type DashboardHighlightsProps = {
@@ -16,7 +17,7 @@ export function DashboardHighlights({
   progressItems,
 }: DashboardHighlightsProps) {
   return (
-    <aside className="space-y-4">
+    <SurfaceCard className="space-y-4">
       <SectionHeader
         title="Destaques"
         description="Uma visão compacta do que está liberado agora."
@@ -32,7 +33,10 @@ export function DashboardHighlights({
       </div>
       <div
         className="rounded-[var(--radius-lg)] border p-4"
-        style={{ borderColor: "var(--color-border)" }}
+        style={{
+          borderColor: "var(--color-border)",
+          backgroundColor: "var(--color-surface-soft)",
+        }}
       >
         <p className="flex items-center gap-2 text-sm font-semibold">
           <CheckCircle2 size={16} aria-hidden="true" />
@@ -44,6 +48,6 @@ export function DashboardHighlights({
             : "Todos os materiais liberados foram concluídos."}
         </p>
       </div>
-    </aside>
+    </SurfaceCard>
   );
 }

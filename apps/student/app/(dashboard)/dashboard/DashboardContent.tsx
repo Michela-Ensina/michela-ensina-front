@@ -54,7 +54,7 @@ export function DashboardContent() {
           description="Assim que os conteúdos forem liberados, você verá seu progresso aqui."
         />
       ) : (
-        <div className="grid gap-5 xl:grid-cols-[1.35fr_0.8fr]">
+        <div className="grid gap-5 xl:grid-cols-2">
           <ContinueStudySection
             nextMaterial={nextMaterial}
             progressItems={data.progress.items}

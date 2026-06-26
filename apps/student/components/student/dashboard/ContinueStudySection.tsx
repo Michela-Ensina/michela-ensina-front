@@ -4,6 +4,7 @@ import { ArrowRight, BookOpen, Clock3 } from "lucide-react";
 import { MaterialListItem } from "@/components/student/MaterialListItem";
 import { SectionHeader } from "@/components/student/SectionHeader";
 import { Button } from "@/components/ui/button";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { Material, ProgressItem } from "@/types/student";
 
 type ContinueStudySectionProps = {
@@ -18,7 +19,7 @@ export function ContinueStudySection({
   recentMaterials,
 }: ContinueStudySectionProps) {
   return (
-    <section className="space-y-4">
+    <SurfaceCard className="space-y-4">
       <SectionHeader
         title="Continuar estudando"
         description="O próximo conteúdo aparece em destaque para manter o fluxo de estudo simples."
@@ -34,10 +35,10 @@ export function ContinueStudySection({
       />
 
       <div
-        className="grid gap-0 overflow-hidden rounded-[var(--radius-lg)] border lg:grid-cols-[1fr_0.9fr]"
+        className="grid gap-0 overflow-hidden rounded-[var(--radius-md)] border"
         style={{
           borderColor: "var(--color-border)",
-          backgroundColor: "var(--color-surface)",
+          backgroundColor: "var(--color-surface-soft)",
         }}
       >
         <div className="p-5 sm:p-6">
@@ -67,7 +68,7 @@ export function ContinueStudySection({
           className="border-t p-5 lg:border-l lg:border-t-0"
           style={{
             borderColor: "var(--color-border)",
-            backgroundColor: "var(--color-surface-soft)",
+            backgroundColor: "var(--color-surface)",
           }}
         >
           <p className="flex items-center gap-2 text-sm font-semibold">
@@ -86,6 +87,6 @@ export function ContinueStudySection({
           </div>
         </div>
       </div>
-    </section>
+    </SurfaceCard>
   );
 }

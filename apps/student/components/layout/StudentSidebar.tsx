@@ -218,8 +218,8 @@ export function StudentSidebar({ items, currentPath }: StudentSidebarProps) {
   return (
     <aside
       className={cn(
-        "student-sidebar relative hidden shrink-0 overflow-hidden px-4 py-6 transition-[width] duration-200 ease-out lg:flex lg:flex-col",
-        isCollapsed ? "lg:w-20 xl:w-72" : "w-72",
+        "student-sidebar relative hidden shrink-0 overflow-hidden px-3 py-6 transition-[width] duration-200 ease-out lg:flex lg:flex-col",
+        isCollapsed ? "lg:w-20 xl:w-56" : "w-56",
       )}
     >
       <SidebarDecor isCollapsed={isCollapsed} />
