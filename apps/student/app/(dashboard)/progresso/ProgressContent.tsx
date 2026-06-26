@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { CheckCircle2, CircleDashed, Clock3 } from "lucide-react";
 
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
@@ -68,22 +69,32 @@ export function ProgressContent() {
   return (
     <div className="grid gap-5 xl:grid-cols-[360px_1fr]">
       <aside className="space-y-4">
-        <SurfaceCard>
-          <p className="text-sm font-semibold">Resumo da jornada</p>
-          <div className="mt-5">
-            <ProgressBar value={progress.percentage} label="Progresso geral" />
-          </div>
-          <div className="mt-5 grid grid-cols-2 gap-3">
-            <ProgressCountTile
-              count={completedMaterials.length}
-              label="Concluídos"
-              accentColor="#48b08c"
-            />
-            <ProgressCountTile
-              count={openMaterials.length}
-              label="Em aberto"
-              accentColor="var(--color-brand-blue)"
-            />
+        <SurfaceCard className="relative overflow-hidden">
+          <Image
+            src="/assets/brand/graphics/estrela-lilas.svg"
+            alt=""
+            width={28}
+            height={28}
+            aria-hidden="true"
+            className="pointer-events-none absolute right-5 top-5 opacity-20"
+          />
+          <div className="relative">
+            <p className="text-sm font-semibold">Resumo da jornada</p>
+            <div className="mt-5">
+              <ProgressBar value={progress.percentage} label="Progresso geral" />
+            </div>
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <ProgressCountTile
+                count={completedMaterials.length}
+                label="Concluídos"
+                accentColor="#48b08c"
+              />
+              <ProgressCountTile
+                count={openMaterials.length}
+                label="Em aberto"
+                accentColor="var(--color-brand-blue)"
+              />
+            </div>
           </div>
         </SurfaceCard>
 

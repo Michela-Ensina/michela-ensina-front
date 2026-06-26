@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
@@ -64,18 +65,36 @@ export function MaterialsContent() {
   return (
     <div className="space-y-6">
       <section
-        className="rounded-[var(--radius-lg)] border p-5 sm:p-6"
+        className="relative overflow-hidden rounded-[var(--radius-lg)] border p-5 sm:p-6"
         style={{
           borderColor: "color-mix(in oklab, var(--color-border) 82%, var(--color-primary))",
-          backgroundColor: "color-mix(in oklab, var(--color-surface) 90%, var(--color-brand-lilac))",
+          backgroundColor: "color-mix(in oklab, var(--color-surface) 88%, var(--color-brand-lilac))",
         }}
       >
-        <div className="grid gap-5 lg:grid-cols-[1fr_0.55fr] lg:items-end">
+        <Image
+          src="/assets/brand/graphics/estrela-lilas.svg"
+          alt=""
+          width={34}
+          height={34}
+          aria-hidden="true"
+          className="pointer-events-none absolute right-6 top-5 opacity-20"
+        />
+        <div className="relative grid gap-5 lg:grid-cols-[1fr_0.55fr] lg:items-end">
           <SectionHeader
             title="Biblioteca de materiais"
             description="Filtre os conteúdos liberados e continue pelo item mais importante para o seu momento."
           />
-          {data.progress ? <ProgressBar value={data.progress.percentage} label="Conclusão dos materiais" /> : null}
+          {data.progress ? (
+            <div
+              className="rounded-[var(--radius-md)] border p-4"
+              style={{
+                borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-brand-blue))",
+                backgroundColor: "color-mix(in oklab, var(--color-background) 42%, var(--color-surface))",
+              }}
+            >
+              <ProgressBar value={data.progress.percentage} label="Conclusão dos materiais" />
+            </div>
+          ) : null}
         </div>
       </section>
 

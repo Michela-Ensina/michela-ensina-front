@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { ArrowLeft, Maximize2, Menu, Minimize2 } from "lucide-react";
+import { useState } from "react";
+import { Maximize2, Minimize2 } from "lucide-react";
 
 import { getStudentNavItems } from "@/components/layout/student-navigation";
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
 import { MaterialAttachmentsList } from "@/components/student/materials/MaterialAttachmentsList";
 import { MaterialDetailSidebar } from "@/components/student/materials/MaterialDetailSidebar";
 import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/materials/material-display";
+import { MaterialTheaterShell } from "@/components/student/materials/MaterialTheaterShell";
 import { MaterialViewer } from "@/components/student/materials/MaterialViewer";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -48,18 +49,6 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
   const status = detail.material ? getMaterialStatus(detail.material, detail.progressItem ? [detail.progressItem] : []) : null;
   const navItems = getStudentNavItems(Boolean(user?.roles?.includes("admin")));
 
-  useEffect(() => {
-    if (isTheaterMode) {
-      document.body.setAttribute("data-material-theater", "true");
-    } else {
-      document.body.removeAttribute("data-material-theater");
-    }
-
-    return () => {
-      document.body.removeAttribute("data-material-theater");
-    };
-  }, [isTheaterMode]);
-
   if (detail.isLoading) return <MaterialDetailSkeleton />;
 
   if (detail.errorMessage) {
@@ -79,63 +68,26 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
 
   const primaryFile = getPrimaryMaterialFile(detail.material);
   const attachments = (detail.material.attachments ?? []).filter((attachment) => attachment.id !== primaryFile?.id);
+  const actions = (
+    <div className="flex flex-wrap items-center gap-2">
+      <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => setIsTheaterMode((current) => !current)}>
+        {isTheaterMode ? <Minimize2 size={15} aria-hidden="true" /> : <Maximize2 size={15} aria-hidden="true" />}
+        {isTheaterMode ? "Modo normal" : "Modo foco"}
+      </Button>
+      <MaterialDetailSidebar
+        material={detail.material}
+        typeLabel={type.label}
+        status={status}
+        progressPercentage={detail.progressPercentage}
+        progressErrorMessage={detail.progressErrorMessage}
+        isUpdatingProgress={detail.isUpdatingProgress}
+        onMarkAsCompleted={() => void detail.markAsCompleted()}
+      />
+    </div>
+  );
 
   return (
-    <section
-      className={cn(
-        "mx-auto w-full space-y-6 pb-8",
-        isTheaterMode
-          ? "max-w-[1680px] rounded-[var(--radius-lg)] bg-[color-mix(in_oklab,var(--color-background)_88%,black)] p-3 sm:p-4"
-          : "max-w-5xl",
-      )}
-    >
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          {isTheaterMode ? (
-            <details className="group relative">
-              <summary className="student-action student-hover-surface flex list-none items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold marker:content-none" style={{ borderColor: "var(--color-border)" }}>
-                <Menu size={16} aria-hidden="true" />
-                Menu
-              </summary>
-              <div className="absolute left-0 z-50 mt-2 w-56 rounded-[var(--radius-md)] border p-2 shadow-[var(--shadow-md)]" style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-
-                  return (
-                    <Link key={item.href} href={item.href} className="student-action student-hover-surface flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-[var(--color-text-muted)]">
-                      <Icon size={16} aria-hidden="true" />
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </div>
-            </details>
-          ) : null}
-          <Link
-            href="/materiais"
-            className="student-text-action inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold text-[var(--color-text-muted)]"
-          >
-            <ArrowLeft size={16} aria-hidden="true" />
-            Materiais
-          </Link>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => setIsTheaterMode((current) => !current)}>
-            {isTheaterMode ? <Minimize2 size={15} aria-hidden="true" /> : <Maximize2 size={15} aria-hidden="true" />}
-            {isTheaterMode ? "Modo normal" : "Modo foco"}
-          </Button>
-          <MaterialDetailSidebar
-            material={detail.material}
-            typeLabel={type.label}
-            status={status}
-            progressPercentage={detail.progressPercentage}
-            progressErrorMessage={detail.progressErrorMessage}
-            isUpdatingProgress={detail.isUpdatingProgress}
-            onMarkAsCompleted={() => void detail.markAsCompleted()}
-          />
-        </div>
-      </div>
-
+    <MaterialTheaterShell isTheaterMode={isTheaterMode} navItems={navItems} actions={actions}>
       <header
         className={cn("flex flex-wrap items-start justify-between gap-3 border-b pb-5", isTheaterMode ? "px-1" : "")}
         style={{ borderColor: "var(--color-border)" }}
@@ -155,6 +107,6 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
       </div>
 
       <MaterialAttachmentsList attachments={attachments} />
-    </section>
+    </MaterialTheaterShell>
   );
 }

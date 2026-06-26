@@ -2,19 +2,15 @@ import type { FormEvent } from "react";
 import { Plus, RotateCcw } from "lucide-react";
 
 import { SectionHeader } from "@/components/student/SectionHeader";
-import { AdminMaterialUpload } from "@/components/student/admin/AdminMaterialUpload";
+import { AdminMaterialTypeFields } from "@/components/student/admin/AdminMaterialTypeFields";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  adminMaterialTypes,
-  type MaterialFormState,
-} from "@/lib/student/admin-material-form";
+import type { MaterialFormState } from "@/lib/student/admin-material-form";
 import type { AdminMaterial, AdminUploadType } from "@/types/admin";
-import type { MaterialAttachment, MaterialType } from "@/types/student";
+import type { MaterialAttachment } from "@/types/student";
 
 type AdminMaterialFormProps = {
   form: MaterialFormState;
@@ -79,77 +75,16 @@ export function AdminMaterialForm({
           />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-[1fr_112px]">
-          <div>
-            <Label htmlFor="materialType">Tipo</Label>
-            <Select
-              id="materialType"
-              value={form.type}
-              onChange={(event) => onFieldChange("type", event.target.value as MaterialType)}
-            >
-              {adminMaterialTypes.map((type) => (
-                <option key={type.value} value={type.value}>
-                  {type.label}
-                </option>
-              ))}
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="materialOrder">Ordem</Label>
-            <Input
-              id="materialOrder"
-              type="number"
-              min={0}
-              value={form.order}
-              onChange={(event) => onFieldChange("order", event.target.value)}
-            />
-          </div>
-        </div>
-
-        <AdminMaterialUpload
+        <AdminMaterialTypeFields
+          form={form}
           file={file}
           attachedFiles={attachedFiles}
-          isUploading={isUploading}
           uploadType={uploadType}
-          materialType={form.type}
+          isUploading={isUploading}
+          onFieldChange={onFieldChange}
           onFileChange={onFileChange}
           onUpload={onUpload}
         />
-
-        {form.type === "video" ? (
-          <div>
-            <Label htmlFor="materialUrl">URL do YouTube</Label>
-            <Input
-              id="materialUrl"
-              value={form.url}
-              onChange={(event) => onFieldChange("url", event.target.value)}
-              placeholder="https://www.youtube.com/watch?v=..."
-            />
-          </div>
-        ) : null}
-
-        {form.type === "other" ? (
-          <div>
-            <Label htmlFor="materialUrl">Link do material</Label>
-            <Input
-              id="materialUrl"
-              value={form.url}
-              onChange={(event) => onFieldChange("url", event.target.value)}
-              placeholder="https://..."
-            />
-          </div>
-        ) : null}
-
-        <div>
-          <Label htmlFor="materialReleasedAt">Liberar em</Label>
-          <Input
-            id="materialReleasedAt"
-            type="datetime-local"
-            value={form.releasedAt}
-            onChange={(event) => onFieldChange("releasedAt", event.target.value)}
-          />
-          <p className="student-muted-text mt-1 text-xs">Deixe em branco para liberar imediatamente.</p>
-        </div>
 
         <label className="student-action flex w-fit items-center gap-2 rounded-lg py-1 text-sm font-semibold">
           <input

@@ -24,3 +24,31 @@ export function getMaterialTypeMeta(type: Material["type"]) {
   if (type === "attachment") return { label: "Anexo", icon: Paperclip };
   return { label: "Link", icon: Link2 };
 }
+
+export function getMaterialTypeAccent(type: Material["type"]) {
+  if (type === "video") {
+    return {
+      color: "var(--color-brand-blue)",
+      surface: "color-mix(in oklab, var(--color-brand-blue) 16%, var(--color-surface))",
+    };
+  }
+
+  if (type === "pdf") {
+    return {
+      color: "var(--color-primary)",
+      surface: "color-mix(in oklab, var(--color-primary) 16%, var(--color-surface))",
+    };
+  }
+
+  if (type === "attachment") {
+    return {
+      color: "var(--color-accent-soft)",
+      surface: "color-mix(in oklab, var(--color-accent-soft) 14%, var(--color-surface))",
+    };
+  }
+
+  return {
+    color: "var(--color-accent)",
+    surface: "color-mix(in oklab, var(--color-accent) 14%, var(--color-surface))",
+  };
+}

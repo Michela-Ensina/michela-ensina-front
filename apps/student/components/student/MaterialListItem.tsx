@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/materials/material-display";
+import {
+  getMaterialStatus,
+  getMaterialTypeAccent,
+  getMaterialTypeMeta,
+} from "@/components/student/materials/material-display";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { cn } from "@/lib/utils/cn";
 import type { Material, ProgressItem } from "@/types/student";
@@ -14,6 +18,7 @@ type MaterialListItemProps = {
 export function MaterialListItem({ material, progressItems, density = "comfortable" }: MaterialListItemProps) {
   const status = getMaterialStatus(material, progressItems);
   const type = getMaterialTypeMeta(material.type);
+  const accent = getMaterialTypeAccent(material.type);
   const TypeIcon = type.icon;
 
   return (
@@ -29,8 +34,8 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
       <div
         className="flex size-10 items-center justify-center rounded-xl"
         style={{
-          backgroundColor: "color-mix(in oklab, var(--color-primary) 16%, var(--color-surface))",
-          color: "var(--color-primary)",
+          backgroundColor: accent.surface,
+          color: accent.color,
         }}
       >
         <TypeIcon size={18} aria-hidden="true" />

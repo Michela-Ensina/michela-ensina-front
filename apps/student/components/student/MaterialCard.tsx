@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/materials/material-display";
+import {
+  getMaterialStatus,
+  getMaterialTypeAccent,
+  getMaterialTypeMeta,
+} from "@/components/student/materials/material-display";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { Material, ProgressItem } from "@/types/student";
@@ -13,6 +17,7 @@ type MaterialCardProps = {
 export function MaterialCard({ material, progressItems }: MaterialCardProps) {
   const status = getMaterialStatus(material, progressItems);
   const type = getMaterialTypeMeta(material.type);
+  const accent = getMaterialTypeAccent(material.type);
   const TypeIcon = type.icon;
 
   return (
@@ -21,8 +26,8 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
         <div
           className="flex size-10 shrink-0 items-center justify-center rounded-xl"
           style={{
-            backgroundColor: "color-mix(in oklab, var(--color-primary) 16%, var(--color-surface))",
-            color: "var(--color-primary)",
+            backgroundColor: accent.surface,
+            color: accent.color,
           }}
         >
           <TypeIcon size={18} aria-hidden="true" />
@@ -43,7 +48,7 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
       <Link
         href={`/materiais/${material.id}`}
         className="student-text-action -mx-2 mt-5 w-fit rounded-lg px-2 py-1 text-sm font-semibold"
-        style={{ color: "var(--color-primary)" }}
+        style={{ color: accent.color }}
       >
         {status.tone === "concluído" ? "Revisar material" : "Continuar estudando"}
       </Link>

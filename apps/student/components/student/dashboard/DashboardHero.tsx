@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { DashboardProgressSummary } from "@/components/student/dashboard/DashboardProgressSummary";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import type { ProgressSummary, User } from "@/types/student";
@@ -17,15 +19,32 @@ export function DashboardHero({
 }: DashboardHeroProps) {
   return (
     <section
-      className="rounded-[var(--radius-lg)] border px-5 py-5 sm:px-6"
+      className="relative overflow-hidden rounded-[var(--radius-lg)] border px-5 py-5 sm:px-6"
       style={{
         borderColor: "color-mix(in oklab, var(--color-border) 76%, var(--color-primary))",
-        backgroundColor: "color-mix(in oklab, var(--color-surface) 86%, var(--color-secondary))",
+        backgroundColor: "color-mix(in oklab, var(--color-surface) 82%, var(--color-brand-blue))",
         boxShadow: "var(--shadow-md)",
       }}
     >
-      <div className="grid gap-6 lg:grid-cols-[1.5fr_0.8fr] lg:items-end">
-        <div>
+      <Image
+        src="/assets/brand/graphics/elementos-02-lilas.svg"
+        alt=""
+        width={148}
+        height={148}
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-8 -top-8 opacity-[0.11]"
+      />
+      <Image
+        src="/assets/brand/graphics/estrela-lilas.svg"
+        alt=""
+        width={32}
+        height={32}
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-7 right-10 opacity-20"
+      />
+
+      <div className="relative grid gap-6 lg:grid-cols-[1.45fr_0.82fr] lg:items-end">
+        <div className="max-w-3xl">
           <div className="flex flex-wrap items-center gap-2">
             <StatusBadge
               label={student.is_active ? "Acesso ativo" : "Acesso limitado"}
@@ -44,12 +63,20 @@ export function DashboardHero({
           </p>
         </div>
 
-        <DashboardProgressSummary
-          percentage={progress.percentage}
-          viewedCount={progress.viewed_count}
-          pendingCount={pendingCount}
-          totalMaterials={totalMaterials}
-        />
+        <div
+          className="rounded-[var(--radius-md)] border p-4"
+          style={{
+            borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
+            backgroundColor: "color-mix(in oklab, var(--color-background) 46%, var(--color-surface))",
+          }}
+        >
+          <DashboardProgressSummary
+            percentage={progress.percentage}
+            viewedCount={progress.viewed_count}
+            pendingCount={pendingCount}
+            totalMaterials={totalMaterials}
+          />
+        </div>
       </div>
     </section>
   );
