@@ -2,12 +2,10 @@
 
 import Link from "next/link";
 import { LogOut, Settings, SunMoon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
+import { useLogoutAction } from "@/lib/auth/use-logout-action";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
 
@@ -19,22 +17,9 @@ function getInitials(name?: string | null) {
 }
 
 export function AccountMenu() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { theme, setTheme } = useTheme();
-  const router = useRouter();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  async function handleLogout() {
-    setIsLoggingOut(true);
-
-    try {
-      await logout();
-      toast.info("Você saiu da sua conta.");
-      router.replace("/login");
-    } finally {
-      setIsLoggingOut(false);
-    }
-  }
+  const { isLoggingOut, logoutFromStudentArea } = useLogoutAction();
 
   return (
     <details className="group relative z-50">
@@ -80,7 +65,7 @@ export function AccountMenu() {
 
         <Button
           type="button"
-          onClick={() => void handleLogout()}
+          onClick={() => void logoutFromStudentArea()}
           disabled={isLoggingOut}
           variant="danger"
           fullWidth

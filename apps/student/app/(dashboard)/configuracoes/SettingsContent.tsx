@@ -1,9 +1,5 @@
 "use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { LogOut, Moon, ShieldCheck, UserRound } from "lucide-react";
-import { toast } from "sonner";
 
 import { SettingsAccountCard } from "@/components/student/settings/SettingsAccountCard";
 import { SettingsPasswordDialog } from "@/components/student/settings/SettingsPasswordDialog";
@@ -13,27 +9,15 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { SettingRow } from "@/components/ui/SettingRow";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
+import { useLogoutAction } from "@/lib/auth/use-logout-action";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
 
 export function SettingsContent() {
-  const { changePassword, user, logout } = useAuth();
+  const { changePassword, user } = useAuth();
   const { theme, setTheme } = useTheme();
-  const router = useRouter();
-
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const passwordDialog = useSettingsPasswordDialog(changePassword);
-
-  async function handleLogout() {
-    setIsLoggingOut(true);
-    try {
-      await logout();
-      toast.info("Você saiu da sua conta.");
-      router.replace("/login");
-    } finally {
-      setIsLoggingOut(false);
-    }
-  }
+  const { isLoggingOut, logoutFromStudentArea } = useLogoutAction();
 
   return (
     <div className="grid gap-5 xl:grid-cols-[340px_1fr]">
@@ -84,7 +68,7 @@ export function SettingsContent() {
         <SettingRow title="Sessão" description="Também disponível no menu da conta no topo.">
           <Button
             type="button"
-            onClick={() => void handleLogout()}
+            onClick={() => void logoutFromStudentArea()}
             disabled={isLoggingOut}
             variant="danger"
             className="gap-2"
