@@ -1,7 +1,8 @@
-import type { ChangeEvent, FormEvent } from "react";
-import { FileUp, Plus, RotateCcw } from "lucide-react";
+import type { FormEvent } from "react";
+import { Plus, RotateCcw } from "lucide-react";
 
 import { SectionHeader } from "@/components/student/SectionHeader";
+import { AdminMaterialUpload } from "@/components/student/admin/AdminMaterialUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -103,27 +104,13 @@ export function AdminMaterialForm({
           </div>
         </div>
 
-        {uploadType ? (
-          <div className="rounded-[var(--radius-md)] border p-3" style={{ borderColor: "var(--color-border)" }}>
-            <Label htmlFor="materialFile">Arquivo</Label>
-            <Input
-              id="materialFile"
-              type="file"
-              onChange={(event: ChangeEvent<HTMLInputElement>) => onFileChange(event.target.files?.[0] ?? null)}
-            />
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="mt-3 gap-2"
-              disabled={!file || isUploading}
-              onClick={onUpload}
-            >
-              <FileUp size={16} aria-hidden="true" />
-              {isUploading ? "Enviando..." : "Enviar arquivo"}
-            </Button>
-          </div>
-        ) : null}
+        <AdminMaterialUpload
+          file={file}
+          isUploading={isUploading}
+          uploadType={uploadType}
+          onFileChange={onFileChange}
+          onUpload={onUpload}
+        />
 
         <div>
           <Label htmlFor="materialUrl">URL</Label>
