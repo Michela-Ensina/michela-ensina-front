@@ -1,7 +1,8 @@
 import { AdminMaterialUpload } from "@/components/student/admin/AdminMaterialUpload";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import {
   adminMaterialTypes,
   type MaterialFormState,
@@ -37,6 +38,9 @@ export function AdminMaterialTypeFields({
   onUpload,
   onRemoveAttachment,
 }: AdminMaterialTypeFieldsProps) {
+  const selectedTypeLabel =
+    adminMaterialTypes.find((type) => type.value === form.type)?.label ?? "Selecione";
+
   return (
     <>
       <div className="grid gap-3 sm:grid-cols-[1fr_112px]">
@@ -45,13 +49,16 @@ export function AdminMaterialTypeFields({
           <Select
             id="materialType"
             value={form.type}
-            onChange={(event) => onFieldChange("type", event.target.value as MaterialType)}
+            onValueChange={(value) => onFieldChange("type", value as MaterialType)}
           >
-            {adminMaterialTypes.map((type) => (
-              <option key={type.value} value={type.value}>
-                {type.label}
-              </option>
-            ))}
+            <SelectTrigger>{selectedTypeLabel}</SelectTrigger>
+            <SelectContent>
+              {adminMaterialTypes.map((type) => (
+                <SelectItem key={type.value} value={type.value}>
+                  {type.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
         </div>
         <div>
@@ -104,11 +111,10 @@ export function AdminMaterialTypeFields({
 
       <div>
         <Label htmlFor="materialReleasedAt">Liberar em</Label>
-        <Input
+        <DateTimePicker
           id="materialReleasedAt"
-          type="datetime-local"
           value={form.releasedAt}
-          onChange={(event) => onFieldChange("releasedAt", event.target.value)}
+          onChange={(value) => onFieldChange("releasedAt", value)}
         />
         <p className="student-muted-text mt-1 text-xs">Deixe em branco para liberar imediatamente.</p>
       </div>

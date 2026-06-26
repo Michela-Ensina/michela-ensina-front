@@ -76,6 +76,7 @@ function SidebarHeader({ isCollapsed, onToggle }: SidebarHeaderProps) {
       >
         <StudentBrandMark
           variant={isCollapsed ? "symbol" : "horizontal"}
+          tone="light"
           className={cn(
             "shrink-0 object-contain",
             isCollapsed ? "h-7 w-7 xl:hidden" : "h-8 w-auto",
@@ -84,6 +85,7 @@ function SidebarHeader({ isCollapsed, onToggle }: SidebarHeaderProps) {
         {isCollapsed ? (
           <StudentBrandMark
             variant="horizontal"
+            tone="light"
             className="hidden h-8 w-auto shrink-0 xl:block"
           />
         ) : null}
@@ -185,7 +187,7 @@ function SidebarSocialLinks({ isCollapsed }: CollapsibleSidebarPartProps) {
           href={STUDENT_BRAND_LINKS.whatsappChannel}
           target="_blank"
           rel="noreferrer"
-          className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[var(--color-brand-cream)]"
+          className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[#fffefa]"
           aria-label="Canal do Whatsapp da Michela"
         >
           <SiWhatsapp size={17} aria-hidden="true" />
@@ -194,7 +196,7 @@ function SidebarSocialLinks({ isCollapsed }: CollapsibleSidebarPartProps) {
           href={STUDENT_BRAND_LINKS.instagram}
           target="_blank"
           rel="noreferrer"
-          className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[var(--color-brand-cream)]"
+          className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[#fffefa]"
           aria-label="Instagram da Michela"
         >
           <SiInstagram size={17} aria-hidden="true" />
