@@ -8,8 +8,8 @@ export function EmptyState({ title, description }: EmptyStateProps) {
     <div
       className="rounded-[var(--radius-lg)] border border-dashed p-6 text-center sm:p-8"
       style={{
-        borderColor: "color-mix(in oklab, var(--color-border) 75%, transparent)",
-        backgroundColor: "color-mix(in oklab, var(--color-surface) 75%, transparent)",
+        borderColor: "var(--color-border)",
+        backgroundColor: "var(--color-surface)",
       }}
     >
       <p className="text-lg font-semibold">{title}</p>

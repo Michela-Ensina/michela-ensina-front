@@ -67,8 +67,8 @@ export function MaterialsContent() {
       <section
         className="relative overflow-hidden rounded-[var(--radius-lg)] border p-5 sm:p-6"
         style={{
-          borderColor: "color-mix(in oklab, var(--color-border) 82%, var(--color-primary))",
-          backgroundColor: "color-mix(in oklab, var(--color-surface) 88%, var(--color-brand-lilac))",
+          borderColor: "var(--color-border)",
+          backgroundColor: "var(--color-surface)",
         }}
       >
         <Image
@@ -88,8 +88,8 @@ export function MaterialsContent() {
             <div
               className="rounded-[var(--radius-md)] border p-4"
               style={{
-                borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-brand-blue))",
-                backgroundColor: "color-mix(in oklab, var(--color-background) 42%, var(--color-surface))",
+                borderColor: "var(--color-border)",
+                backgroundColor: "var(--color-surface-soft)",
               }}
             >
               <ProgressBar value={data.progress.percentage} label="Conclusão dos materiais" />
@@ -98,7 +98,7 @@ export function MaterialsContent() {
         </div>
       </section>
 
-      <div className="grid gap-5 xl:grid-cols-[0.82fr_1.18fr]">
+      <div className="grid gap-5 xl:grid-cols-[340px_1fr]">
         <MaterialsFilterSidebar
           featuredMaterial={featuredMaterial}
           progressItems={progressItems}

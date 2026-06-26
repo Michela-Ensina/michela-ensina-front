@@ -24,12 +24,15 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
   return (
     <article
       className={cn(
-        "grid gap-3 border-b py-4 transition-colors duration-200 last:border-b-0",
+        "student-hover-surface grid gap-3 rounded-[var(--radius-md)] border p-4 transition-colors duration-200",
         density === "compact"
-          ? "grid-cols-[auto_1fr] items-start"
-          : "student-hover-surface -mx-2 rounded-xl px-2 sm:grid-cols-[auto_1fr_auto] sm:items-center",
+          ? "grid-cols-[auto_1fr] items-start sm:grid-cols-[auto_1fr_auto] sm:items-center"
+          : "sm:grid-cols-[auto_1fr_auto] sm:items-center",
       )}
-      style={{ borderColor: "color-mix(in oklab, var(--color-border) 72%, transparent)" }}
+      style={{
+        borderColor: "color-mix(in oklab, var(--color-border) 82%, var(--color-brand-lilac))",
+        backgroundColor: "var(--color-surface-soft)",
+      }}
     >
       <div
         className="flex size-10 items-center justify-center rounded-xl"
@@ -60,7 +63,7 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
         href={`/materiais/${material.id}`}
         className={cn(
           "student-action student-primary-action inline-flex min-h-9 items-center justify-center rounded-xl px-3 text-sm font-semibold",
-          density === "compact" ? "col-start-2 justify-self-start" : "",
+          density === "compact" ? "col-start-2 justify-self-start sm:col-start-auto sm:justify-self-end" : "",
         )}
         style={{
           color: "var(--color-brand-cream)",

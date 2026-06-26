@@ -21,9 +21,9 @@ export function DashboardHero({
     <section
       className="relative overflow-hidden rounded-[var(--radius-lg)] border px-5 py-5 sm:px-6"
       style={{
-        borderColor: "color-mix(in oklab, var(--color-border) 76%, var(--color-primary))",
-        backgroundColor: "color-mix(in oklab, var(--color-surface) 82%, var(--color-brand-blue))",
-        boxShadow: "var(--shadow-md)",
+        borderColor: "var(--color-border)",
+        backgroundColor: "var(--color-surface)",
+        boxShadow: "var(--shadow-sm)",
       }}
     >
       <Image
@@ -66,8 +66,8 @@ export function DashboardHero({
         <div
           className="rounded-[var(--radius-md)] border p-4"
           style={{
-            borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
-            backgroundColor: "color-mix(in oklab, var(--color-background) 46%, var(--color-surface))",
+            borderColor: "var(--color-border)",
+            backgroundColor: "var(--color-surface-soft)",
           }}
         >
           <DashboardProgressSummary

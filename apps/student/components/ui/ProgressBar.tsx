@@ -16,13 +16,13 @@ export function ProgressBar({ value, label }: ProgressBarProps) {
       ) : null}
       <div
         className="h-2.5 w-full overflow-hidden rounded-full"
-        style={{ backgroundColor: "color-mix(in oklab, var(--color-text-muted) 20%, transparent)" }}
+        style={{ backgroundColor: "var(--color-border)" }}
       >
         <div
           className="h-full rounded-full transition-[width] duration-200 ease-out"
           style={{
             width: `${normalizedValue}%`,
-            backgroundColor: "var(--color-primary)",
+            backgroundColor: "var(--color-secondary)",
           }}
         />
       </div>

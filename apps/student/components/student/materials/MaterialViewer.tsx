@@ -25,8 +25,8 @@ export function MaterialViewer({ material, typeLabel, isTheaterMode = false }: M
     <div
       className="overflow-hidden rounded-[var(--radius-lg)] border"
       style={{
-        borderColor: "color-mix(in oklab, var(--color-border) 70%, var(--color-accent-soft))",
-        backgroundColor: "color-mix(in oklab, var(--color-surface) 88%, var(--color-brand-lilac))",
+        borderColor: "var(--color-border)",
+        backgroundColor: "var(--color-surface)",
       }}
     >
       {material.type === "video" ? (

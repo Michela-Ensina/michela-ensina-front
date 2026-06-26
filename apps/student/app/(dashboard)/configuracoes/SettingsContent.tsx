@@ -29,7 +29,7 @@ export function SettingsContent() {
         className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
         style={{
           borderColor: "var(--color-border)",
-          backgroundColor: "color-mix(in oklab, var(--color-surface) 70%, transparent)",
+          backgroundColor: "var(--color-surface)",
         }}
       >
         <div className="border-b py-4" style={{ borderColor: "var(--color-border)" }}>

@@ -13,8 +13,7 @@ export function SurfaceCard({ className, ...props }: SurfaceCardProps) {
       )}
       style={{
         backgroundColor: "var(--color-surface)",
-        borderColor: "color-mix(in oklab, var(--color-border) 84%, var(--color-primary))",
-        backdropFilter: "blur(2px)",
+        borderColor: "var(--color-border)",
       }}
       {...props}
     />

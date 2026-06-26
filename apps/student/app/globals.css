@@ -18,20 +18,20 @@
   --me-lilac-light: #e4cef4;
   --me-white: #fffefa;
 
-  --me-dark-base: #0f0a18;
-  --me-dark-raised: #180f24;
-  --me-dark-overlay: #1f1430;
-  --me-dark-border: #2e1d42;
-  --me-dark-muted: #3a2554;
+  --me-dark-base: #130825;
+  --me-dark-raised: #24123a;
+  --me-dark-overlay: #301a4a;
+  --me-dark-border: rgb(181 126 220 / 0.2);
+  --me-dark-muted: #5b3a78;
 
   --color-background: var(--me-dark-base);
   --color-surface: var(--me-dark-raised);
   --color-surface-soft: var(--me-dark-overlay);
-  --color-text: #ede8f7;
-  --color-text-muted: #b497d2;
-  --color-primary: #b57edc;
-  --color-secondary: #9b64c4;
-  --color-accent: #4f6ee8;
+  --color-text: #f4ecfb;
+  --color-text-muted: #b57edc;
+  --color-primary: #dbb5ee;
+  --color-secondary: #7e4ca5;
+  --color-accent: #7f95ff;
   --color-accent-soft: var(--me-lilac);
   --color-brand-blue: #6f8cff;
   --color-brand-lilac: var(--me-lilac);
@@ -44,44 +44,42 @@
   --radius-md: 14px;
   --radius-lg: 18px;
 
-  --shadow-sm: 0 2px 8px rgb(10 5 20 / 0.45);
-  --shadow-md: 0 8px 24px rgb(10 5 20 / 0.65);
+  --shadow-sm: 0 2px 8px rgb(77 35 117 / 0.24);
+  --shadow-md: 0 8px 24px rgb(77 35 117 / 0.3);
   --shadow-brand: 0 18px 42px rgb(77 35 117 / 0.24);
   --shadow-focus: 0 0 0 3px rgb(181 126 220 / 0.4);
   --login-glow-a: #211034;
   --login-glow-b: #0b0715;
-  --app-background:
-    linear-gradient(180deg, #150d22 0%, var(--color-background) 46%);
+  --app-background: var(--color-background);
 }
 
 :root[data-theme="light"],
 .light {
   color-scheme: light;
 
-  --color-background: #fbfafc;
-  --color-surface: #ffffff;
-  --color-surface-soft: #f3eef7;
-  --color-text: #2a173d;
-  --color-text-muted: #64437f;
-  --color-primary: #7e4ca5;
-  --color-secondary: #5f3490;
-  --color-accent: #2f49bd;
+  --color-background: #f5eeff;
+  --color-surface: #fffefa;
+  --color-surface-soft: #f5eeff;
+  --color-text: #4d2375;
+  --color-text-muted: #7e4ca5;
+  --color-primary: #4d2375;
+  --color-secondary: #7e4ca5;
+  --color-accent: #233695;
   --color-accent-soft: var(--me-lavender);
   --color-brand-blue: var(--me-blue-dark);
   --color-brand-lilac: var(--me-lilac);
   --color-brand-cream: var(--me-white);
-  --color-border: #d7c4ea;
+  --color-border: #e4cef4;
   --color-selection-bg: #dbb5ee;
   --color-selection-text: #2a173d;
 
-  --shadow-sm: 0 2px 10px rgb(27 18 41 / 0.08);
-  --shadow-md: 0 10px 24px rgb(27 18 41 / 0.14);
-  --shadow-brand: 0 16px 34px rgb(77 35 117 / 0.12);
+  --shadow-sm: 0 2px 8px rgb(77 35 117 / 0.07);
+  --shadow-md: 0 8px 18px rgb(77 35 117 / 0.1);
+  --shadow-brand: 0 10px 22px rgb(77 35 117 / 0.1);
   --shadow-focus: 0 0 0 3px rgb(126 76 165 / 0.25);
   --login-glow-a: #ffffff;
   --login-glow-b: #fbfafc;
-  --app-background:
-    linear-gradient(180deg, #fffefa 0%, var(--color-background) 52%);
+  --app-background: var(--color-background);
 }
 
 html,
@@ -183,7 +181,7 @@ a {
 
 .student-menu-trigger {
   border-color: color-mix(in oklab, var(--color-border) 70%, transparent);
-  background-color: color-mix(in oklab, var(--color-surface) 82%, transparent);
+  background-color: var(--color-surface);
 }
 
 .student-menu-surface {
@@ -196,8 +194,9 @@ a {
 }
 
 .student-sidebar {
-  border-right: 1px solid color-mix(in oklab, var(--color-border) 78%, var(--color-primary));
-  background-color: color-mix(in oklab, var(--color-surface) 82%, var(--color-background));
+  border-right: 1px solid color-mix(in oklab, var(--color-border) 82%, transparent);
+  background:
+    linear-gradient(160deg, #4d2375 0%, #32174b 100%);
 }
 
 .student-sidebar-toggle {
@@ -227,7 +226,7 @@ a {
 }
 
 .student-sidebar-section-label {
-  color: var(--color-text-muted);
+  color: var(--color-brand-lilac);
 }
 
 .student-sidebar-nav {
@@ -265,8 +264,14 @@ body[data-material-theater="true"] main {
   }
 
   .student-hover-surface:hover {
-    background-color: color-mix(in oklab, var(--color-primary) 9%, var(--color-surface));
-    border-color: color-mix(in oklab, var(--color-primary) 52%, var(--color-border));
+    background-color: var(--color-surface-soft);
+    border-color: color-mix(in oklab, var(--color-primary) 36%, var(--color-border));
+  }
+
+  .student-sidebar .student-hover-surface:hover {
+    background-color: rgb(255 254 250 / 0.12);
+    border-color: transparent;
+    color: var(--color-brand-cream);
   }
 
   .student-text-action:hover {

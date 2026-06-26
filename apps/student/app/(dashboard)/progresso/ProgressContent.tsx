@@ -67,7 +67,7 @@ export function ProgressContent() {
   const { completedMaterials, openMaterials } = groupMaterialsByProgress(data.materials, progress.items);
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[360px_1fr]">
+    <div className="grid gap-5 xl:grid-cols-[340px_1fr]">
       <aside className="space-y-4">
         <SurfaceCard className="relative overflow-hidden">
           <Image
@@ -101,8 +101,8 @@ export function ProgressContent() {
         <div
           className="rounded-[var(--radius-lg)] border p-4"
           style={{
-            borderColor: "color-mix(in oklab, var(--color-border) 70%, var(--color-accent-soft))",
-            backgroundColor: "color-mix(in oklab, var(--color-surface) 88%, var(--color-brand-lilac))",
+            borderColor: "var(--color-border)",
+            backgroundColor: "var(--color-surface)",
           }}
         >
           <p className="flex items-center gap-2 text-sm font-semibold">
@@ -123,8 +123,8 @@ export function ProgressContent() {
       <section
         className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
         style={{
-          borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
-          backgroundColor: "color-mix(in oklab, var(--color-surface) 76%, transparent)",
+          borderColor: "var(--color-border)",
+          backgroundColor: "var(--color-surface)",
         }}
       >
         <div className="border-b py-4" style={{ borderColor: "var(--color-border)" }}>

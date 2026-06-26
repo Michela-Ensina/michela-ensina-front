@@ -24,8 +24,8 @@ export function SegmentedControl<TValue extends string>({
       <div
         className="inline-flex flex-wrap gap-1 rounded-2xl border p-1"
         style={{
-          borderColor: "color-mix(in oklab, var(--color-border) 78%, transparent)",
-          backgroundColor: "color-mix(in oklab, var(--color-surface-soft) 68%, transparent)",
+          borderColor: "var(--color-border)",
+          backgroundColor: "var(--color-surface-soft)",
         }}
       >
         {options.map((option) => {

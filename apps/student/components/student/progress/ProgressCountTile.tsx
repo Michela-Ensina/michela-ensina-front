@@ -9,11 +9,11 @@ export function ProgressCountTile({ count, label, accentColor }: ProgressCountTi
     <div
       className="rounded-2xl border p-3"
       style={{
-        borderColor: `color-mix(in oklab, var(--color-border) 72%, ${accentColor})`,
-        backgroundColor: `color-mix(in oklab, ${accentColor} 12%, transparent)`,
+        borderColor: `color-mix(in oklab, var(--color-border) 84%, ${accentColor})`,
+        backgroundColor: "var(--color-surface-soft)",
       }}
     >
-      <p className="text-2xl font-bold">{count}</p>
+      <p className="text-2xl font-bold" style={{ color: accentColor }}>{count}</p>
       <p className="student-muted-text text-xs">{label}</p>
     </div>
   );

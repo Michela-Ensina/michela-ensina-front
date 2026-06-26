@@ -11,10 +11,10 @@ type MaterialsStudyListProps = {
 export function MaterialsStudyList({ materials, totalMaterials, progressItems }: MaterialsStudyListProps) {
   return (
     <section
-      className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
+      className="min-h-[420px] rounded-[var(--radius-lg)] border px-4 sm:px-5"
       style={{
-        borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
-        backgroundColor: "color-mix(in oklab, var(--color-surface) 76%, transparent)",
+        borderColor: "var(--color-border)",
+        backgroundColor: "var(--color-surface)",
       }}
     >
       <div
@@ -30,9 +30,11 @@ export function MaterialsStudyList({ materials, totalMaterials, progressItems }:
       </div>
 
       {materials.length > 0 ? (
-        materials.map((material) => (
-          <MaterialListItem key={material.id} material={material} progressItems={progressItems} />
-        ))
+        <div className="space-y-3 py-4">
+          {materials.map((material) => (
+            <MaterialListItem key={material.id} material={material} progressItems={progressItems} />
+          ))}
+        </div>
       ) : (
         <div className="py-6">
           <EmptyState

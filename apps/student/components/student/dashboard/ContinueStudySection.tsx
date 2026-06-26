@@ -36,8 +36,8 @@ export function ContinueStudySection({
       <div
         className="grid gap-0 overflow-hidden rounded-[var(--radius-lg)] border lg:grid-cols-[1fr_0.9fr]"
         style={{
-          borderColor: "color-mix(in oklab, var(--color-border) 82%, var(--color-primary))",
-          backgroundColor: "color-mix(in oklab, var(--color-surface) 88%, var(--color-secondary))",
+          borderColor: "var(--color-border)",
+          backgroundColor: "var(--color-surface)",
         }}
       >
         <div className="p-5 sm:p-6">
@@ -67,14 +67,14 @@ export function ContinueStudySection({
           className="border-t p-5 lg:border-l lg:border-t-0"
           style={{
             borderColor: "var(--color-border)",
-            backgroundColor: "color-mix(in oklab, var(--color-surface-soft) 86%, var(--color-secondary))",
+            backgroundColor: "var(--color-surface-soft)",
           }}
         >
           <p className="flex items-center gap-2 text-sm font-semibold">
             <BookOpen size={16} aria-hidden="true" />
             Materiais recentes
           </p>
-          <div className="mt-2">
+          <div className="mt-3 space-y-3">
             {recentMaterials.map((material) => (
               <MaterialListItem
                 key={material.id}

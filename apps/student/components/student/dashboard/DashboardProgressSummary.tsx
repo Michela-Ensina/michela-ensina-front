@@ -31,8 +31,8 @@ export function DashboardProgressSummary({
       <div
         className="mt-4 grid grid-cols-3 overflow-hidden rounded-2xl border text-center"
         style={{
-          borderColor: "color-mix(in oklab, var(--color-border) 70%, var(--color-accent-soft))",
-          backgroundColor: "color-mix(in oklab, var(--color-background) 58%, var(--color-surface))",
+          borderColor: "var(--color-border)",
+          backgroundColor: "var(--color-surface)",
         }}
       >
         <SummaryCount label="Concluídos" value={viewedCount} />

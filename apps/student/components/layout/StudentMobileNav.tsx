@@ -12,8 +12,8 @@ export function StudentMobileNav({ items, currentPath }: StudentMobileNavProps) 
     <nav
       className="fixed inset-x-0 bottom-0 z-30 border-t px-2 py-1.5 lg:hidden"
       style={{
-        borderColor: "color-mix(in oklab, var(--color-border) 75%, transparent)",
-        backgroundColor: "color-mix(in oklab, var(--color-surface) 92%, var(--color-background))",
+        borderColor: "var(--color-border)",
+        backgroundColor: "var(--color-surface)",
       }}
     >
       <ul className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>

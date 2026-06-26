@@ -1,5 +1,6 @@
 import { MaterialCard } from "@/components/student/MaterialCard";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { Material, ProgressItem } from "@/types/student";
 
 export type MaterialStatusFilter = "todos" | "em-aberto" | "concluidos";
@@ -38,13 +39,7 @@ export function MaterialsFilterSidebar({
 }: MaterialsFilterSidebarProps) {
   return (
     <aside className="space-y-4">
-      <div
-        className="rounded-[var(--radius-lg)] border p-4"
-        style={{
-          borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
-          backgroundColor: "color-mix(in oklab, var(--color-surface) 78%, transparent)",
-        }}
-      >
+      <SurfaceCard className="p-4 shadow-none">
         <p className="text-sm font-semibold">Status</p>
         <div className="mt-3">
           <SegmentedControl
@@ -54,15 +49,9 @@ export function MaterialsFilterSidebar({
             onChange={onStatusFilterChange}
           />
         </div>
-      </div>
+      </SurfaceCard>
 
-      <div
-        className="rounded-[var(--radius-lg)] border p-4"
-        style={{
-          borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-brand-blue))",
-          backgroundColor: "color-mix(in oklab, var(--color-surface) 78%, transparent)",
-        }}
-      >
+      <SurfaceCard className="p-4 shadow-none">
         <p className="text-sm font-semibold">Tipo de material</p>
         <div className="mt-3">
           <SegmentedControl
@@ -72,7 +61,7 @@ export function MaterialsFilterSidebar({
             onChange={onTypeFilterChange}
           />
         </div>
-      </div>
+      </SurfaceCard>
 
       {featuredMaterial ? (
         <div>

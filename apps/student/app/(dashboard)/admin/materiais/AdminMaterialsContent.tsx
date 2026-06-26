@@ -42,8 +42,8 @@ export function AdminMaterialsContent() {
       <section
         className="rounded-[var(--radius-lg)] border p-5 sm:p-6"
         style={{
-          borderColor: "color-mix(in oklab, var(--color-border) 78%, var(--color-primary))",
-          backgroundColor: "color-mix(in oklab, var(--color-surface) 88%, var(--color-brand-blue))",
+          borderColor: "var(--color-border)",
+          backgroundColor: "var(--color-surface)",
         }}
       >
         <div className="flex flex-wrap items-center gap-4">

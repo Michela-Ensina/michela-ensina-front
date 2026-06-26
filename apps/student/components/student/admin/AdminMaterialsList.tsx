@@ -27,8 +27,8 @@ export function AdminMaterialsList({ materials, onEdit, onDelete }: AdminMateria
     <section
       className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
       style={{
-        borderColor: "color-mix(in oklab, var(--color-border) 72%, var(--color-accent-soft))",
-        backgroundColor: "color-mix(in oklab, var(--color-surface) 76%, transparent)",
+        borderColor: "var(--color-border)",
+        backgroundColor: "var(--color-surface)",
       }}
     >
       <div className="border-b py-4" style={{ borderColor: "var(--color-border)" }}>
@@ -39,9 +39,16 @@ export function AdminMaterialsList({ materials, onEdit, onDelete }: AdminMateria
       </div>
 
       {materials.length > 0 ? (
-        <div className="divide-y" style={{ borderColor: "var(--color-border)" }}>
+        <div className="space-y-3 py-4">
           {materials.map((material) => (
-            <article key={material.id} className="grid gap-3 py-4 md:grid-cols-[1fr_auto] md:items-center">
+            <article
+              key={material.id}
+              className="grid gap-3 rounded-[var(--radius-md)] border p-4 md:grid-cols-[1fr_auto] md:items-center"
+              style={{
+                borderColor: "color-mix(in oklab, var(--color-border) 82%, var(--color-brand-lilac))",
+                backgroundColor: "var(--color-surface-soft)",
+              }}
+            >
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="text-lg leading-tight">{material.title}</h3>
