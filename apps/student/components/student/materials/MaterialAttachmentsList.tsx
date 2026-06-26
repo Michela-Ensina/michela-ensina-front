@@ -1,5 +1,6 @@
 import { FileText, Paperclip } from "lucide-react";
 
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatFileSize } from "@/lib/student/material-media";
 import type { MaterialAttachment } from "@/types/student";
 
@@ -19,7 +20,7 @@ function AttachmentCard({ attachment }: { attachment: MaterialAttachment }) {
       className="student-action student-hover-surface flex min-w-0 items-center gap-3 rounded-[var(--radius-sm)] border p-3"
       style={{
         borderColor: "var(--color-border)",
-        backgroundColor: "var(--color-surface)",
+        backgroundColor: "var(--color-surface-soft)",
       }}
     >
       <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-[var(--color-surface-soft)] text-[var(--color-primary)]">
@@ -37,7 +38,7 @@ export function MaterialAttachmentsList({ attachments }: MaterialAttachmentsList
   if (attachments.length === 0) return null;
 
   return (
-    <section className="border-t pt-6" style={{ borderColor: "var(--color-border)" }}>
+    <SurfaceCard>
       <div>
         <h2 className="text-xl">Materiais de apoio</h2>
         <p className="student-muted-text mt-1 text-sm">Arquivos anexados a este conteúdo.</p>
@@ -47,6 +48,6 @@ export function MaterialAttachmentsList({ attachments }: MaterialAttachmentsList
           <AttachmentCard key={attachment.id} attachment={attachment} />
         ))}
       </div>
-    </section>
+    </SurfaceCard>
   );
 }

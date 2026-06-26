@@ -74,7 +74,7 @@ export function MaterialTheaterShell({
         "mx-auto w-full space-y-6 pb-8",
         isTheaterMode
           ? "max-w-[1680px] rounded-[var(--radius-lg)] bg-[color-mix(in_oklab,var(--color-background)_88%,black)] p-3 sm:p-4"
-          : "max-w-5xl",
+          : "max-w-7xl",
       )}
     >
       <div className="flex flex-wrap items-center justify-between gap-3">

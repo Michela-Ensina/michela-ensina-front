@@ -25,7 +25,7 @@ type MaterialDetailContentProps = {
 
 function MaterialDetailSkeleton() {
   return (
-    <section className="mx-auto w-full max-w-5xl space-y-5">
+    <section className="mx-auto w-full max-w-7xl space-y-5">
       <div className="flex items-center justify-between">
         <div className="h-9 w-36 animate-pulse rounded-lg bg-[var(--color-surface)]" />
         <div className="h-9 w-44 animate-pulse rounded-lg bg-[var(--color-surface)]" />
@@ -88,10 +88,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
 
   return (
     <MaterialTheaterShell isTheaterMode={isTheaterMode} navItems={navItems} actions={actions}>
-      <header
-        className={cn("flex flex-wrap items-start justify-between gap-3 border-b pb-5", isTheaterMode ? "px-1" : "")}
-        style={{ borderColor: "var(--color-border)" }}
-      >
+      <SurfaceCard className={cn("flex flex-wrap items-start justify-between gap-3", isTheaterMode ? "shadow-none" : "")}>
         <div className="max-w-3xl">
           <p className="student-muted-text text-sm">Materiais / {type.label}</p>
           <h1 className="mt-1 text-3xl">{detail.material.title}</h1>
@@ -100,7 +97,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
           ) : null}
         </div>
         <StatusBadge label={status.label} tone={status.tone} />
-      </header>
+      </SurfaceCard>
 
       <div className={cn(isTheaterMode ? "mx-auto w-full max-w-[1500px]" : "")}>
         <MaterialViewer material={detail.material} typeLabel={type.label} isTheaterMode={isTheaterMode} />
