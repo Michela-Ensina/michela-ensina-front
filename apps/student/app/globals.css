@@ -234,8 +234,7 @@ a {
   z-index: 1;
 }
 
-body[data-material-theater="true"] .student-sidebar,
-body[data-material-theater="true"] .student-topbar {
+body[data-material-theater="true"] .student-sidebar {
   display: none;
 }
 

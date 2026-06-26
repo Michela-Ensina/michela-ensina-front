@@ -71,7 +71,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
     <div className="flex flex-wrap items-center gap-2">
       <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => setIsTheaterMode((current) => !current)}>
         {isTheaterMode ? <Minimize2 size={15} aria-hidden="true" /> : <Maximize2 size={15} aria-hidden="true" />}
-        {isTheaterMode ? "Modo normal" : "Modo foco"}
+        {isTheaterMode ? "Modo normal" : "Modo teatro"}
       </Button>
       <MaterialDetailSidebar
         material={detail.material}
@@ -87,7 +87,12 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
 
   return (
     <MaterialTheaterShell isTheaterMode={isTheaterMode} navItems={navItems} actions={actions}>
-      <SurfaceCard className={cn("flex flex-wrap items-start justify-between gap-3", isTheaterMode ? "shadow-none" : "")}>
+      <SurfaceCard
+        className={cn(
+          "flex flex-wrap items-start justify-between gap-3",
+          isTheaterMode ? "p-4 shadow-none sm:p-4" : "",
+        )}
+      >
         <div className="max-w-3xl">
           <p className="student-muted-text text-sm">Materiais / {type.label}</p>
           <h1 className="mt-1 text-3xl">{detail.material.title}</h1>
@@ -98,7 +103,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
         <StatusBadge label={status.label} tone={status.tone} />
       </SurfaceCard>
 
-      <div className={cn(isTheaterMode ? "mx-auto w-full max-w-[1500px]" : "")}>
+      <div className={cn(isTheaterMode ? "w-full" : "")}>
         <MaterialViewer material={detail.material} typeLabel={type.label} isTheaterMode={isTheaterMode} />
       </div>
 

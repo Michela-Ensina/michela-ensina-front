@@ -73,7 +73,7 @@ export function MaterialTheaterShell({
       className={cn(
         "mx-auto w-full space-y-6 pb-8",
         isTheaterMode
-          ? "max-w-[1680px] rounded-[var(--radius-lg)] bg-[color-mix(in_oklab,var(--color-background)_88%,black)] p-3 sm:p-4"
+          ? "max-w-none"
           : "max-w-7xl",
       )}
     >
