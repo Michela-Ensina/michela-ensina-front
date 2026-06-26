@@ -7,7 +7,7 @@ import {
   toAdminMaterialFormState,
   toAdminMaterialPayload,
   type MaterialFormState,
-} from "@/components/student/admin/admin-material-form-model";
+} from "@/lib/student/admin-material-form";
 import {
   createAdminMaterial,
   deleteAdminMaterial,

@@ -3,10 +3,10 @@
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
 import { AdminMaterialForm } from "@/components/student/admin/AdminMaterialForm";
 import { AdminMaterialsList } from "@/components/student/admin/AdminMaterialsList";
-import { useAdminMaterialsManager } from "@/components/student/admin/use-admin-materials-manager";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { useAuth } from "@/lib/auth/use-auth";
+import { useAdminMaterialsManager } from "@/lib/student/use-admin-materials-manager";
 
 export function AdminMaterialsContent() {
   const { token, user } = useAuth();

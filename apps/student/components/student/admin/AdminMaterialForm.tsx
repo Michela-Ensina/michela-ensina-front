@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   adminMaterialTypes,
   type MaterialFormState,
-} from "@/components/student/admin/admin-material-form-model";
+} from "@/lib/student/admin-material-form";
 import type { AdminMaterial, AdminUploadType } from "@/types/admin";
 import type { MaterialType } from "@/types/student";
 
