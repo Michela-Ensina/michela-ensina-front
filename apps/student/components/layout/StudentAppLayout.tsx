@@ -41,7 +41,7 @@ export function StudentAppLayout({ children, pathname }: StudentAppLayoutProps) 
 
       <div className="student-app-content relative z-10 flex min-h-screen w-full flex-col px-4 pb-24 sm:px-6 lg:px-8 lg:pb-8">
         <StudentTopbar title={page.title} subtitle={page.subtitle} />
-        <main className="w-full max-w-[1320px] flex-1">{children}</main>
+        <main className="student-app-main w-full max-w-[1320px] flex-1">{children}</main>
       </div>
 
       <StudentMobileNav items={navItems} currentPath={pathname} />

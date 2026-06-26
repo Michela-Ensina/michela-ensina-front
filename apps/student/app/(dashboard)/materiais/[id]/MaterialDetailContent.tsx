@@ -87,15 +87,10 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
 
   return (
     <MaterialTheaterShell isTheaterMode={isTheaterMode} navItems={navItems} actions={actions}>
-      <SurfaceCard
-        className={cn(
-          "flex flex-wrap items-start justify-between gap-3",
-          isTheaterMode ? "p-4 shadow-none sm:p-4" : "",
-        )}
-      >
+      <SurfaceCard className={cn("flex flex-wrap items-start justify-between gap-3", isTheaterMode ? "p-4 shadow-none sm:p-4" : "")}>
         <div className="max-w-3xl">
           <p className="student-muted-text text-sm">Materiais / {type.label}</p>
-          <h1 className="mt-1 text-3xl">{detail.material.title}</h1>
+          <h1 className={cn("mt-1", isTheaterMode ? "text-2xl" : "text-3xl")}>{detail.material.title}</h1>
           {detail.material.description ? (
             <p className="student-muted-text mt-2 max-w-2xl text-sm">{detail.material.description}</p>
           ) : null}
@@ -103,11 +98,13 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
         <StatusBadge label={status.label} tone={status.tone} />
       </SurfaceCard>
 
-      <div className={cn(isTheaterMode ? "w-full" : "")}>
+      <div className={cn(isTheaterMode ? "-mx-4 sm:-mx-6 lg:-mx-8" : "")}>
         <MaterialViewer material={detail.material} typeLabel={type.label} isTheaterMode={isTheaterMode} />
       </div>
 
-      <MaterialAttachmentsList attachments={attachments} />
+      <div className={cn(isTheaterMode ? "mx-auto w-full max-w-7xl" : "")}>
+        <MaterialAttachmentsList attachments={attachments} />
+      </div>
     </MaterialTheaterShell>
   );
 }

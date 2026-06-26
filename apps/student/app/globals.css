@@ -246,7 +246,7 @@ body[data-material-theater="true"] .student-app-content {
   padding: 16px;
 }
 
-body[data-material-theater="true"] main {
+body[data-material-theater="true"] .student-app-main {
   max-width: none;
 }
 

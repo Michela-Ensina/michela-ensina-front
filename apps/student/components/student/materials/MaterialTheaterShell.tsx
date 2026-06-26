@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, type ReactNode } from "react";
-import { ArrowLeft, Menu } from "lucide-react";
+import { ArrowLeft, ListVideo } from "lucide-react";
 
 import type { StudentNavItem } from "@/components/layout/StudentSidebar";
 import { cn } from "@/lib/utils/cn";
@@ -21,8 +21,8 @@ function TheaterMenu({ navItems }: { navItems: StudentNavItem[] }) {
         className="student-action student-hover-surface flex list-none items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold marker:content-none"
         style={{ borderColor: "var(--color-border)" }}
       >
-        <Menu size={16} aria-hidden="true" />
-        Menu
+        <ListVideo size={16} aria-hidden="true" />
+        Conteúdo
       </summary>
       <div
         className="absolute left-0 z-50 mt-2 w-56 rounded-[var(--radius-md)] border p-2 shadow-[var(--shadow-md)]"
@@ -71,10 +71,10 @@ export function MaterialTheaterShell({
   return (
     <section
       className={cn(
-        "mx-auto w-full space-y-6 pb-8",
+        "mx-auto w-full pb-8",
         isTheaterMode
-          ? "max-w-none"
-          : "max-w-7xl",
+          ? "max-w-none space-y-4"
+          : "max-w-7xl space-y-6",
       )}
     >
       <div className="flex flex-wrap items-center justify-between gap-3">

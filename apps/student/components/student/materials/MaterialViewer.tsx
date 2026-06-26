@@ -4,6 +4,7 @@ import { PdfMaterialViewer } from "@/components/student/materials/PdfMaterialVie
 import { VideoMaterialViewer } from "@/components/student/materials/VideoMaterialViewer";
 import { Button } from "@/components/ui/button";
 import { getMaterialFileUrl } from "@/lib/student/material-media";
+import { cn } from "@/lib/utils/cn";
 import type { Material } from "@/types/student";
 
 type MaterialViewerProps = {
@@ -23,7 +24,10 @@ export function MaterialViewer({ material, typeLabel, isTheaterMode = false }: M
 
   return (
     <div
-      className="overflow-hidden rounded-[var(--radius-lg)] border"
+      className={cn(
+        "overflow-hidden border",
+        isTheaterMode ? "rounded-none border-x-0 sm:border-x" : "rounded-[var(--radius-lg)]",
+      )}
       style={{
         borderColor: "var(--color-border)",
         backgroundColor: "var(--color-surface)",
