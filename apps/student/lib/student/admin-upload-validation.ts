@@ -28,6 +28,10 @@ export function getAdminUploadHelpText(type: AdminUploadType) {
   return `${extensions} até ${ADMIN_UPLOAD_MAX_SIZE_LABEL}.`;
 }
 
+export function getAdminUploadTransportErrorMessage() {
+  return `Não foi possível enviar o arquivo. O servidor pode ter interrompido o envio por tamanho ou instabilidade. Confirme que ele tem até ${ADMIN_UPLOAD_MAX_SIZE_LABEL} e tente novamente.`;
+}
+
 export function validateAdminUploadFile(file: File, type: AdminUploadType) {
   if (file.size > MAX_UPLOAD_SIZE_BYTES) {
     return `O arquivo deve ter no máximo ${ADMIN_UPLOAD_MAX_SIZE_LABEL}.`;

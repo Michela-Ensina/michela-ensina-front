@@ -47,6 +47,10 @@ export function getApiErrorMessage(status: number, error?: ApiErrorPayload): str
     return "Dados inválidos.";
   }
 
+  if (status === 413) {
+    return "O arquivo é maior do que o limite permitido para envio.";
+  }
+
   if (status >= 500) {
     return "Erro interno no servidor.";
   }

@@ -8,7 +8,10 @@ import {
   toAdminMaterialPayload,
   type MaterialFormState,
 } from "@/lib/student/admin-material-form";
-import { validateAdminUploadFile } from "@/lib/student/admin-upload-validation";
+import {
+  getAdminUploadTransportErrorMessage,
+  validateAdminUploadFile,
+} from "@/lib/student/admin-upload-validation";
 import {
   createAdminMaterial,
   deleteAdminMaterial,
@@ -120,7 +123,7 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
       setFile(null);
       toast.success("Arquivo enviado com sucesso.");
     } catch (error) {
-      const message = error instanceof ApiClientError ? error.message : "Não foi possível enviar o arquivo.";
+      const message = error instanceof ApiClientError ? error.message : getAdminUploadTransportErrorMessage();
       setErrorMessage(message);
       toast.error(message);
     } finally {
