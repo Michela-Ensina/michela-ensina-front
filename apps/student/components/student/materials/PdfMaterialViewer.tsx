@@ -43,7 +43,7 @@ export function PdfMaterialViewer({ title, url, isTheaterMode = false }: PdfMate
           message:
             error instanceof Error
               ? error.message
-              : "Não foi possível preparar o PDF em modo protegido.",
+              : "Não foi possível preparar o PDF na visualização interna.",
         });
       });
 
@@ -82,7 +82,7 @@ export function PdfMaterialViewer({ title, url, isTheaterMode = false }: PdfMate
     return (
       <div>
         <div className="border-b px-4 py-3 text-xs text-[var(--color-text-muted)]" style={{ borderColor: "var(--color-border)" }}>
-          {loadState.message} O conteúdo segue disponível na visualização interna.
+          {loadState.message} O conteúdo seguirá na visualização alternativa.
         </div>
         <iframe
           title={title}
