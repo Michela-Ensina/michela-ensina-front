@@ -3,6 +3,7 @@
 import { FilePlus2 } from "lucide-react";
 
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
+import { AdminDeleteMaterialDialog } from "@/components/student/admin/AdminDeleteMaterialDialog";
 import { AdminMaterialForm } from "@/components/student/admin/AdminMaterialForm";
 import { AdminMaterialsList } from "@/components/student/admin/AdminMaterialsList";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -81,9 +82,16 @@ export function AdminMaterialsContent() {
         <AdminMaterialsList
           materials={manager.materials}
           onEdit={manager.selectMaterial}
-          onDelete={(material) => void manager.handleDelete(material)}
+          onDelete={manager.requestDeleteMaterial}
         />
       </div>
+
+      <AdminDeleteMaterialDialog
+        material={manager.materialPendingDeletion}
+        isDeleting={manager.isDeleting}
+        onClose={manager.cancelDeleteMaterial}
+        onConfirm={() => void manager.confirmDeleteMaterial()}
+      />
     </div>
   );
 }

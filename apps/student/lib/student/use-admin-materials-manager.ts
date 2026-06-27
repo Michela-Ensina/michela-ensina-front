@@ -30,6 +30,8 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [materialPendingDeletion, setMaterialPendingDeletion] = useState<AdminMaterial | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const uploadType = useMemo(() => getAdminUploadType(form.type), [form.type]);
@@ -204,23 +206,33 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     }
   }
 
-  async function handleDelete(material: AdminMaterial) {
-    if (!token) return;
+  function requestDeleteMaterial(material: AdminMaterial) {
+    setMaterialPendingDeletion(material);
+  }
 
-    const confirmed = window.confirm(`Remover "${material.title}"?`);
-    if (!confirmed) return;
+  function cancelDeleteMaterial() {
+    if (isDeleting) return;
+    setMaterialPendingDeletion(null);
+  }
 
+  async function confirmDeleteMaterial() {
+    if (!token || !materialPendingDeletion) return;
+
+    setIsDeleting(true);
     try {
-      await deleteAdminMaterial(material.id, token);
+      await deleteAdminMaterial(materialPendingDeletion.id, token);
       toast.success("Material removido com sucesso.");
-      if (selectedMaterial?.id === material.id) {
+      if (selectedMaterial?.id === materialPendingDeletion.id) {
         resetForm();
       }
+      setMaterialPendingDeletion(null);
       await loadMaterials();
     } catch (error) {
       const message = error instanceof ApiClientError ? error.message : "Não foi possível remover o material.";
       setErrorMessage(message);
       toast.error(message);
+    } finally {
+      setIsDeleting(false);
     }
   }
 
@@ -233,14 +245,18 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     isLoading,
     isSaving,
     isUploading,
+    isDeleting,
     errorMessage,
+    materialPendingDeletion,
     uploadType,
-    handleDelete,
+    cancelDeleteMaterial,
+    confirmDeleteMaterial,
     handleSubmit,
     handleUpload,
     loadMaterials,
     removeAttachedFile,
     rejectFile,
+    requestDeleteMaterial,
     resetForm,
     selectMaterial,
     setFile,
