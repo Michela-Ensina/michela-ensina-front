@@ -2,6 +2,7 @@ import { AdminMaterialUpload } from "@/components/student/admin/AdminMaterialUpl
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NumberInput } from "@/components/ui/number-input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import {
   adminMaterialTypes,
@@ -63,12 +64,12 @@ export function AdminMaterialTypeFields({
         </div>
         <div>
           <Label htmlFor="materialOrder">Ordem</Label>
-          <Input
+          <NumberInput
             id="materialOrder"
-            type="number"
             min={0}
-            value={form.order}
-            onChange={(event) => onFieldChange("order", event.target.value)}
+            step={1}
+            value={form.order === "" ? null : Number(form.order)}
+            onValueChange={(value) => onFieldChange("order", value === null ? "" : String(value))}
           />
         </div>
       </div>

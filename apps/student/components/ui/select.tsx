@@ -41,7 +41,7 @@ function SelectContent({ className, children, ...props }: SelectContentProps) {
       <BaseSelect.Positioner sideOffset={6} className="z-50">
         <BaseSelect.Popup
           className={cn(
-            "max-h-72 min-w-[var(--anchor-width)] overflow-auto rounded-[var(--radius-md)] border p-1 shadow-[var(--shadow-md)] outline-none",
+            "max-h-72 w-[var(--anchor-width)] overflow-auto rounded-[var(--radius-md)] border p-1 shadow-[var(--shadow-md)] outline-none",
             className,
           )}
           style={{
@@ -61,15 +61,17 @@ function SelectItem({ className, children, ...props }: SelectItemProps) {
   return (
     <BaseSelect.Item
       className={cn(
-        "student-action flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--color-text)] outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--color-surface-soft)] data-[selected]:font-semibold",
+        "student-action grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--color-text)] outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--color-surface-soft)] data-[selected]:font-semibold",
         className,
       )}
       {...props}
     >
-      <BaseSelect.ItemIndicator className="text-[var(--color-primary)]">
-        <Check size={14} aria-hidden="true" />
-      </BaseSelect.ItemIndicator>
-      <BaseSelect.ItemText>{children}</BaseSelect.ItemText>
+      <span className="grid size-4 place-items-center">
+        <BaseSelect.ItemIndicator className="grid size-4 place-items-center text-[var(--color-primary)]">
+          <Check size={14} aria-hidden="true" />
+        </BaseSelect.ItemIndicator>
+      </span>
+      <BaseSelect.ItemText className="min-w-0 truncate">{children}</BaseSelect.ItemText>
     </BaseSelect.Item>
   );
 }

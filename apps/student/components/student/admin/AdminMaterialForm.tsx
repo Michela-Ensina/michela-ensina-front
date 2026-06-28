@@ -4,6 +4,7 @@ import { Plus, RotateCcw } from "lucide-react";
 import { SectionHeader } from "@/components/student/SectionHeader";
 import { AdminMaterialTypeFields } from "@/components/student/admin/AdminMaterialTypeFields";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
@@ -92,11 +93,10 @@ export function AdminMaterialForm({
           onRemoveAttachment={onRemoveAttachment}
         />
 
-        <label className="student-action flex w-fit items-center gap-2 rounded-lg py-1 text-sm font-semibold">
-          <input
-            type="checkbox"
+        <label className="student-action student-hover-surface flex w-fit items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold">
+          <Checkbox
             checked={form.isActive}
-            onChange={(event) => onFieldChange("isActive", event.target.checked)}
+            onCheckedChange={(checked) => onFieldChange("isActive", checked)}
           />
           Material ativo
         </label>
