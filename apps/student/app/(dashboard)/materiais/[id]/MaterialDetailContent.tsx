@@ -86,7 +86,13 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
   );
 
   return (
-    <MaterialTheaterShell isTheaterMode={isTheaterMode} navItems={navItems} actions={actions}>
+    <MaterialTheaterShell
+      isTheaterMode={isTheaterMode}
+      navItems={navItems}
+      actions={actions}
+      title={detail.material.title}
+      typeLabel={type.label}
+    >
       {!isTheaterMode ? (
         <SurfaceCard className="flex flex-wrap items-start justify-between gap-3">
           <div className="max-w-3xl">
@@ -103,11 +109,11 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
       <div
         className={cn(
           isTheaterMode
-            ? "relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen bg-[#07050d] py-5 sm:py-6"
+            ? "relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen bg-[#05040a] px-4 py-5 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.05)] sm:px-6 sm:py-7"
             : "",
         )}
       >
-        <div className={cn(isTheaterMode ? "mx-auto w-full max-w-6xl px-4" : "")}>
+        <div className={cn(isTheaterMode ? "mx-auto w-full max-w-[84rem]" : "")}>
           <MaterialViewer
             material={detail.material}
             typeLabel={type.label}

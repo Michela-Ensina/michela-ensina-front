@@ -43,12 +43,18 @@ export function MaterialViewer({
     <div
       className={cn(
         "overflow-hidden border",
-        isTheaterMode ? "rounded-[var(--radius-md)]" : "rounded-[var(--radius-lg)]",
+        isTheaterMode
+          ? "rounded-[var(--radius-md)] border-white/10 bg-black shadow-[0_18px_56px_rgb(0_0_0_/_0.34)]"
+          : "rounded-[var(--radius-lg)]",
       )}
-      style={{
-        borderColor: "var(--color-border)",
-        backgroundColor: "var(--color-surface)",
-      }}
+      style={
+        isTheaterMode
+          ? undefined
+          : {
+              borderColor: "var(--color-border)",
+              backgroundColor: "var(--color-surface)",
+            }
+      }
     >
       {material.type === "video" ? (
         <VideoMaterialViewer title={material.title} url={material.url} />

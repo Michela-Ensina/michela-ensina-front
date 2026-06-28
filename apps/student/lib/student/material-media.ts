@@ -106,7 +106,7 @@ export async function createObjectUrlFromRemoteFile(
   const response = await fetch(url, { headers, signal });
 
   if (!response.ok) {
-    throw new Error("Não foi possível carregar o arquivo para visualização interna.");
+    throw new Error("Não foi possível carregar este arquivo agora. Tente novamente em alguns instantes.");
   }
 
   const blob = await response.blob();

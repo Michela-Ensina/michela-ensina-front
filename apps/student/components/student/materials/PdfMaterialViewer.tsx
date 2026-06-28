@@ -87,7 +87,11 @@ export function PdfMaterialViewer({
     <iframe
       title={title}
       src={`${loadState.objectUrl}#toolbar=0&navpanes=0&scrollbar=1`}
-      className={isTheaterMode ? "h-[calc(100vh-190px)] min-h-[640px] w-full bg-white" : "h-[72vh] min-h-[520px] w-full bg-white"}
+      className={
+        isTheaterMode
+          ? "h-[min(72vh,760px)] min-h-[520px] w-full bg-white"
+          : "h-[72vh] min-h-[520px] w-full bg-white"
+      }
     />
   );
 }

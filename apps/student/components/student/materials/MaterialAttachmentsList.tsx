@@ -130,7 +130,7 @@ export function MaterialAttachmentsList({
               style={{ borderColor: "var(--color-border)" }}
             >
               <div className="min-w-0">
-                <BaseDialog.Title className="truncate font-[var(--font-body)] text-lg font-semibold">
+                <BaseDialog.Title className="truncate text-lg font-semibold">
                   {previewAttachment?.original_name ?? "Material de apoio"}
                 </BaseDialog.Title>
               </div>
