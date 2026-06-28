@@ -2,7 +2,7 @@ import { env } from "@/lib/config/env";
 import { ApiClientError, getApiErrorMessage } from "@/lib/api/errors";
 import type { ApiEnvelope, ApiErrorPayload, RequestOptions } from "@/lib/api/types";
 
-function buildUrl(path: string): string {
+export function buildApiUrl(path: string): string {
   const sanitizedBase = env.apiUrl.replace(/\/$/, "");
   const sanitizedPath = path.startsWith("/") ? path : `/${path}`;
 
@@ -58,7 +58,7 @@ export async function apiRequest<TData, TBody = unknown>(
     requestHeaders.set("Authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(buildUrl(path), {
+  const response = await fetch(buildApiUrl(path), {
     method,
     headers: requestHeaders,
     body: hasBody ? JSON.stringify(body) : undefined,
@@ -123,7 +123,7 @@ export async function apiFormPost<TData>(
     requestHeaders.set("Authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(buildUrl(path), {
+  const response = await fetch(buildApiUrl(path), {
     method: "POST",
     headers: requestHeaders,
     body,

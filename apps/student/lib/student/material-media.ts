@@ -95,8 +95,15 @@ function getPathExtension(url: string): string | null {
 export async function createObjectUrlFromRemoteFile(
   url: string,
   signal?: AbortSignal,
+  token?: string | null,
 ): Promise<ObjectUrlResult> {
-  const response = await fetch(url, { signal });
+  const headers = new Headers();
+
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  const response = await fetch(url, { headers, signal });
 
   if (!response.ok) {
     throw new Error("Não foi possível carregar o arquivo para visualização interna.");

@@ -3,7 +3,12 @@ import { ExternalLink, FileText, Link2, Paperclip } from "lucide-react";
 import { PdfMaterialViewer } from "@/components/student/materials/PdfMaterialViewer";
 import { VideoMaterialViewer } from "@/components/student/materials/VideoMaterialViewer";
 import { Button } from "@/components/ui/button";
-import { getMaterialFileUrl, isPdfMaterial } from "@/lib/student/material-media";
+import { getMaterialUploadFileUrl } from "@/lib/api/materials";
+import {
+  getMaterialFileUrl,
+  getPrimaryMaterialFile,
+  isPdfMaterial,
+} from "@/lib/student/material-media";
 import { cn } from "@/lib/utils/cn";
 import type { Material } from "@/types/student";
 
@@ -11,6 +16,7 @@ type MaterialViewerProps = {
   material: Material;
   typeLabel: string;
   isTheaterMode?: boolean;
+  token?: string | null;
 };
 
 function MaterialFallbackIcon({ type }: { type: Material["type"] }) {
@@ -19,15 +25,24 @@ function MaterialFallbackIcon({ type }: { type: Material["type"] }) {
   return <Link2 size={28} aria-hidden="true" />;
 }
 
-export function MaterialViewer({ material, typeLabel, isTheaterMode = false }: MaterialViewerProps) {
+export function MaterialViewer({
+  material,
+  typeLabel,
+  isTheaterMode = false,
+  token,
+}: MaterialViewerProps) {
   const fileUrl = getMaterialFileUrl(material);
+  const primaryFile = getPrimaryMaterialFile(material);
   const shouldRenderPdfViewer = isPdfMaterial(material);
+  const pdfUrl = primaryFile
+    ? getMaterialUploadFileUrl(material.id, primaryFile.id)
+    : fileUrl;
 
   return (
     <div
       className={cn(
         "overflow-hidden border",
-        isTheaterMode ? "rounded-none border-x-0 sm:border-x" : "rounded-[var(--radius-lg)]",
+        isTheaterMode ? "rounded-[var(--radius-md)]" : "rounded-[var(--radius-lg)]",
       )}
       style={{
         borderColor: "var(--color-border)",
@@ -37,7 +52,13 @@ export function MaterialViewer({ material, typeLabel, isTheaterMode = false }: M
       {material.type === "video" ? (
         <VideoMaterialViewer title={material.title} url={material.url} />
       ) : shouldRenderPdfViewer ? (
-        <PdfMaterialViewer key={fileUrl} title={material.title} url={fileUrl} isTheaterMode={isTheaterMode} />
+        <PdfMaterialViewer
+          key={pdfUrl}
+          title={material.title}
+          url={pdfUrl}
+          isTheaterMode={isTheaterMode}
+          token={token}
+        />
       ) : (
         <div className="grid min-h-[360px] place-items-center p-8 text-center">
           <div>

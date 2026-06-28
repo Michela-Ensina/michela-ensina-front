@@ -10,15 +10,20 @@ type PdfMaterialViewerProps = {
   title: string;
   url: string;
   isTheaterMode?: boolean;
+  token?: string | null;
 };
 
 type PdfLoadState =
   | { status: "loading"; objectUrl: null; message: null }
   | { status: "ready"; objectUrl: string; message: null }
-  | { status: "fallback"; objectUrl: null; message: string }
   | { status: "error"; objectUrl: null; message: string };
 
-export function PdfMaterialViewer({ title, url, isTheaterMode = false }: PdfMaterialViewerProps) {
+export function PdfMaterialViewer({
+  title,
+  url,
+  isTheaterMode = false,
+  token,
+}: PdfMaterialViewerProps) {
   const [loadState, setLoadState] = useState<PdfLoadState>({
     status: "loading",
     objectUrl: null,
@@ -29,7 +34,7 @@ export function PdfMaterialViewer({ title, url, isTheaterMode = false }: PdfMate
     const controller = new AbortController();
     let revokeObjectUrl: (() => void) | null = null;
 
-    createObjectUrlFromRemoteFile(url, controller.signal)
+    createObjectUrlFromRemoteFile(url, controller.signal, token)
       .then(({ objectUrl, revoke }) => {
         revokeObjectUrl = revoke;
         setLoadState({ status: "ready", objectUrl, message: null });
@@ -38,12 +43,12 @@ export function PdfMaterialViewer({ title, url, isTheaterMode = false }: PdfMate
         if (controller.signal.aborted) return;
 
         setLoadState({
-          status: "fallback",
+          status: "error",
           objectUrl: null,
           message:
             error instanceof Error
               ? error.message
-              : "Não foi possível preparar o PDF na visualização interna.",
+              : "Não foi possível carregar este PDF agora.",
         });
       });
 
@@ -51,7 +56,7 @@ export function PdfMaterialViewer({ title, url, isTheaterMode = false }: PdfMate
       controller.abort();
       revokeObjectUrl?.();
     };
-  }, [url]);
+  }, [token, url]);
 
   if (loadState.status === "loading") {
     return (
@@ -74,21 +79,6 @@ export function PdfMaterialViewer({ title, url, isTheaterMode = false }: PdfMate
         <div className="max-w-md">
           <Alert tone="error">{loadState.message}</Alert>
         </div>
-      </div>
-    );
-  }
-
-  if (loadState.status === "fallback") {
-    return (
-      <div>
-        <div className="border-b px-4 py-3 text-xs text-[var(--color-text-muted)]" style={{ borderColor: "var(--color-border)" }}>
-          {loadState.message} O conteúdo seguirá na visualização alternativa.
-        </div>
-        <iframe
-          title={title}
-          src={`${url}#toolbar=0&navpanes=0&scrollbar=1`}
-          className={isTheaterMode ? "h-[calc(100vh-224px)] min-h-[620px] w-full bg-white" : "h-[70vh] min-h-[500px] w-full bg-white"}
-        />
       </div>
     );
   }

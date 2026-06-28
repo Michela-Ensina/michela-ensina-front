@@ -6,11 +6,14 @@ import { ExternalLink, FileText, Paperclip, X } from "lucide-react";
 
 import { PdfMaterialViewer } from "@/components/student/materials/PdfMaterialViewer";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
+import { getMaterialUploadFileUrl } from "@/lib/api/materials";
 import { formatFileSize, isPdfAttachment } from "@/lib/student/material-media";
 import type { MaterialAttachment } from "@/types/student";
 
 type MaterialAttachmentsListProps = {
   attachments: MaterialAttachment[];
+  materialId: string;
+  token?: string | null;
 };
 
 type AttachmentCardProps = {
@@ -79,6 +82,8 @@ function AttachmentCard({ attachment, onPreviewPdf }: AttachmentCardProps) {
 
 export function MaterialAttachmentsList({
   attachments,
+  materialId,
+  token,
 }: MaterialAttachmentsListProps) {
   const [previewAttachment, setPreviewAttachment] =
     useState<MaterialAttachment | null>(null);
@@ -125,12 +130,9 @@ export function MaterialAttachmentsList({
               style={{ borderColor: "var(--color-border)" }}
             >
               <div className="min-w-0">
-                <BaseDialog.Title className="truncate text-lg font-semibold">
+                <BaseDialog.Title className="truncate font-[var(--font-body)] text-lg font-semibold">
                   {previewAttachment?.original_name ?? "Material de apoio"}
                 </BaseDialog.Title>
-                <BaseDialog.Description className="student-muted-text mt-1 text-sm">
-                  Visualização protegida do PDF anexado.
-                </BaseDialog.Description>
               </div>
               <BaseDialog.Close
                 type="button"
@@ -151,7 +153,8 @@ export function MaterialAttachmentsList({
               <div className="min-h-0 overflow-auto">
                 <PdfMaterialViewer
                   title={previewAttachment.original_name}
-                  url={previewAttachment.url}
+                  url={getMaterialUploadFileUrl(materialId, previewAttachment.id)}
+                  token={token}
                 />
               </div>
             ) : null}

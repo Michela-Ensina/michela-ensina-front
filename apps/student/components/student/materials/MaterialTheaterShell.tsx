@@ -77,16 +77,23 @@ export function MaterialTheaterShell({
           : "max-w-7xl space-y-6",
       )}
     >
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div
+        className={cn(
+          "flex flex-wrap items-center justify-between gap-3",
+          isTheaterMode ? "mx-auto w-full max-w-6xl px-4" : "",
+        )}
+      >
         <div className="flex flex-wrap items-center gap-2">
           {isTheaterMode ? <TheaterMenu navItems={navItems} /> : null}
-          <Link
-            href="/materiais"
-            className="student-text-action inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold text-[var(--color-text-muted)]"
-          >
-            <ArrowLeft size={16} aria-hidden="true" />
-            Materiais
-          </Link>
+          {!isTheaterMode ? (
+            <Link
+              href="/materiais"
+              className="student-text-action inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold text-[var(--color-text-muted)]"
+            >
+              <ArrowLeft size={16} aria-hidden="true" />
+              Materiais
+            </Link>
+          ) : null}
         </div>
         {actions}
       </div>
