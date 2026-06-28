@@ -3,7 +3,7 @@ import { ExternalLink, FileText, Link2, Paperclip } from "lucide-react";
 import { PdfMaterialViewer } from "@/components/student/materials/PdfMaterialViewer";
 import { VideoMaterialViewer } from "@/components/student/materials/VideoMaterialViewer";
 import { Button } from "@/components/ui/button";
-import { getMaterialFileUrl } from "@/lib/student/material-media";
+import { getMaterialFileUrl, isPdfMaterial } from "@/lib/student/material-media";
 import { cn } from "@/lib/utils/cn";
 import type { Material } from "@/types/student";
 
@@ -21,6 +21,7 @@ function MaterialFallbackIcon({ type }: { type: Material["type"] }) {
 
 export function MaterialViewer({ material, typeLabel, isTheaterMode = false }: MaterialViewerProps) {
   const fileUrl = getMaterialFileUrl(material);
+  const shouldRenderPdfViewer = isPdfMaterial(material);
 
   return (
     <div
@@ -35,7 +36,7 @@ export function MaterialViewer({ material, typeLabel, isTheaterMode = false }: M
     >
       {material.type === "video" ? (
         <VideoMaterialViewer title={material.title} url={material.url} />
-      ) : material.type === "pdf" ? (
+      ) : shouldRenderPdfViewer ? (
         <PdfMaterialViewer key={fileUrl} title={material.title} url={fileUrl} isTheaterMode={isTheaterMode} />
       ) : (
         <div className="grid min-h-[360px] place-items-center p-8 text-center">

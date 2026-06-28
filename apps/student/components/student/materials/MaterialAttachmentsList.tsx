@@ -6,7 +6,7 @@ import { ExternalLink, FileText, Paperclip, X } from "lucide-react";
 
 import { PdfMaterialViewer } from "@/components/student/materials/PdfMaterialViewer";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { formatFileSize } from "@/lib/student/material-media";
+import { formatFileSize, isPdfAttachment } from "@/lib/student/material-media";
 import type { MaterialAttachment } from "@/types/student";
 
 type MaterialAttachmentsListProps = {
@@ -17,10 +17,6 @@ type AttachmentCardProps = {
   attachment: MaterialAttachment;
   onPreviewPdf: (attachment: MaterialAttachment) => void;
 };
-
-function isPdfAttachment(attachment: MaterialAttachment) {
-  return attachment.type === "pdf" || attachment.mime_type === "application/pdf";
-}
 
 function AttachmentCard({ attachment, onPreviewPdf }: AttachmentCardProps) {
   const size = formatFileSize(attachment.size);

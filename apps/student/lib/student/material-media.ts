@@ -48,6 +48,21 @@ export function getPrimaryMaterialFile(material: Material): MaterialAttachment |
   return null;
 }
 
+export function isPdfAttachment(attachment: MaterialAttachment | null | undefined): boolean {
+  return Boolean(
+    attachment &&
+      (attachment.type === "pdf" ||
+        attachment.mime_type === "application/pdf" ||
+        getPathExtension(attachment.url) === "pdf"),
+  );
+}
+
+export function isPdfMaterial(material: Material): boolean {
+  if (material.type === "pdf") return true;
+
+  return isPdfAttachment(getPrimaryMaterialFile(material));
+}
+
 export function getSupportingMaterialAttachments(material: Material): MaterialAttachment[] {
   const primaryFile = getPrimaryMaterialFile(material);
   const seenIds = new Set<string>();
@@ -64,6 +79,17 @@ export function getSupportingMaterialAttachments(material: Material): MaterialAt
 
 export function getMaterialFileUrl(material: Material): string {
   return getPrimaryMaterialFile(material)?.url ?? material.url;
+}
+
+function getPathExtension(url: string): string | null {
+  try {
+    const parsed = new URL(url);
+    const filename = parsed.pathname.split("/").filter(Boolean).pop();
+    return filename?.split(".").pop()?.toLowerCase() ?? null;
+  } catch {
+    const filename = url.split("?")[0]?.split("/").filter(Boolean).pop();
+    return filename?.split(".").pop()?.toLowerCase() ?? null;
+  }
 }
 
 export async function createObjectUrlFromRemoteFile(
