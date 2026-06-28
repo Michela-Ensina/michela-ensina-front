@@ -13,10 +13,6 @@ export function StudentTopbar({ title, subtitle }: StudentTopbarProps) {
   return (
     <header
       className="student-topbar sticky top-0 z-50 -mx-4 mb-6 overflow-visible border-b px-4 py-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
-      style={{
-        borderColor: "var(--color-border)",
-        backgroundColor: "var(--color-surface)",
-      }}
     >
       <Image
         src="/assets/brand/graphics/estrela-lilas.svg"

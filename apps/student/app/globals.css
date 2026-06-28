@@ -199,9 +199,20 @@ a {
   box-shadow: var(--shadow-sm);
 }
 
+.student-app-content .student-elevated-surface {
+  border-color: rgb(181 126 220 / 0.2);
+  background-color: rgb(77 35 117 / 0.25);
+  box-shadow: 0 8px 32px rgb(77 35 117 / 0.3);
+}
+
 .student-soft-surface {
   border-color: color-mix(in oklab, var(--color-border) 86%, var(--color-brand-lilac));
   background-color: color-mix(in oklab, var(--color-surface-soft) 76%, transparent);
+}
+
+.student-app-content .student-soft-surface {
+  border-color: rgb(181 126 220 / 0.18);
+  background-color: rgb(181 126 220 / 0.08);
 }
 
 .student-hero-surface {
@@ -217,8 +228,21 @@ a {
   background-color: color-mix(in oklab, var(--color-surface) 94%, var(--me-lilac-light));
 }
 
+:root[data-theme="light"] .student-app-content .student-elevated-surface,
+.light .student-app-content .student-elevated-surface {
+  border-color: var(--color-border);
+  background-color: color-mix(in oklab, var(--color-surface) 94%, var(--me-lilac-light));
+  box-shadow: var(--shadow-sm);
+}
+
 :root[data-theme="light"] .student-soft-surface,
 .light .student-soft-surface {
+  background-color: color-mix(in oklab, var(--color-surface-soft) 74%, var(--color-surface));
+}
+
+:root[data-theme="light"] .student-app-content .student-soft-surface,
+.light .student-app-content .student-soft-surface {
+  border-color: var(--color-border);
   background-color: color-mix(in oklab, var(--color-surface-soft) 74%, var(--color-surface));
 }
 
@@ -233,6 +257,18 @@ a {
   border-right: 1px solid color-mix(in oklab, var(--color-border) 82%, transparent);
   background:
     linear-gradient(160deg, #4d2375 0%, #32174b 100%);
+}
+
+.student-topbar {
+  border-color: rgb(228 206 244 / 0.28);
+  background-color: rgb(36 10 58 / 0.95);
+  backdrop-filter: saturate(120%) blur(12px);
+}
+
+:root[data-theme="light"] .student-topbar,
+.light .student-topbar {
+  border-color: var(--color-border);
+  background-color: color-mix(in oklab, var(--color-surface) 92%, var(--me-lilac-light));
 }
 
 .student-sidebar-toggle {
