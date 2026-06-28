@@ -34,6 +34,7 @@ export function MaterialViewer({
   const fileUrl = getMaterialFileUrl(material);
   const primaryFile = getPrimaryMaterialFile(material);
   const shouldRenderPdfViewer = isPdfMaterial(material);
+  const shouldUseProtectedFileUrl = Boolean(primaryFile);
   const pdfUrl = primaryFile
     ? getMaterialUploadFileUrl(material.id, primaryFile.id)
     : fileUrl;
@@ -57,7 +58,7 @@ export function MaterialViewer({
           title={material.title}
           url={pdfUrl}
           isTheaterMode={isTheaterMode}
-          token={token}
+          token={shouldUseProtectedFileUrl ? token : null}
         />
       ) : (
         <div className="grid min-h-[360px] place-items-center p-8 text-center">
