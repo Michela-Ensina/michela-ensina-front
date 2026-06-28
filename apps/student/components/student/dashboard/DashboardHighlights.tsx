@@ -32,11 +32,7 @@ export function DashboardHighlights({
         ))}
       </div>
       <div
-        className="rounded-[var(--radius-lg)] border p-4"
-        style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "var(--color-surface-soft)",
-        }}
+        className="student-soft-surface rounded-[var(--radius-lg)] border p-4"
       >
         <p className="flex items-center gap-2 text-sm font-semibold">
           <CheckCircle2 size={16} aria-hidden="true" />

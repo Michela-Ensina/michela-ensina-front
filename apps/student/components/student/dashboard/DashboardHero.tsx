@@ -19,12 +19,7 @@ export function DashboardHero({
 }: DashboardHeroProps) {
   return (
     <section
-      className="relative overflow-hidden rounded-[var(--radius-lg)] border px-5 py-5 sm:px-6"
-      style={{
-        borderColor: "var(--color-border)",
-        backgroundColor: "var(--color-surface)",
-        boxShadow: "var(--shadow-sm)",
-      }}
+      className="student-hero-surface relative overflow-hidden rounded-[var(--radius-lg)] border px-5 py-5 sm:px-6"
     >
       <Image
         src="/assets/brand/graphics/elementos-02-lilas.svg"
@@ -64,11 +59,7 @@ export function DashboardHero({
         </div>
 
         <div
-          className="rounded-[var(--radius-md)] border p-4"
-          style={{
-            borderColor: "var(--color-border)",
-            backgroundColor: "var(--color-surface-soft)",
-          }}
+          className="student-soft-surface rounded-[var(--radius-md)] border p-4"
         >
           <DashboardProgressSummary
             percentage={progress.percentage}

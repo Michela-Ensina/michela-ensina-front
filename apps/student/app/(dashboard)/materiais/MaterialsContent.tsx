@@ -65,11 +65,7 @@ export function MaterialsContent() {
   return (
     <div className="space-y-6">
       <section
-        className="relative overflow-hidden rounded-[var(--radius-lg)] border p-5 sm:p-6"
-        style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "var(--color-surface)",
-        }}
+        className="student-elevated-surface relative overflow-hidden rounded-[var(--radius-lg)] border p-5 sm:p-6"
       >
         <Image
           src="/assets/brand/graphics/estrela-lilas.svg"
@@ -86,11 +82,7 @@ export function MaterialsContent() {
           />
           {data.progress ? (
             <div
-              className="rounded-[var(--radius-md)] border p-4"
-              style={{
-                borderColor: "var(--color-border)",
-                backgroundColor: "var(--color-surface-soft)",
-              }}
+              className="student-soft-surface rounded-[var(--radius-md)] border p-4"
             >
               <ProgressBar value={data.progress.percentage} label="Conclusão dos materiais" />
             </div>

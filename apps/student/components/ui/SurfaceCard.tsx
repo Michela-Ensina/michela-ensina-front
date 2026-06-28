@@ -8,13 +8,9 @@ export function SurfaceCard({ className, ...props }: SurfaceCardProps) {
   return (
     <section
       className={cn(
-        "rounded-[var(--radius-lg)] border p-5 shadow-[var(--shadow-sm)] sm:p-6",
+        "student-elevated-surface rounded-[var(--radius-lg)] border p-5 sm:p-6",
         className,
       )}
-      style={{
-        backgroundColor: "var(--color-surface)",
-        borderColor: "var(--color-border)",
-      }}
       {...props}
     />
   );

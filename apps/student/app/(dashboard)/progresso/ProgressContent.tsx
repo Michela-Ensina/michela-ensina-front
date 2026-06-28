@@ -99,11 +99,7 @@ export function ProgressContent() {
         </SurfaceCard>
 
         <div
-          className="rounded-[var(--radius-lg)] border p-4"
-          style={{
-            borderColor: "var(--color-border)",
-            backgroundColor: "var(--color-surface)",
-          }}
+          className="student-elevated-surface rounded-[var(--radius-lg)] border p-4"
         >
           <p className="flex items-center gap-2 text-sm font-semibold">
             <Clock3 size={16} aria-hidden="true" />
@@ -121,11 +117,7 @@ export function ProgressContent() {
       </aside>
 
       <section
-        className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
-        style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "var(--color-surface)",
-        }}
+        className="student-elevated-surface rounded-[var(--radius-lg)] border px-4 sm:px-5"
       >
         <div className="border-b py-4" style={{ borderColor: "var(--color-border)" }}>
           <SectionHeader

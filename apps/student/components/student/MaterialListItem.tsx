@@ -24,15 +24,11 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
   return (
     <article
       className={cn(
-        "student-hover-surface grid gap-3 rounded-[var(--radius-md)] border p-4 transition-colors duration-200",
+        "student-hover-surface student-soft-surface grid gap-3 rounded-[var(--radius-md)] border p-4 transition-colors duration-200",
         density === "compact"
           ? "grid-cols-[auto_1fr] items-start sm:grid-cols-[auto_1fr_auto] sm:items-center"
           : "sm:grid-cols-[auto_1fr_auto] sm:items-center",
       )}
-      style={{
-        borderColor: "color-mix(in oklab, var(--color-border) 82%, var(--color-brand-lilac))",
-        backgroundColor: "var(--color-surface-soft)",
-      }}
     >
       <div
         className="flex size-10 items-center justify-center rounded-xl"

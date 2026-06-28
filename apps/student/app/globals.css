@@ -193,6 +193,42 @@ a {
   background-color: var(--color-border);
 }
 
+.student-elevated-surface {
+  border-color: var(--color-border);
+  background-color: color-mix(in oklab, var(--color-surface) 88%, transparent);
+  box-shadow: var(--shadow-sm);
+}
+
+.student-soft-surface {
+  border-color: color-mix(in oklab, var(--color-border) 86%, var(--color-brand-lilac));
+  background-color: color-mix(in oklab, var(--color-surface-soft) 76%, transparent);
+}
+
+.student-hero-surface {
+  border-color: color-mix(in oklab, var(--color-brand-lilac) 32%, var(--color-border));
+  background:
+    radial-gradient(circle at 91% 8%, rgb(228 206 244 / 0.20), transparent 24%),
+    linear-gradient(170deg, #4d2375 0%, #7e4ca5 64%, #b57edc 100%);
+  box-shadow: var(--shadow-brand);
+}
+
+:root[data-theme="light"] .student-elevated-surface,
+.light .student-elevated-surface {
+  background-color: color-mix(in oklab, var(--color-surface) 94%, var(--me-lilac-light));
+}
+
+:root[data-theme="light"] .student-soft-surface,
+.light .student-soft-surface {
+  background-color: color-mix(in oklab, var(--color-surface-soft) 74%, var(--color-surface));
+}
+
+:root[data-theme="light"] .student-hero-surface,
+.light .student-hero-surface {
+  background:
+    radial-gradient(circle at 96% 10%, rgb(219 181 238 / 0.24), transparent 22%),
+    color-mix(in oklab, var(--color-surface) 82%, var(--me-lilac-light));
+}
+
 .student-sidebar {
   border-right: 1px solid color-mix(in oklab, var(--color-border) 82%, transparent);
   background:

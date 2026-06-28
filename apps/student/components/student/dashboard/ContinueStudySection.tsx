@@ -35,11 +35,7 @@ export function ContinueStudySection({
       />
 
       <div
-        className="grid gap-0 overflow-hidden rounded-[var(--radius-md)] border"
-        style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "var(--color-surface-soft)",
-        }}
+        className="student-soft-surface grid gap-0 overflow-hidden rounded-[var(--radius-md)] border"
       >
         <div className="p-5 sm:p-6">
           <p className="student-muted-text flex items-center gap-2 text-sm font-semibold">
@@ -65,11 +61,7 @@ export function ContinueStudySection({
         </div>
 
         <div
-          className="border-t p-5 lg:border-l lg:border-t-0"
-          style={{
-            borderColor: "var(--color-border)",
-            backgroundColor: "var(--color-surface)",
-          }}
+          className="student-elevated-surface border-t p-5 lg:border-l lg:border-t-0"
         >
           <p className="flex items-center gap-2 text-sm font-semibold">
             <BookOpen size={16} aria-hidden="true" />
