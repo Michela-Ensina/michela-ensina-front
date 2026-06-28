@@ -6,6 +6,7 @@ import {
   getAdminUploadType,
   toAdminMaterialFormState,
   toAdminMaterialPayload,
+  uniqueAttachmentIds,
   type MaterialFormState,
 } from "@/lib/student/admin-material-form";
 import {
@@ -113,13 +114,19 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     try {
       const upload = await uploadAdminMaterialFile(file, uploadType, token);
       const shouldReplacePrimaryFile = form.type === "pdf" || form.type === "attachment";
-      const nextAttachmentIds = shouldReplacePrimaryFile ? [upload.id] : [...form.attachmentIds, upload.id];
+      const nextAttachmentIds = shouldReplacePrimaryFile
+        ? [upload.id]
+        : uniqueAttachmentIds([...form.attachmentIds, upload.id]);
 
       if (shouldReplacePrimaryFile) {
         updateField("url", upload.url);
       }
       updateField("attachmentIds", nextAttachmentIds);
-      setAttachedFiles((current) => (shouldReplacePrimaryFile ? [upload] : [...current, upload]));
+      setAttachedFiles((current) => {
+        if (shouldReplacePrimaryFile) return [upload];
+        if (current.some((attachment) => attachment.id === upload.id)) return current;
+        return [...current, upload];
+      });
       setFile(null);
       toast.success("Arquivo enviado com sucesso.");
     } catch (error) {
@@ -137,7 +144,9 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
   function removeAttachedFile(attachmentId: string) {
     setAttachedFiles((current) => current.filter((attachment) => attachment.id !== attachmentId));
     setForm((current) => {
-      const nextAttachmentIds = current.attachmentIds.filter((id) => id !== attachmentId);
+      const nextAttachmentIds = uniqueAttachmentIds(
+        current.attachmentIds.filter((id) => id !== attachmentId),
+      );
 
       return {
         ...current,

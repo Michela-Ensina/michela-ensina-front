@@ -37,6 +37,10 @@ export function getAdminUploadType(type: MaterialType): AdminUploadType | null {
   return null;
 }
 
+export function uniqueAttachmentIds(attachmentIds: string[]): string[] {
+  return Array.from(new Set(attachmentIds));
+}
+
 export function toAdminMaterialPayload(form: MaterialFormState): AdminMaterialPayload {
   return {
     title: form.title.trim(),
@@ -46,7 +50,7 @@ export function toAdminMaterialPayload(form: MaterialFormState): AdminMaterialPa
     order: Number(form.order || 0),
     released_at: form.releasedAt || null,
     is_active: form.isActive,
-    attachment_ids: form.attachmentIds,
+    attachment_ids: uniqueAttachmentIds(form.attachmentIds),
   };
 }
 
@@ -59,6 +63,6 @@ export function toAdminMaterialFormState(material: AdminMaterial): MaterialFormS
     order: String(material.order),
     releasedAt: material.released_at ? material.released_at.slice(0, 16) : "",
     isActive: material.is_active,
-    attachmentIds: material.attachments?.map((attachment) => attachment.id) ?? [],
+    attachmentIds: uniqueAttachmentIds(material.attachments?.map((attachment) => attachment.id) ?? []),
   };
 }
