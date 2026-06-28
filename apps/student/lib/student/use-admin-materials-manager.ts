@@ -19,7 +19,7 @@ import {
   updateAdminMaterial,
   uploadAdminMaterialFile,
 } from "@/lib/api/admin-materials";
-import { ApiClientError } from "@/lib/api/errors";
+import { ApiClientError, getFirstApiFieldError } from "@/lib/api/errors";
 import { resolveYoutubeEmbedUrl } from "@/lib/student/material-media";
 import type { AdminMaterial } from "@/types/admin";
 import type { MaterialAttachment } from "@/types/student";
@@ -123,7 +123,10 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
       setFile(null);
       toast.success("Arquivo enviado com sucesso.");
     } catch (error) {
-      const message = error instanceof ApiClientError ? error.message : getAdminUploadTransportErrorMessage();
+      const message =
+        error instanceof ApiClientError
+          ? getFirstApiFieldError(error) ?? error.message
+          : getAdminUploadTransportErrorMessage();
       setErrorMessage(message);
       toast.error(message);
     } finally {
@@ -201,7 +204,10 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
       resetForm();
       await loadMaterials();
     } catch (error) {
-      const message = error instanceof ApiClientError ? error.message : "Não foi possível salvar o material.";
+      const message =
+        error instanceof ApiClientError
+          ? getFirstApiFieldError(error) ?? error.message
+          : "Não foi possível salvar o material.";
       setErrorMessage(message);
       toast.error(message);
     } finally {
@@ -231,7 +237,10 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
       setMaterialPendingDeletion(null);
       await loadMaterials();
     } catch (error) {
-      const message = error instanceof ApiClientError ? error.message : "Não foi possível remover o material.";
+      const message =
+        error instanceof ApiClientError
+          ? getFirstApiFieldError(error) ?? error.message
+          : "Não foi possível remover o material.";
       setErrorMessage(message);
       toast.error(message);
     } finally {

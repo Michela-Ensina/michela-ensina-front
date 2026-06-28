@@ -57,3 +57,8 @@ export function getApiErrorMessage(status: number, error?: ApiErrorPayload): str
 
   return "Falha ao processar requisição.";
 }
+
+export function getFirstApiFieldError(error: ApiClientError): string | null {
+  const fieldErrors = error.fields ? Object.values(error.fields).flat() : [];
+  return fieldErrors[0] ?? null;
+}
