@@ -74,7 +74,6 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
         {isTheaterMode ? "Modo normal" : "Modo teatro"}
       </Button>
       <MaterialDetailSidebar
-        material={detail.material}
         typeLabel={type.label}
         status={status}
         progressPercentage={detail.progressPercentage}

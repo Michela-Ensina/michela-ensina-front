@@ -169,6 +169,9 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     if (!token) return;
 
     const payload = toAdminMaterialPayload(form);
+    if (!selectedMaterial) {
+      payload.order = materials.length;
+    }
 
     if (!payload.title) {
       const message = "Informe o título do material.";

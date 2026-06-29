@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import type { Material } from "@/types/student";
 
 type MaterialDetailStatus = {
   label: string;
@@ -13,7 +12,6 @@ type MaterialDetailStatus = {
 };
 
 type MaterialDetailSidebarProps = {
-  material: Material;
   typeLabel: string;
   status: MaterialDetailStatus;
   progressPercentage: number;
@@ -23,7 +21,6 @@ type MaterialDetailSidebarProps = {
 };
 
 export function MaterialDetailSidebar({
-  material,
   typeLabel,
   status,
   progressPercentage,
@@ -44,7 +41,11 @@ export function MaterialDetailSidebar({
       >
         <PlayCircle size={16} aria-hidden="true" />
         Progresso e detalhes
-        <ChevronDown size={16} className="ml-auto transition-transform group-open:rotate-180" aria-hidden="true" />
+        <ChevronDown
+          size={16}
+          className="ml-auto transition-transform group-open:rotate-180"
+          aria-hidden="true"
+        />
       </summary>
 
       <div
@@ -66,16 +67,14 @@ export function MaterialDetailSidebar({
                 <StatusBadge label={status.label} tone={status.tone} />
               </dd>
             </div>
-            <div className="flex items-center justify-between gap-4">
-              <dt className="student-muted-text">Ordem</dt>
-              <dd className="font-semibold">{material.order}</dd>
-            </div>
           </dl>
         </SurfaceCard>
 
         <SurfaceCard>
           <ProgressBar value={progressPercentage} label="Conclusão geral" />
-          {progressErrorMessage ? <Alert tone="error">{progressErrorMessage}</Alert> : null}
+          {progressErrorMessage ? (
+            <Alert tone="error">{progressErrorMessage}</Alert>
+          ) : null}
           <Button
             type="button"
             onClick={onMarkAsCompleted}
@@ -84,7 +83,11 @@ export function MaterialDetailSidebar({
             fullWidth
             className="mt-4"
           >
-            {isUpdatingProgress ? "Atualizando..." : isCompleted ? "Material concluído" : "Marcar como concluído"}
+            {isUpdatingProgress
+              ? "Atualizando..."
+              : isCompleted
+                ? "Material concluído"
+                : "Marcar como concluído"}
           </Button>
         </SurfaceCard>
       </div>

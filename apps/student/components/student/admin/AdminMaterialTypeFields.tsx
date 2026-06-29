@@ -2,7 +2,6 @@ import { AdminMaterialUpload } from "@/components/student/admin/AdminMaterialUpl
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { NumberInput } from "@/components/ui/number-input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import {
   adminMaterialTypes,
@@ -44,34 +43,22 @@ export function AdminMaterialTypeFields({
 
   return (
     <>
-      <div className="grid gap-3 sm:grid-cols-[1fr_112px]">
-        <div>
-          <Label htmlFor="materialType">Tipo</Label>
-          <Select
-            id="materialType"
-            value={form.type}
-            onValueChange={(value) => onFieldChange("type", value as MaterialType)}
-          >
-            <SelectTrigger>{selectedTypeLabel}</SelectTrigger>
-            <SelectContent>
-              {adminMaterialTypes.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  {type.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Label htmlFor="materialOrder">Ordem</Label>
-          <NumberInput
-            id="materialOrder"
-            min={0}
-            step={1}
-            value={form.order === "" ? null : Number(form.order)}
-            onValueChange={(value) => onFieldChange("order", value === null ? "" : String(value))}
-          />
-        </div>
+      <div>
+        <Label htmlFor="materialType">Tipo</Label>
+        <Select
+          id="materialType"
+          value={form.type}
+          onValueChange={(value) => onFieldChange("type", value as MaterialType)}
+        >
+          <SelectTrigger>{selectedTypeLabel}</SelectTrigger>
+          <SelectContent>
+            {adminMaterialTypes.map((type) => (
+              <SelectItem key={type.value} value={type.value}>
+                {type.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <AdminMaterialUpload

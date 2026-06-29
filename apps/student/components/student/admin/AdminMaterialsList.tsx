@@ -22,7 +22,11 @@ function formatReleaseDate(value: string | null): string | null {
   }).format(new Date(value));
 }
 
-export function AdminMaterialsList({ materials, onEdit, onDelete }: AdminMaterialsListProps) {
+export function AdminMaterialsList({
+  materials,
+  onEdit,
+  onDelete,
+}: AdminMaterialsListProps) {
   return (
     <section
       className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
@@ -45,7 +49,8 @@ export function AdminMaterialsList({ materials, onEdit, onDelete }: AdminMateria
               key={material.id}
               className="grid gap-3 rounded-[var(--radius-md)] border p-4 md:grid-cols-[1fr_auto] md:items-center"
               style={{
-                borderColor: "color-mix(in oklab, var(--color-border) 82%, var(--color-brand-lilac))",
+                borderColor:
+                  "color-mix(in oklab, var(--color-border) 82%, var(--color-brand-lilac))",
                 backgroundColor: "var(--color-surface-soft)",
               }}
             >
@@ -58,11 +63,12 @@ export function AdminMaterialsList({ materials, onEdit, onDelete }: AdminMateria
                   />
                 </div>
                 <div className="student-muted-text mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-                  <span>{getMaterialTypeMeta(material.type).label} · ordem {material.order}</span>
+                  <span>{getMaterialTypeMeta(material.type).label}</span>
                   {material.attachments?.length ? (
                     <span className="inline-flex items-center gap-1">
                       <Paperclip size={14} aria-hidden="true" />
-                      {material.attachments.length} anexo{material.attachments.length > 1 ? "s" : ""}
+                      {material.attachments.length} anexo
+                      {material.attachments.length > 1 ? "s" : ""}
                     </span>
                   ) : null}
                   {formatReleaseDate(material.released_at) ? (
@@ -73,16 +79,30 @@ export function AdminMaterialsList({ materials, onEdit, onDelete }: AdminMateria
                   ) : null}
                 </div>
                 {material.description ? (
-                  <p className="student-muted-text mt-2 line-clamp-2 text-sm">{material.description}</p>
+                  <p className="student-muted-text mt-2 line-clamp-2 text-sm">
+                    {material.description}
+                  </p>
                 ) : null}
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => onEdit(material)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="gap-2"
+                  onClick={() => onEdit(material)}
+                >
                   <Edit3 size={15} aria-hidden="true" />
                   Editar
                 </Button>
-                <Button type="button" variant="danger" size="sm" className="gap-2" onClick={() => onDelete(material)}>
+                <Button
+                  type="button"
+                  variant="danger"
+                  size="sm"
+                  className="gap-2"
+                  onClick={() => onDelete(material)}
+                >
                   <Trash2 size={15} aria-hidden="true" />
                   Remover
                 </Button>
