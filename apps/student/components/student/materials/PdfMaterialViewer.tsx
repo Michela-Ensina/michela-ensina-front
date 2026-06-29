@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FileText } from "lucide-react";
+import * as pdfjs from "pdfjs-dist";
+import type { PDFDocumentProxy, RenderTask } from "pdfjs-dist";
 
 import { Alert } from "@/components/ui/alert";
-import { createObjectUrlFromRemoteFile } from "@/lib/student/material-media";
+import { fetchRemoteFileAsArrayBuffer } from "@/lib/student/material-media";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url,
+).toString();
 
 type PdfMaterialViewerProps = {
   title: string;
@@ -14,9 +21,92 @@ type PdfMaterialViewerProps = {
 };
 
 type PdfLoadState =
-  | { status: "loading"; objectUrl: null; message: null }
-  | { status: "ready"; objectUrl: string; message: null }
-  | { status: "error"; objectUrl: null; message: string };
+  | { status: "loading"; document: null; pageCount: 0; message: null }
+  | {
+      status: "ready";
+      document: PDFDocumentProxy;
+      pageCount: number;
+      message: null;
+    }
+  | { status: "error"; document: null; pageCount: 0; message: string };
+
+type PdfCanvasPageProps = {
+  document: PDFDocumentProxy;
+  pageNumber: number;
+};
+
+function PdfCanvasPage({ document, pageNumber }: PdfCanvasPageProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const updateWidth = () => setContainerWidth(container.clientWidth);
+    updateWidth();
+
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || containerWidth === 0) return;
+
+    let isCancelled = false;
+    let renderTask: RenderTask | null = null;
+
+    async function renderPage() {
+      const page = await document.getPage(pageNumber);
+      if (isCancelled) return;
+
+      const currentCanvas = canvasRef.current;
+      if (!currentCanvas) return;
+
+      const baseViewport = page.getViewport({ scale: 1 });
+      const maxCssWidth = Math.max(280, Math.min(containerWidth, 1120));
+      const cssScale = maxCssWidth / baseViewport.width;
+      const outputScale = window.devicePixelRatio || 1;
+      const viewport = page.getViewport({ scale: cssScale * outputScale });
+      const context = currentCanvas.getContext("2d");
+
+      if (!context) return;
+
+      currentCanvas.width = Math.floor(viewport.width);
+      currentCanvas.height = Math.floor(viewport.height);
+      currentCanvas.style.width = `${Math.floor(baseViewport.width * cssScale)}px`;
+      currentCanvas.style.height = `${Math.floor(baseViewport.height * cssScale)}px`;
+
+      renderTask = page.render({
+        canvas: currentCanvas,
+        canvasContext: context,
+        viewport,
+      });
+      await renderTask.promise;
+    }
+
+    void renderPage();
+
+    return () => {
+      isCancelled = true;
+      renderTask?.cancel();
+    };
+  }, [containerWidth, document, pageNumber]);
+
+  return (
+    <div ref={containerRef} className="flex justify-center">
+      <canvas
+        ref={canvasRef}
+        aria-label={`Página ${pageNumber}`}
+        className="max-w-full rounded-[var(--radius-sm)] bg-white shadow-[var(--shadow-sm)]"
+      />
+    </div>
+  );
+}
 
 export function PdfMaterialViewer({
   title,
@@ -26,25 +116,40 @@ export function PdfMaterialViewer({
 }: PdfMaterialViewerProps) {
   const [loadState, setLoadState] = useState<PdfLoadState>({
     status: "loading",
-    objectUrl: null,
+    document: null,
+    pageCount: 0,
     message: null,
   });
 
   useEffect(() => {
     const controller = new AbortController();
-    let revokeObjectUrl: (() => void) | null = null;
+    let pdfDocument: PDFDocumentProxy | null = null;
 
-    createObjectUrlFromRemoteFile(url, controller.signal, token)
-      .then(({ objectUrl, revoke }) => {
-        revokeObjectUrl = revoke;
-        setLoadState({ status: "ready", objectUrl, message: null });
+    fetchRemoteFileAsArrayBuffer(url, controller.signal, token)
+      .then((arrayBuffer) =>
+        pdfjs.getDocument({ data: new Uint8Array(arrayBuffer) }).promise,
+      )
+      .then((nextDocument) => {
+        if (controller.signal.aborted) {
+          void nextDocument.cleanup();
+          return;
+        }
+
+        pdfDocument = nextDocument;
+        setLoadState({
+          status: "ready",
+          document: nextDocument,
+          pageCount: nextDocument.numPages,
+          message: null,
+        });
       })
       .catch((error: unknown) => {
         if (controller.signal.aborted) return;
 
         setLoadState({
           status: "error",
-          objectUrl: null,
+          document: null,
+          pageCount: 0,
           message:
             error instanceof Error
               ? error.message
@@ -54,7 +159,7 @@ export function PdfMaterialViewer({
 
     return () => {
       controller.abort();
-      revokeObjectUrl?.();
+      void pdfDocument?.cleanup();
     };
   }, [token, url]);
 
@@ -84,14 +189,25 @@ export function PdfMaterialViewer({
   }
 
   return (
-    <iframe
-      title={title}
-      src={`${loadState.objectUrl}#toolbar=0&navpanes=0&scrollbar=1`}
+    <div
+      aria-label={title}
       className={
         isTheaterMode
-          ? "h-[min(72vh,760px)] min-h-[520px] w-full bg-white"
-          : "h-[72vh] min-h-[520px] w-full bg-white"
+          ? "max-h-[min(72vh,760px)] min-h-[520px] overflow-auto bg-[rgb(13_7_24)] p-4 sm:p-6"
+          : "h-[72vh] min-h-[520px] overflow-auto bg-[var(--color-surface)] p-4 sm:p-6"
       }
-    />
+      onContextMenu={(event) => event.preventDefault()}
+      role="region"
+    >
+      <div className="mx-auto grid w-full max-w-6xl gap-4">
+        {Array.from({ length: loadState.pageCount }, (_, index) => (
+          <PdfCanvasPage
+            key={index + 1}
+            document={loadState.document}
+            pageNumber={index + 1}
+          />
+        ))}
+      </div>
+    </div>
   );
 }

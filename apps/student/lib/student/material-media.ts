@@ -5,6 +5,16 @@ type ObjectUrlResult = {
   revoke: () => void;
 };
 
+function buildFileRequestHeaders(token?: string | null) {
+  const headers = new Headers();
+
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  return headers;
+}
+
 export function resolveYoutubeEmbedUrl(rawUrl: string): string | null {
   try {
     const parsed = new URL(rawUrl);
@@ -34,7 +44,9 @@ export function resolveYoutubeEmbedUrl(rawUrl: string): string | null {
   return null;
 }
 
-export function getPrimaryMaterialFile(material: Material): MaterialAttachment | null {
+export function getPrimaryMaterialFile(
+  material: Material,
+): MaterialAttachment | null {
   const attachments = material.attachments ?? [];
 
   if (material.type === "pdf") {
@@ -48,7 +60,9 @@ export function getPrimaryMaterialFile(material: Material): MaterialAttachment |
   return null;
 }
 
-export function isPdfAttachment(attachment: MaterialAttachment | null | undefined): boolean {
+export function isPdfAttachment(
+  attachment: MaterialAttachment | null | undefined,
+): boolean {
   return Boolean(
     attachment &&
       (attachment.type === "pdf" ||
@@ -63,7 +77,9 @@ export function isPdfMaterial(material: Material): boolean {
   return isPdfAttachment(getPrimaryMaterialFile(material));
 }
 
-export function getSupportingMaterialAttachments(material: Material): MaterialAttachment[] {
+export function getSupportingMaterialAttachments(
+  material: Material,
+): MaterialAttachment[] {
   const primaryFile = getPrimaryMaterialFile(material);
   const seenIds = new Set<string>();
 
@@ -92,23 +108,31 @@ function getPathExtension(url: string): string | null {
   }
 }
 
+async function fetchRemoteFile(
+  url: string,
+  signal?: AbortSignal,
+  token?: string | null,
+) {
+  const response = await fetch(url, {
+    headers: buildFileRequestHeaders(token),
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      "Não foi possível carregar este arquivo agora. Tente novamente em alguns instantes.",
+    );
+  }
+
+  return response;
+}
+
 export async function createObjectUrlFromRemoteFile(
   url: string,
   signal?: AbortSignal,
   token?: string | null,
 ): Promise<ObjectUrlResult> {
-  const headers = new Headers();
-
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
-
-  const response = await fetch(url, { headers, signal });
-
-  if (!response.ok) {
-    throw new Error("Não foi possível carregar este arquivo agora. Tente novamente em alguns instantes.");
-  }
-
+  const response = await fetchRemoteFile(url, signal, token);
   const blob = await response.blob();
   const objectUrl = URL.createObjectURL(blob);
 
@@ -116,6 +140,16 @@ export async function createObjectUrlFromRemoteFile(
     objectUrl,
     revoke: () => URL.revokeObjectURL(objectUrl),
   };
+}
+
+export async function fetchRemoteFileAsArrayBuffer(
+  url: string,
+  signal?: AbortSignal,
+  token?: string | null,
+): Promise<ArrayBuffer> {
+  const response = await fetchRemoteFile(url, signal, token);
+
+  return response.arrayBuffer();
 }
 
 export function formatFileSize(size?: number): string | null {
