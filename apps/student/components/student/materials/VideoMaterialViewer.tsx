@@ -24,8 +24,8 @@ export function VideoMaterialViewer({ title, url }: VideoMaterialViewerProps) {
   }
 
   return (
-    <div className="relative bg-black">
-      <div className="absolute left-4 top-4 z-10 hidden items-center gap-2 rounded-full bg-black/70 px-3 py-2 text-sm font-semibold text-white backdrop-blur-sm sm:flex">
+    <div className="relative bg-[rgb(13_7_24)]">
+      <div className="absolute left-4 top-4 z-10 hidden items-center gap-2 rounded-full bg-[rgb(26_13_43_/_0.78)] px-3 py-2 text-sm font-semibold text-white backdrop-blur-sm sm:flex">
         <PlayCircle size={16} aria-hidden="true" />
         Aula em vídeo
       </div>

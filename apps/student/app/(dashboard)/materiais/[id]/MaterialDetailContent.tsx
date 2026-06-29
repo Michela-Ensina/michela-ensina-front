@@ -109,7 +109,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
       <div
         className={cn(
           isTheaterMode
-            ? "relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen bg-[#05040a] px-4 py-5 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.05)] sm:px-6 sm:py-7"
+            ? "student-theater-stage relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen px-4 py-5 sm:px-6 sm:py-7"
             : "",
         )}
       >

@@ -20,7 +20,8 @@ function TheaterMenu({ navItems }: { navItems: StudentNavItem[] }) {
   return (
     <details className="group relative">
       <summary
-        className="student-action flex list-none items-center gap-2 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white/80 marker:content-none transition hover:bg-white/[0.11] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
+        className="student-action student-hover-surface flex list-none items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold marker:content-none"
+        style={{ color: "var(--color-text)" }}
       >
         <ListVideo size={16} aria-hidden="true" />
         Conteúdo
@@ -94,25 +95,25 @@ export function MaterialTheaterShell({
       </div>
 
       {isTheaterMode ? (
-        <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen border-y border-white/10 bg-[#0d0b14]">
+        <div className="student-theater-header relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen border-y">
           <div className="mx-auto flex min-h-14 w-full max-w-[96rem] items-center justify-between gap-3 px-4 sm:px-6">
             <div className="flex min-w-0 items-center gap-3">
               <Link
                 href="/materiais"
-                className="grid size-9 shrink-0 place-items-center rounded-lg text-white/72 transition hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
+                className="student-action student-hover-surface grid size-9 shrink-0 place-items-center rounded-lg text-[var(--color-text-muted)]"
                 aria-label="Voltar para materiais"
               >
                 <ArrowLeft size={18} aria-hidden="true" />
               </Link>
-              <div className="hidden h-7 w-px bg-white/10 sm:block" />
+              <TheaterMenu navItems={navItems} />
+              <div className="hidden h-7 w-px bg-[var(--color-border)] sm:block" />
               <div className="flex min-w-0 items-center gap-2 text-sm">
-                <span className="truncate font-semibold text-white">{title}</span>
-                <ChevronRight size={14} className="hidden shrink-0 text-white/28 sm:block" aria-hidden="true" />
-                <span className="hidden shrink-0 text-white/52 sm:block">{typeLabel}</span>
+                <span className="truncate font-semibold text-[var(--color-text)]">{title}</span>
+                <ChevronRight size={14} className="hidden shrink-0 text-[var(--color-text-muted)] sm:block" aria-hidden="true" />
+                <span className="hidden shrink-0 text-[var(--color-text-muted)] sm:block">{typeLabel}</span>
               </div>
             </div>
             <div className="flex shrink-0 items-center gap-2">
-              <TheaterMenu navItems={navItems} />
               {actions}
             </div>
           </div>

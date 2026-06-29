@@ -44,7 +44,7 @@ export function MaterialViewer({
       className={cn(
         "overflow-hidden border",
         isTheaterMode
-          ? "rounded-[var(--radius-md)] border-white/10 bg-black shadow-[0_18px_56px_rgb(0_0_0_/_0.34)]"
+          ? "rounded-[var(--radius-md)] border-[rgb(228_206_244_/_0.14)] bg-[rgb(13_7_24)] shadow-[0_18px_56px_rgb(10_5_20_/_0.34)]"
           : "rounded-[var(--radius-lg)]",
       )}
       style={
