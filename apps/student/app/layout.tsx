@@ -1,18 +1,56 @@
 import type { Metadata } from "next";
-import { Cherry_Swash, Mulish } from "next/font/google";
+import localFont from "next/font/local";
 
 import "./globals.css";
 import { Providers } from "./providers";
 
-const mulish = Mulish({
-  subsets: ["latin"],
+const mulish = localFont({
+  src: [
+    {
+      path: "./fonts/Mulish/Mulish-Light.ttf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Mulish/Mulish-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Mulish/Mulish-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Mulish/Mulish-SemiBold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Mulish/Mulish-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-body",
+  display: "swap",
 });
 
-const cherrySwash = Cherry_Swash({
-  subsets: ["latin"],
-  weight: ["400", "700"],
+const cherrySwash = localFont({
+  src: [
+    {
+      path: "./fonts/Cherry_Swash/CherrySwash-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Cherry_Swash/CherrySwash-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-display",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
