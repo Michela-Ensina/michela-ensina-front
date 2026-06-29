@@ -18,9 +18,7 @@ export function DashboardHero({
   totalMaterials,
 }: DashboardHeroProps) {
   return (
-    <section
-      className="student-hero-surface relative overflow-hidden rounded-[var(--radius-lg)] border px-5 py-5 sm:px-6"
-    >
+    <section className="student-hero-surface relative overflow-hidden rounded-[var(--radius-lg)] border px-5 py-5 sm:px-6">
       <Image
         src="/assets/brand/graphics/elementos-02-lilas.svg"
         alt=""
@@ -53,14 +51,12 @@ export function DashboardHero({
             Olá, {student.name.split(" ")[0]}.
           </h2>
           <p className="student-muted-text mt-2 max-w-2xl text-sm sm:text-base">
-            Seu espaço do Modo Fluente está pronto para continuar os estudos,
-            revisar materiais e acompanhar o ritmo.
+            Continue de onde parou, revise seus materiais e acompanhe seu
+            progresso em um só lugar.
           </p>
         </div>
 
-        <div
-          className="student-soft-surface rounded-[var(--radius-md)] border p-4"
-        >
+        <div className="student-soft-surface rounded-[var(--radius-md)] border p-4">
           <DashboardProgressSummary
             percentage={progress.percentage}
             viewedCount={progress.viewed_count}

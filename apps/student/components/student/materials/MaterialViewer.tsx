@@ -38,6 +38,7 @@ export function MaterialViewer({
   const pdfUrl = primaryFile
     ? getMaterialUploadFileUrl(material.id, primaryFile.id)
     : fileUrl;
+  const canOpenExternalMaterial = material.type === "other" && Boolean(fileUrl);
 
   return (
     <div
@@ -72,7 +73,8 @@ export function MaterialViewer({
             <div
               className="mx-auto grid size-16 place-items-center rounded-2xl"
               style={{
-                backgroundColor: "color-mix(in oklab, var(--color-primary) 16%, var(--color-surface))",
+                backgroundColor:
+                  "color-mix(in oklab, var(--color-primary) 16%, var(--color-surface))",
                 color: "var(--color-primary)",
               }}
             >
@@ -80,14 +82,23 @@ export function MaterialViewer({
             </div>
             <h3 className="mt-4 text-2xl">{typeLabel}</h3>
             <p className="student-muted-text mx-auto mt-2 max-w-md text-sm">
-              Este conteúdo está disponível como material de apoio.
+              {canOpenExternalMaterial
+                ? "Este conteúdo está disponível em um link externo."
+                : "Este arquivo principal ainda não possui visualização interna para este formato."}
             </p>
-            <a href={fileUrl} target="_blank" rel="noreferrer" className="mt-5 inline-block">
-              <Button type="button" variant="primary" className="gap-2">
-                Abrir material
-                <ExternalLink size={16} aria-hidden="true" />
-              </Button>
-            </a>
+            {canOpenExternalMaterial ? (
+              <a
+                href={fileUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-5 inline-block"
+              >
+                <Button type="button" variant="primary" className="gap-2">
+                  Abrir material
+                  <ExternalLink size={16} aria-hidden="true" />
+                </Button>
+              </a>
+            ) : null}
           </div>
         </div>
       )}

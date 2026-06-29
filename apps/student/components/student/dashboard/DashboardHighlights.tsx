@@ -11,6 +11,18 @@ type DashboardHighlightsProps = {
   progressItems: ProgressItem[];
 };
 
+function getPendingMaterialsMessage(pendingCount: number) {
+  if (pendingCount === 0) {
+    return "Todos os materiais liberados foram concluídos.";
+  }
+
+  if (pendingCount === 1) {
+    return "1 material ainda está aberto para continuar.";
+  }
+
+  return `${pendingCount} materiais ainda estão abertos para continuar.`;
+}
+
 export function DashboardHighlights({
   materials,
   pendingCount,
@@ -31,17 +43,13 @@ export function DashboardHighlights({
           />
         ))}
       </div>
-      <div
-        className="student-soft-surface rounded-[var(--radius-lg)] border p-4"
-      >
+      <div className="student-soft-surface rounded-[var(--radius-lg)] border p-4">
         <p className="flex items-center gap-2 text-sm font-semibold">
           <CheckCircle2 size={16} aria-hidden="true" />
           Ritmo de estudo
         </p>
         <p className="student-muted-text mt-2 text-sm">
-          {pendingCount > 0
-            ? `${pendingCount} materiais ainda estão abertos para continuar.`
-            : "Todos os materiais liberados foram concluídos."}
+          {getPendingMaterialsMessage(pendingCount)}
         </p>
       </div>
     </SurfaceCard>

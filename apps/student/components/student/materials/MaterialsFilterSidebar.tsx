@@ -4,7 +4,9 @@ import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { Material, ProgressItem } from "@/types/student";
 
 export type MaterialStatusFilter = "todos" | "em-aberto" | "concluidos";
-export type MaterialTypeFilter = "todos" | Material["type"];
+export type MaterialTypeFilter =
+  | "todos"
+  | Exclude<Material["type"], "attachment">;
 
 const statusFilters = [
   { value: "todos", label: "Todos" },
@@ -16,7 +18,6 @@ const typeFilters = [
   { value: "todos", label: "Todos" },
   { value: "video", label: "Vídeo" },
   { value: "pdf", label: "PDF" },
-  { value: "attachment", label: "Anexos" },
   { value: "other", label: "Links" },
 ] satisfies Array<{ value: MaterialTypeFilter; label: string }>;
 
@@ -65,8 +66,13 @@ export function MaterialsFilterSidebar({
 
       {featuredMaterial ? (
         <div>
-          <p className="student-muted-text mb-3 text-sm font-semibold">Em destaque</p>
-          <MaterialCard material={featuredMaterial} progressItems={progressItems} />
+          <p className="student-muted-text mb-3 text-sm font-semibold">
+            Em destaque
+          </p>
+          <MaterialCard
+            material={featuredMaterial}
+            progressItems={progressItems}
+          />
         </div>
       ) : null}
     </aside>
