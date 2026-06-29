@@ -2,12 +2,17 @@
 
 import { useState } from "react";
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
-import { ExternalLink, FileText, Paperclip, X } from "lucide-react";
+import { Download, ExternalLink, FileText, Paperclip, X } from "lucide-react";
+import { toast } from "sonner";
 
 import { PdfMaterialViewer } from "@/components/student/materials/PdfMaterialViewer";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { getMaterialUploadFileUrl } from "@/lib/api/materials";
-import { formatFileSize, isPdfAttachment } from "@/lib/student/material-media";
+import {
+  createObjectUrlFromRemoteFile,
+  formatFileSize,
+  isPdfAttachment,
+} from "@/lib/student/material-media";
 import type { MaterialAttachment } from "@/types/student";
 
 type MaterialAttachmentsListProps = {
@@ -18,10 +23,17 @@ type MaterialAttachmentsListProps = {
 
 type AttachmentCardProps = {
   attachment: MaterialAttachment;
+  isDownloading: boolean;
+  onDownload: (attachment: MaterialAttachment) => void;
   onPreviewPdf: (attachment: MaterialAttachment) => void;
 };
 
-function AttachmentCard({ attachment, onPreviewPdf }: AttachmentCardProps) {
+function AttachmentCard({
+  attachment,
+  isDownloading,
+  onDownload,
+  onPreviewPdf,
+}: AttachmentCardProps) {
   const size = formatFileSize(attachment.size);
   const isPdf = isPdfAttachment(attachment);
   const Icon = isPdf ? FileText : Paperclip;
@@ -38,45 +50,50 @@ function AttachmentCard({ attachment, onPreviewPdf }: AttachmentCardProps) {
           {size ?? attachment.mime_type ?? "Arquivo de apoio"}
         </span>
       </span>
-      {isPdf ? null : (
-        <ExternalLink
-          size={16}
-          className="shrink-0 text-[var(--color-text-muted)]"
-          aria-hidden="true"
-        />
-      )}
     </>
   );
-
-  if (isPdf) {
-    return (
-      <button
-        type="button"
-        className="student-action student-hover-surface flex min-w-0 items-center gap-3 rounded-[var(--radius-sm)] border p-3"
-        style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "var(--color-surface-soft)",
-        }}
-        onClick={() => onPreviewPdf(attachment)}
-      >
-        {content}
-      </button>
-    );
-  }
+  const sharedClassName =
+    "student-hover-surface flex min-w-0 flex-1 items-center gap-3 rounded-[var(--radius-sm)] p-3 text-left";
 
   return (
-    <a
-      href={attachment.url}
-      target="_blank"
-      rel="noreferrer"
-      className="student-action student-hover-surface flex min-w-0 items-center gap-3 rounded-[var(--radius-sm)] border p-3"
-      style={{
-        borderColor: "var(--color-border)",
-        backgroundColor: "var(--color-surface-soft)",
-      }}
+    <div
+      className="student-soft-surface flex min-w-0 items-center gap-2 rounded-[var(--radius-sm)] border p-1"
+      style={{ borderColor: "var(--color-border)" }}
     >
-      {content}
-    </a>
+      {isPdf ? (
+        <button
+          type="button"
+          className={sharedClassName}
+          onClick={() => onPreviewPdf(attachment)}
+        >
+          {content}
+        </button>
+      ) : (
+        <a
+          href={attachment.url}
+          target="_blank"
+          rel="noreferrer"
+          className={sharedClassName}
+        >
+          {content}
+          <ExternalLink
+            size={16}
+            className="shrink-0 text-[var(--color-text-muted)]"
+            aria-hidden="true"
+          />
+        </a>
+      )}
+      <button
+        type="button"
+        className="student-action student-hover-surface grid size-10 shrink-0 place-items-center rounded-[var(--radius-sm)] text-[var(--color-text-muted)]"
+        disabled={isDownloading}
+        onClick={() => onDownload(attachment)}
+        aria-label={`Baixar ${attachment.original_name}`}
+        title="Baixar arquivo"
+      >
+        <Download size={17} aria-hidden="true" />
+      </button>
+    </div>
   );
 }
 
@@ -87,8 +104,37 @@ export function MaterialAttachmentsList({
 }: MaterialAttachmentsListProps) {
   const [previewAttachment, setPreviewAttachment] =
     useState<MaterialAttachment | null>(null);
+  const [downloadingAttachmentId, setDownloadingAttachmentId] =
+    useState<string | null>(null);
 
   if (attachments.length === 0) return null;
+
+  async function handleDownload(attachment: MaterialAttachment) {
+    setDownloadingAttachmentId(attachment.id);
+
+    try {
+      const { objectUrl, revoke } = await createObjectUrlFromRemoteFile(
+        getMaterialUploadFileUrl(materialId, attachment.id),
+        undefined,
+        token,
+      );
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = attachment.original_name || "material-de-apoio";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(revoke, 0);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível baixar este arquivo agora.",
+      );
+    } finally {
+      setDownloadingAttachmentId(null);
+    }
+  }
 
   return (
     <>
@@ -104,6 +150,10 @@ export function MaterialAttachmentsList({
             <AttachmentCard
               key={attachment.id}
               attachment={attachment}
+              isDownloading={downloadingAttachmentId === attachment.id}
+              onDownload={(nextAttachment) =>
+                void handleDownload(nextAttachment)
+              }
               onPreviewPdf={setPreviewAttachment}
             />
           ))}
