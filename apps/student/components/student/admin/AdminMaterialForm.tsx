@@ -106,7 +106,7 @@ export function AdminMaterialForm({
             <RotateCcw size={16} aria-hidden="true" />
             Limpar
           </Button>
-          <Button type="submit" variant="primary" className="gap-2" disabled={isSaving}>
+          <Button type="submit" variant="primary" className="gap-2" disabled={isSaving || isUploading}>
             <Plus size={16} aria-hidden="true" />
             {isSaving ? "Salvando..." : selectedMaterial ? "Atualizar" : "Criar"}
           </Button>

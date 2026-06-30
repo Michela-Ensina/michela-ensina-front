@@ -134,8 +134,8 @@ export function AdminMaterialUpload({
       ) : null}
       <p className="student-muted-text mt-3 text-xs">
         {replacesPrimaryFile
-          ? "Enviar outro arquivo substitui o arquivo principal deste material."
-          : "Você pode adicionar arquivos de apoio ao vídeo antes de salvar."}
+          ? "O arquivo selecionado será enviado ao salvar. Enviar outro arquivo substitui o principal deste material."
+          : "O arquivo selecionado será enviado ao salvar. Use o envio manual para adicionar mais apoios antes de criar."}
       </p>
       <p className="student-muted-text mt-1 text-xs">{uploadHelpText}</p>
       <Button
@@ -147,7 +147,7 @@ export function AdminMaterialUpload({
         onClick={onUpload}
       >
         <FileUp size={16} aria-hidden="true" />
-        {isUploading ? "Enviando..." : "Enviar arquivo"}
+        {isUploading ? "Enviando..." : "Adicionar agora"}
       </Button>
     </div>
   );

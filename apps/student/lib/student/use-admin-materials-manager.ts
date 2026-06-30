@@ -22,7 +22,7 @@ import {
 } from "@/lib/api/admin-materials";
 import { ApiClientError, getFirstApiFieldError } from "@/lib/api/errors";
 import { resolveYoutubeEmbedUrl } from "@/lib/student/material-media";
-import type { AdminMaterial } from "@/types/admin";
+import type { AdminMaterial, AdminUpload } from "@/types/admin";
 import type { MaterialAttachment } from "@/types/student";
 
 export function useAdminMaterialsManager(token: string | null, isAdmin: boolean) {
@@ -98,8 +98,31 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     setAttachedFiles(material.attachments ?? []);
   }
 
-  async function handleUpload() {
-    if (!file || !token || !uploadType) return;
+  function applyUploadedFile(upload: AdminUpload) {
+    const shouldReplacePrimaryFile = form.type === "pdf" || form.type === "attachment";
+    const nextAttachmentIds = shouldReplacePrimaryFile
+      ? [upload.id]
+      : uniqueAttachmentIds([...form.attachmentIds, upload.id]);
+
+    if (shouldReplacePrimaryFile) {
+      updateField("url", upload.url);
+    }
+    updateField("attachmentIds", nextAttachmentIds);
+    setAttachedFiles((current) => {
+      if (shouldReplacePrimaryFile) return [upload];
+      if (current.some((attachment) => attachment.id === upload.id)) return current;
+      return [...current, upload];
+    });
+    setFile(null);
+
+    return {
+      url: shouldReplacePrimaryFile ? upload.url : form.url,
+      attachmentIds: nextAttachmentIds,
+    };
+  }
+
+  async function uploadSelectedFile() {
+    if (!file || !token || !uploadType) return null;
 
     const validationMessage = validateAdminUploadFile(file, uploadType);
     if (validationMessage) {
@@ -113,22 +136,9 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
 
     try {
       const upload = await uploadAdminMaterialFile(file, uploadType, token);
-      const shouldReplacePrimaryFile = form.type === "pdf" || form.type === "attachment";
-      const nextAttachmentIds = shouldReplacePrimaryFile
-        ? [upload.id]
-        : uniqueAttachmentIds([...form.attachmentIds, upload.id]);
-
-      if (shouldReplacePrimaryFile) {
-        updateField("url", upload.url);
-      }
-      updateField("attachmentIds", nextAttachmentIds);
-      setAttachedFiles((current) => {
-        if (shouldReplacePrimaryFile) return [upload];
-        if (current.some((attachment) => attachment.id === upload.id)) return current;
-        return [...current, upload];
-      });
-      setFile(null);
+      const uploadedState = applyUploadedFile(upload);
       toast.success("Arquivo enviado com sucesso.");
+      return uploadedState;
     } catch (error) {
       const message =
         error instanceof ApiClientError
@@ -136,9 +146,14 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
           : getAdminUploadTransportErrorMessage();
       setErrorMessage(message);
       toast.error(message);
+      return null;
     } finally {
       setIsUploading(false);
     }
+  }
+
+  async function handleUpload() {
+    await uploadSelectedFile();
   }
 
   function removeAttachedFile(attachmentId: string) {
@@ -187,13 +202,6 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
       return;
     }
 
-    if ((payload.type === "pdf" || payload.type === "attachment") && payload.attachment_ids?.length === 0) {
-      const message = payload.type === "pdf" ? "Envie o PDF do material." : "Envie o arquivo do anexo.";
-      setErrorMessage(message);
-      toast.error(message);
-      return;
-    }
-
     if (payload.type === "other" && !payload.url) {
       const message = "Informe o link do material.";
       setErrorMessage(message);
@@ -205,6 +213,21 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     setErrorMessage(null);
 
     try {
+      const uploadedState = file ? await uploadSelectedFile() : null;
+      if (file && !uploadedState) return;
+
+      if (uploadedState) {
+        payload.url = uploadedState.url;
+        payload.attachment_ids = uploadedState.attachmentIds;
+      }
+
+      if ((payload.type === "pdf" || payload.type === "attachment") && payload.attachment_ids?.length === 0) {
+        const message = payload.type === "pdf" ? "Envie o PDF do material." : "Envie o arquivo do anexo.";
+        setErrorMessage(message);
+        toast.error(message);
+        return;
+      }
+
       if (selectedMaterial) {
         await updateAdminMaterial(selectedMaterial.id, payload, token);
         toast.success("Material atualizado com sucesso.");
