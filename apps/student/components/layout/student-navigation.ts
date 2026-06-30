@@ -31,7 +31,7 @@ const PAGE_META: Record<string, StudentPageMeta> = {
   },
   "/progresso": {
     title: "Progresso",
-    subtitle: "Acompanhe sua evolução no curso.",
+    subtitle: "Acompanhe seu avanço nos materiais.",
   },
   "/configuracoes": {
     title: "Configurações",
