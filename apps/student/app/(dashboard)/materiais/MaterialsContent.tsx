@@ -60,7 +60,7 @@ export function MaterialsContent() {
     );
   }
 
-  const featuredMaterial = filteredMaterials[0] ?? data.materials[0];
+  const featuredMaterial = filteredMaterials[0];
 
   return (
     <div className="space-y-6">
