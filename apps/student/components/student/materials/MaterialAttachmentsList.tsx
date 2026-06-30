@@ -25,6 +25,7 @@ type AttachmentCardProps = {
   attachment: MaterialAttachment;
   isDownloading: boolean;
   onDownload: (attachment: MaterialAttachment) => void;
+  onOpen: (attachment: MaterialAttachment) => void;
   onPreviewPdf: (attachment: MaterialAttachment) => void;
 };
 
@@ -32,6 +33,7 @@ function AttachmentCard({
   attachment,
   isDownloading,
   onDownload,
+  onOpen,
   onPreviewPdf,
 }: AttachmentCardProps) {
   const size = formatFileSize(attachment.size);
@@ -69,11 +71,10 @@ function AttachmentCard({
           {content}
         </button>
       ) : (
-        <a
-          href={attachment.url}
-          target="_blank"
-          rel="noreferrer"
+        <button
+          type="button"
           className={sharedClassName}
+          onClick={() => onOpen(attachment)}
         >
           {content}
           <ExternalLink
@@ -81,7 +82,7 @@ function AttachmentCard({
             className="shrink-0 text-[var(--color-text-muted)]"
             aria-hidden="true"
           />
-        </a>
+        </button>
       )}
       <button
         type="button"
@@ -136,6 +137,30 @@ export function MaterialAttachmentsList({
     }
   }
 
+  async function handleOpenAttachment(attachment: MaterialAttachment) {
+    try {
+      const { objectUrl, revoke } = await createObjectUrlFromRemoteFile(
+        getMaterialUploadFileUrl(materialId, attachment.id),
+        undefined,
+        token,
+      );
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(revoke, 60_000);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível abrir este arquivo agora.",
+      );
+    }
+  }
+
   return (
     <>
       <SurfaceCard>
@@ -153,6 +178,9 @@ export function MaterialAttachmentsList({
               isDownloading={downloadingAttachmentId === attachment.id}
               onDownload={(nextAttachment) =>
                 void handleDownload(nextAttachment)
+              }
+              onOpen={(nextAttachment) =>
+                void handleOpenAttachment(nextAttachment)
               }
               onPreviewPdf={setPreviewAttachment}
             />
