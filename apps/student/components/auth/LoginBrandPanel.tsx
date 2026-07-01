@@ -77,14 +77,16 @@ function LoginBrandDivider() {
 
 function LoginHighlightList() {
   return (
-    <div className="mt-10 grid w-full max-w-sm gap-3 lg:[@media_(max-height:760px)]:mt-7 lg:[@media_(max-height:760px)]:gap-2.5">
+    <div className="mt-10 grid w-full max-w-sm gap-2.5 lg:[@media_(max-height:760px)]:mt-7">
       {loginHighlights.map(({ icon: Icon, label }) => (
         <div
           key={label}
-          className="flex items-center gap-3 rounded-md bg-white/12 px-4 py-3 text-left text-sm font-semibold text-white/90"
+          className="flex items-center gap-3 rounded-2xl border border-white/14 bg-white/13 px-4 py-3 text-left text-sm font-semibold text-white shadow-[inset_0_1px_0_rgb(255_255_255_/_0.13)]"
         >
-          <Icon size={18} aria-hidden="true" className="text-white/80" />
-          <span>{label}</span>
+          <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-white/14 text-white/90">
+            <Icon size={17} aria-hidden="true" />
+          </span>
+          <span className="min-w-0">{label}</span>
         </div>
       ))}
     </div>
@@ -93,18 +95,20 @@ function LoginHighlightList() {
 
 function PlannerCta() {
   return (
-    <div className="mt-8 w-full max-w-sm rounded-md border border-white/18 bg-white/10 p-4 text-left lg:[@media_(max-height:760px)]:mt-5">
-      <p className="text-sm font-semibold text-white">
-        Ainda não possui acesso ao material?
-      </p>
-      <p className="mt-1 text-sm leading-5 text-white/72">
-        Conheça o Modo Fluente e aprenda um novo idioma ainda hoje.
-      </p>
+    <div className="mt-8 flex w-full max-w-sm items-center justify-between gap-4 rounded-2xl border border-white/16 bg-white/13 p-4 text-left shadow-[inset_0_1px_0_rgb(255_255_255_/_0.14)] lg:[@media_(max-height:760px)]:mt-5">
+      <div className="min-w-0">
+        <p className="text-sm font-semibold text-white">
+          Ainda não possui acesso ao material?
+        </p>
+        <p className="mt-1 text-sm leading-5 text-white/78">
+          Conheça o Modo Fluente e aprenda um novo idioma ainda hoje.
+        </p>
+      </div>
       <Link
         href={STUDENT_BRAND_LINKS.planner}
         target="_blank"
         rel="noreferrer"
-        className="student-action mt-3 inline-flex min-h-9 items-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-[var(--me-purple-dark)]"
+        className="student-action inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-[var(--me-purple-dark)] shadow-[0_6px_14px_rgb(77_35_117_/_0.18)]"
         style={{ color: "var(--me-purple-dark)" }}
       >
         Garanta o seu
