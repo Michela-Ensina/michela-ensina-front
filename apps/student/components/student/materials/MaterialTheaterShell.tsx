@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Popover as BasePopover } from "@base-ui/react/popover";
 import { ArrowLeft, ChevronRight, ListVideo } from "lucide-react";
 
 import type { StudentNavItem } from "@/components/layout/StudentSidebar";
@@ -17,38 +18,46 @@ type MaterialTheaterShellProps = {
 };
 
 function TheaterMenu({ navItems }: { navItems: StudentNavItem[] }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <details className="group relative">
-      <summary
-        className="student-action student-hover-surface flex list-none items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold marker:content-none"
+    <BasePopover.Root open={open} onOpenChange={setOpen}>
+      <BasePopover.Trigger
+        type="button"
+        className="student-action student-hover-surface flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold"
         style={{ color: "var(--color-text)" }}
       >
         <ListVideo size={16} aria-hidden="true" />
         Conteúdo
-      </summary>
-      <div
-        className="absolute left-0 z-50 mt-2 w-56 rounded-[var(--radius-md)] border p-2 shadow-[var(--shadow-md)]"
-        style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "var(--color-surface)",
-        }}
-      >
-        {navItems.map((item) => {
-          const Icon = item.icon;
+      </BasePopover.Trigger>
+      <BasePopover.Portal>
+        <BasePopover.Positioner sideOffset={8} className="z-50">
+          <BasePopover.Popup
+            className="w-56 rounded-[var(--radius-md)] border p-2 shadow-[var(--shadow-md)] outline-none"
+            style={{
+              borderColor: "var(--color-border)",
+              backgroundColor: "var(--color-surface)",
+            }}
+          >
+            {navItems.map((item) => {
+              const Icon = item.icon;
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="student-action student-hover-surface flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-[var(--color-text-muted)]"
-            >
-              <Icon size={16} aria-hidden="true" />
-              {item.label}
-            </Link>
-          );
-        })}
-      </div>
-    </details>
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="student-action student-hover-surface flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-[var(--color-text-muted)]"
+                  onClick={() => setOpen(false)}
+                >
+                  <Icon size={16} aria-hidden="true" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </BasePopover.Popup>
+        </BasePopover.Positioner>
+      </BasePopover.Portal>
+    </BasePopover.Root>
   );
 }
 
