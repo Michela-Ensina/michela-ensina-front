@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FileText } from "lucide-react";
+import { FileText, RotateCcw, ZoomIn, ZoomOut } from "lucide-react";
 import * as pdfjs from "pdfjs-dist";
 import type { PDFDocumentProxy, RenderTask } from "pdfjs-dist";
 
 import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { fetchRemoteFileAsArrayBuffer } from "@/lib/student/material-media";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -32,10 +33,30 @@ type PdfLoadState =
 
 type PdfCanvasPageProps = {
   document: PDFDocumentProxy;
+  maxPageWidth: number;
   pageNumber: number;
+  zoom: number;
 };
 
-function PdfCanvasPage({ document, pageNumber }: PdfCanvasPageProps) {
+const PDF_DEFAULT_ZOOM = 0.86;
+const PDF_MIN_ZOOM = 0.7;
+const PDF_MAX_ZOOM = 1.3;
+const PDF_ZOOM_STEP = 0.1;
+
+function clampPdfZoom(value: number) {
+  return Math.min(PDF_MAX_ZOOM, Math.max(PDF_MIN_ZOOM, value));
+}
+
+function getPageCountLabel(pageCount: number) {
+  return pageCount === 1 ? "1 página" : `${pageCount} páginas`;
+}
+
+function PdfCanvasPage({
+  document,
+  maxPageWidth,
+  pageNumber,
+  zoom,
+}: PdfCanvasPageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -68,8 +89,9 @@ function PdfCanvasPage({ document, pageNumber }: PdfCanvasPageProps) {
       if (!currentCanvas) return;
 
       const baseViewport = page.getViewport({ scale: 1 });
-      const maxCssWidth = Math.max(280, Math.min(containerWidth, 1120));
-      const cssScale = maxCssWidth / baseViewport.width;
+      const safeContainerWidth = Math.max(280, containerWidth - 16);
+      const fitWidth = Math.min(safeContainerWidth, maxPageWidth);
+      const cssScale = (fitWidth / baseViewport.width) * zoom;
       const outputScale = window.devicePixelRatio || 1;
       const viewport = page.getViewport({ scale: cssScale * outputScale });
       const context = currentCanvas.getContext("2d");
@@ -95,14 +117,14 @@ function PdfCanvasPage({ document, pageNumber }: PdfCanvasPageProps) {
       isCancelled = true;
       renderTask?.cancel();
     };
-  }, [containerWidth, document, pageNumber]);
+  }, [containerWidth, document, maxPageWidth, pageNumber, zoom]);
 
   return (
-    <div ref={containerRef} className="flex justify-center">
+    <div ref={containerRef} className="flex min-w-full justify-center">
       <canvas
         ref={canvasRef}
         aria-label={`Página ${pageNumber}`}
-        className="max-w-full rounded-[var(--radius-sm)] bg-white shadow-[var(--shadow-sm)]"
+        className="shrink-0 rounded-[var(--radius-sm)] bg-white shadow-[var(--shadow-sm)]"
       />
     </div>
   );
@@ -120,6 +142,7 @@ export function PdfMaterialViewer({
     pageCount: 0,
     message: null,
   });
+  const [zoom, setZoom] = useState(PDF_DEFAULT_ZOOM);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -188,6 +211,9 @@ export function PdfMaterialViewer({
     );
   }
 
+  const pageMaxWidth = isTheaterMode ? 960 : 820;
+  const zoomPercent = Math.round(zoom * 100);
+
   return (
     <div
       aria-label={title}
@@ -199,12 +225,70 @@ export function PdfMaterialViewer({
       onContextMenu={(event) => event.preventDefault()}
       role="region"
     >
-      <div className="mx-auto grid w-full max-w-6xl gap-4">
+      <div className="sticky top-0 z-10 mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--color-border)] bg-[var(--color-surface)]/95 pb-4 backdrop-blur">
+        <div>
+          <p className="text-sm font-semibold text-[var(--color-text)]">
+            Visualização do PDF
+          </p>
+          <p className="student-muted-text text-xs">
+            {getPageCountLabel(loadState.pageCount)}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            aria-label="Diminuir zoom"
+            disabled={zoom <= PDF_MIN_ZOOM}
+            onClick={() =>
+              setZoom((currentZoom) =>
+                clampPdfZoom(currentZoom - PDF_ZOOM_STEP),
+              )
+            }
+            size="icon"
+            title="Diminuir zoom"
+            type="button"
+            variant="ghost"
+          >
+            <ZoomOut size={18} aria-hidden="true" />
+          </Button>
+          <span className="min-w-14 rounded-full border border-[var(--color-border)] px-3 py-1 text-center text-xs font-semibold text-[var(--color-text)]">
+            {zoomPercent}%
+          </span>
+          <Button
+            aria-label="Aumentar zoom"
+            disabled={zoom >= PDF_MAX_ZOOM}
+            onClick={() =>
+              setZoom((currentZoom) =>
+                clampPdfZoom(currentZoom + PDF_ZOOM_STEP),
+              )
+            }
+            size="icon"
+            title="Aumentar zoom"
+            type="button"
+            variant="ghost"
+          >
+            <ZoomIn size={18} aria-hidden="true" />
+          </Button>
+          <Button
+            className="gap-2"
+            onClick={() => setZoom(PDF_DEFAULT_ZOOM)}
+            size="sm"
+            title="Voltar ao ajuste padrão"
+            type="button"
+            variant="outline"
+          >
+            <RotateCcw size={16} aria-hidden="true" />
+            Ajustar
+          </Button>
+        </div>
+      </div>
+      <div className="mx-auto grid w-full gap-5">
         {Array.from({ length: loadState.pageCount }, (_, index) => (
           <PdfCanvasPage
             key={index + 1}
             document={loadState.document}
+            maxPageWidth={pageMaxWidth}
             pageNumber={index + 1}
+            zoom={zoom}
           />
         ))}
       </div>
