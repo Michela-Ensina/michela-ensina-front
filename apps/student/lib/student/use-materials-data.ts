@@ -1,5 +1,6 @@
 import { getMaterials } from "@/lib/api/materials";
 import { getProgress } from "@/lib/api/progress";
+import { ApiClientError } from "@/lib/api/errors";
 import { useStudentData } from "@/lib/student/use-student-data";
 import type { Material, ProgressSummary } from "@/types/student";
 
@@ -9,7 +10,16 @@ type MaterialsData = {
 };
 
 async function loadMaterialsData(token: string): Promise<MaterialsData> {
-  const [materials, progress] = await Promise.all([getMaterials(token), getProgress(token)]);
+  const materials = await getMaterials(token);
+  let progress: ProgressSummary | null = null;
+
+  try {
+    progress = await getProgress(token);
+  } catch (error) {
+    if (error instanceof ApiClientError && error.status === 401) {
+      throw error;
+    }
+  }
 
   return { materials, progress };
 }

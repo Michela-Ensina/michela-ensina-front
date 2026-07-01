@@ -4,6 +4,7 @@ import { ApiClientError } from "@/lib/api/errors";
 import { getMaterialById } from "@/lib/api/materials";
 import { getProgress, updateMaterialProgress } from "@/lib/api/progress";
 import { useAuth } from "@/lib/auth/use-auth";
+import { createEmptyProgressSummary } from "@/lib/student/progress-summary";
 import type { Material, ProgressItem } from "@/types/student";
 
 export function useMaterialDetail(materialId: string) {
@@ -28,10 +29,16 @@ export function useMaterialDetail(materialId: string) {
         throw new Error("Sua sessão não está disponível.");
       }
 
-      const [materialResponse, progress] = await Promise.all([
-        getMaterialById(materialId, token),
-        getProgress(token),
-      ]);
+      const materialResponse = await getMaterialById(materialId, token);
+      let progress = createEmptyProgressSummary();
+
+      try {
+        progress = await getProgress(token);
+      } catch (error) {
+        if (error instanceof ApiClientError && error.status === 401) {
+          throw error;
+        }
+      }
 
       setMaterial(materialResponse);
       setProgressPercentage(progress.percentage);
