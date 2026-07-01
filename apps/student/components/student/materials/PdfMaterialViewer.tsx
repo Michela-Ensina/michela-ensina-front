@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FileText, RotateCcw, ZoomIn, ZoomOut } from "lucide-react";
+import { FileText, Maximize2, RotateCcw, ZoomIn, ZoomOut } from "lucide-react";
 import * as pdfjs from "pdfjs-dist";
 import type { PDFDocumentProxy, RenderTask } from "pdfjs-dist";
 
@@ -32,15 +32,19 @@ type PdfLoadState =
   | { status: "error"; document: null; pageCount: 0; message: string };
 
 type PdfCanvasPageProps = {
+  availableHeight: number;
   document: PDFDocumentProxy;
+  fitMode: PdfFitMode;
   maxPageWidth: number;
   pageNumber: number;
   zoom: number;
 };
 
-const PDF_DEFAULT_ZOOM = 0.86;
-const PDF_MIN_ZOOM = 0.7;
-const PDF_MAX_ZOOM = 1.3;
+type PdfFitMode = "page" | "width";
+
+const PDF_DEFAULT_ZOOM = 1;
+const PDF_MIN_ZOOM = 0.85;
+const PDF_MAX_ZOOM = 1.5;
 const PDF_ZOOM_STEP = 0.1;
 
 function clampPdfZoom(value: number) {
@@ -52,7 +56,9 @@ function getPageCountLabel(pageCount: number) {
 }
 
 function PdfCanvasPage({
+  availableHeight,
   document,
+  fitMode,
   maxPageWidth,
   pageNumber,
   zoom,
@@ -90,8 +96,11 @@ function PdfCanvasPage({
 
       const baseViewport = page.getViewport({ scale: 1 });
       const safeContainerWidth = Math.max(280, containerWidth - 16);
+      const safeContainerHeight = Math.max(360, availableHeight - 32);
       const fitWidth = Math.min(safeContainerWidth, maxPageWidth);
-      const cssScale = (fitWidth / baseViewport.width) * zoom;
+      const widthScale = fitWidth / baseViewport.width;
+      const pageScale = Math.min(widthScale, safeContainerHeight / baseViewport.height);
+      const cssScale = (fitMode === "page" ? pageScale : widthScale) * zoom;
       const outputScale = window.devicePixelRatio || 1;
       const viewport = page.getViewport({ scale: cssScale * outputScale });
       const context = currentCanvas.getContext("2d");
@@ -117,7 +126,7 @@ function PdfCanvasPage({
       isCancelled = true;
       renderTask?.cancel();
     };
-  }, [containerWidth, document, maxPageWidth, pageNumber, zoom]);
+  }, [availableHeight, containerWidth, document, fitMode, maxPageWidth, pageNumber, zoom]);
 
   return (
     <div ref={containerRef} className="flex min-w-full justify-center">
@@ -136,13 +145,29 @@ export function PdfMaterialViewer({
   isTheaterMode = false,
   token,
 }: PdfMaterialViewerProps) {
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [loadState, setLoadState] = useState<PdfLoadState>({
     status: "loading",
     document: null,
     pageCount: 0,
     message: null,
   });
+  const [fitMode, setFitMode] = useState<PdfFitMode>("page");
+  const [viewerHeight, setViewerHeight] = useState(0);
   const [zoom, setZoom] = useState(PDF_DEFAULT_ZOOM);
+
+  useEffect(() => {
+    const scrollArea = scrollAreaRef.current;
+    if (!scrollArea) return;
+
+    const updateHeight = () => setViewerHeight(scrollArea.clientHeight);
+    updateHeight();
+
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(scrollArea);
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -211,7 +236,7 @@ export function PdfMaterialViewer({
     );
   }
 
-  const pageMaxWidth = isTheaterMode ? 960 : 820;
+  const pageMaxWidth = isTheaterMode ? 1320 : 1120;
   const zoomPercent = Math.round(zoom * 100);
 
   return (
@@ -219,8 +244,8 @@ export function PdfMaterialViewer({
       aria-label={title}
       className={
         isTheaterMode
-          ?"flex max-h-[min(72vh,760px)] min-h-[520px] flex-col overflow-hidden bg-[rgb(13_7_24)]"
-          : "flex h-[72vh] min-h-[520px] flex-col overflow-hidden bg-[var(--color-surface)]"
+          ?"flex h-[calc(100vh-7rem)] min-h-[680px] flex-col overflow-hidden bg-[rgb(13_7_24)]"
+          : "flex h-[min(86vh,980px)] min-h-[620px] flex-col overflow-hidden bg-[var(--color-surface)]"
       }
       onContextMenu={(event) => event.preventDefault()}
       role="region"
@@ -254,6 +279,18 @@ export function PdfMaterialViewer({
             {zoomPercent}%
           </span>
           <Button
+            aria-pressed={fitMode === "page"}
+            className="gap-2"
+            onClick={() => setFitMode((current) => (current === "page" ? "width" : "page"))}
+            size="sm"
+            title={fitMode === "page" ? "Ajustar pela largura" : "Ver página inteira"}
+            type="button"
+            variant="outline"
+          >
+            <Maximize2 size={16} aria-hidden="true" />
+            {fitMode === "page" ? "Página inteira" : "Largura"}
+          </Button>
+          <Button
             aria-label="Aumentar zoom"
             disabled={zoom >= PDF_MAX_ZOOM}
             onClick={() =>
@@ -281,12 +318,14 @@ export function PdfMaterialViewer({
           </Button>
         </div>
       </div>
-      <div className="min-h-0 flex-1 overflow-auto p-4 sm:p-6">
+      <div ref={scrollAreaRef} className="min-h-0 flex-1 overflow-auto p-2 sm:p-3">
         <div className="mx-auto grid w-full gap-5">
           {Array.from({ length: loadState.pageCount }, (_, index) => (
             <PdfCanvasPage
               key={index + 1}
+              availableHeight={viewerHeight}
               document={loadState.document}
+              fitMode={fitMode}
               maxPageWidth={pageMaxWidth}
               pageNumber={index + 1}
               zoom={zoom}

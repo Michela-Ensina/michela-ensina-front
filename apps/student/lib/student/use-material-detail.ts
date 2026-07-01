@@ -4,6 +4,7 @@ import { ApiClientError } from "@/lib/api/errors";
 import { getMaterialById } from "@/lib/api/materials";
 import { getProgress, updateMaterialProgress } from "@/lib/api/progress";
 import { useAuth } from "@/lib/auth/use-auth";
+import { isMaterialReleased } from "@/lib/student/material-availability";
 import { createEmptyProgressSummary } from "@/lib/student/progress-summary";
 import type { Material, ProgressItem } from "@/types/student";
 
@@ -30,6 +31,13 @@ export function useMaterialDetail(materialId: string) {
       }
 
       const materialResponse = await getMaterialById(materialId, token);
+      if (!isMaterialReleased(materialResponse)) {
+        setNotFound(true);
+        setMaterial(null);
+        setProgressItem(null);
+        return;
+      }
+
       let progress = createEmptyProgressSummary();
 
       try {

@@ -1,6 +1,10 @@
 import { getMaterials } from "@/lib/api/materials";
 import { getProgress } from "@/lib/api/progress";
 import { ApiClientError } from "@/lib/api/errors";
+import {
+  filterProgressForReleasedMaterials,
+  filterReleasedMaterials,
+} from "@/lib/student/material-availability";
 import { useStudentData } from "@/lib/student/use-student-data";
 import type { Material, ProgressSummary } from "@/types/student";
 
@@ -10,11 +14,11 @@ type MaterialsData = {
 };
 
 async function loadMaterialsData(token: string): Promise<MaterialsData> {
-  const materials = await getMaterials(token);
+  const materials = filterReleasedMaterials(await getMaterials(token));
   let progress: ProgressSummary | null = null;
 
   try {
-    progress = await getProgress(token);
+    progress = filterProgressForReleasedMaterials(await getProgress(token), materials);
   } catch (error) {
     if (error instanceof ApiClientError && error.status === 401) {
       throw error;

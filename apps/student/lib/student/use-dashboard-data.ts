@@ -1,6 +1,10 @@
 import { getMaterials } from "@/lib/api/materials";
 import { getProgress } from "@/lib/api/progress";
 import { ApiClientError } from "@/lib/api/errors";
+import {
+  filterProgressForReleasedMaterials,
+  filterReleasedMaterials,
+} from "@/lib/student/material-availability";
 import { createEmptyProgressSummary } from "@/lib/student/progress-summary";
 import { useStudentData } from "@/lib/student/use-student-data";
 import type { Material, ProgressSummary, User } from "@/types/student";
@@ -16,11 +20,13 @@ async function loadDashboardData(token: string, user: User | null): Promise<Dash
     throw new Error("Sua sessão não está disponível.");
   }
 
-  const materials = await getMaterials(token);
+  const materials = filterReleasedMaterials(await getMaterials(token));
   let progress: ProgressSummary;
 
   try {
-    progress = await getProgress(token);
+    progress =
+      filterProgressForReleasedMaterials(await getProgress(token), materials) ??
+      createEmptyProgressSummary(materials.length);
   } catch (error) {
     if (error instanceof ApiClientError && error.status === 401) {
       throw error;
