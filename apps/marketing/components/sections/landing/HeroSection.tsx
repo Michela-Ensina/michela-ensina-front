@@ -267,9 +267,7 @@ export function HeroSection({ isReleased = false }: HeroSectionProps) {
                     target="_blank"
                     variant={isReleased ? "primary" : "outline"}
                   >
-                    {isReleased
-                      ? "Comprar o Modo Fluente"
-                      : "Garanta o seu planner"}
+                    {isReleased ? "Garanta o seu" : "Garanta o seu planner"}
                   </ButtonLink>
                 </Magnet>
               </div>

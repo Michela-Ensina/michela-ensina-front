@@ -87,7 +87,7 @@ export function FinalCtaSection({ isReleased = false }: FinalCtaSectionProps) {
                       target="_blank"
                       variant="primary"
                     >
-                      Comprar o Modo Fluente
+                      Garanta o seu
                     </ButtonLink>
                   </Magnet>
                   <ButtonLink
