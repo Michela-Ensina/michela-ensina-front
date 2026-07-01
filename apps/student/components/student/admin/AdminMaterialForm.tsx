@@ -3,6 +3,7 @@ import { Plus, RotateCcw } from "lucide-react";
 
 import { SectionHeader } from "@/components/student/SectionHeader";
 import { AdminMaterialTypeFields } from "@/components/student/admin/AdminMaterialTypeFields";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -55,9 +56,7 @@ export function AdminMaterialForm({
         description="Cadastre vídeos do YouTube, PDFs de leitura ou anexos da fase 1."
       />
 
-      {errorMessage ?(
-        <p className="student-muted-text mt-4 text-sm">{errorMessage}</p>
-      ) : null}
+      {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
 
       <form className="mt-5 space-y-4" onSubmit={onSubmit}>
         <div>

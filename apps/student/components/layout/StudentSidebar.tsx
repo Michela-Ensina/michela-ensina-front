@@ -187,7 +187,8 @@ function SidebarSocialLinks({ isCollapsed }: CollapsibleSidebarPartProps) {
           href={STUDENT_BRAND_LINKS.whatsappChannel}
           target="_blank"
           rel="noreferrer"
-          className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[var(--color-brand-cream)]"
+          className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[var(--color-brand-lilac)]"
+          style={{ color: "var(--color-brand-lilac)" }}
           aria-label="Canal do Whatsapp da Michela"
         >
           <SiWhatsapp size={17} aria-hidden="true" />
@@ -196,7 +197,8 @@ function SidebarSocialLinks({ isCollapsed }: CollapsibleSidebarPartProps) {
           href={STUDENT_BRAND_LINKS.instagram}
           target="_blank"
           rel="noreferrer"
-          className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[var(--color-brand-cream)]"
+          className="student-action student-hover-surface grid size-9 place-items-center rounded-xl text-[var(--color-brand-lilac)]"
+          style={{ color: "var(--color-brand-lilac)" }}
           aria-label="Instagram da Michela"
         >
           <SiInstagram size={17} aria-hidden="true" />

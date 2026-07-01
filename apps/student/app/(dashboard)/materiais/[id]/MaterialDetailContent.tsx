@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getStudentNavItems } from "@/components/layout/student-navigation";
 import { LoadErrorCard } from "@/components/student/LoadErrorCard";
@@ -48,6 +48,17 @@ function TheaterModeIcon({ isActive }: { isActive: boolean }) {
   return isActive ? <ExitTheaterIcon /> : <EnterTheaterIcon />;
 }
 
+function isTypingTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return false;
+
+  return (
+    target.isContentEditable ||
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLTextAreaElement ||
+    target instanceof HTMLSelectElement
+  );
+}
+
 function MaterialDetailSkeleton() {
   return (
     <section className="mx-auto w-full max-w-7xl space-y-5">
@@ -73,6 +84,27 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
   const type = detail.material ? getMaterialTypeMeta(detail.material.type) : null;
   const status = detail.material ? getMaterialStatus(detail.material, detail.progressItem ? [detail.progressItem] : []) : null;
   const navItems = getStudentNavItems(Boolean(user?.roles?.includes("admin")));
+
+  useEffect(() => {
+    function handleTheaterShortcut(event: KeyboardEvent) {
+      if (event.key.toLowerCase() !== "t" || event.repeat || event.metaKey || event.ctrlKey || event.altKey) {
+        return;
+      }
+
+      if (isTypingTarget(event.target)) {
+        return;
+      }
+
+      event.preventDefault();
+      setIsTheaterMode((current) => !current);
+    }
+
+    window.addEventListener("keydown", handleTheaterShortcut);
+
+    return () => {
+      window.removeEventListener("keydown", handleTheaterShortcut);
+    };
+  }, []);
 
   if (detail.isLoading) return <MaterialDetailSkeleton />;
 

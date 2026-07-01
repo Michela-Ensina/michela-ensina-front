@@ -77,7 +77,7 @@ function LoginBrandDivider() {
 
 function LoginHighlightList() {
   return (
-    <div className="mt-10 grid w-full max-w-xs gap-3 lg:[@media_(max-height:760px)]:mt-7 lg:[@media_(max-height:760px)]:gap-2.5">
+    <div className="mt-10 grid w-full max-w-sm gap-3 lg:[@media_(max-height:760px)]:mt-7 lg:[@media_(max-height:760px)]:gap-2.5">
       {loginHighlights.map(({ icon: Icon, label }) => (
         <div
           key={label}
@@ -93,7 +93,7 @@ function LoginHighlightList() {
 
 function PlannerCta() {
   return (
-    <div className="mt-8 w-full max-w-xs rounded-md border border-white/18 bg-white/10 p-4 text-left lg:[@media_(max-height:760px)]:mt-5">
+    <div className="mt-8 w-full max-w-sm rounded-md border border-white/18 bg-white/10 p-4 text-left lg:[@media_(max-height:760px)]:mt-5">
       <p className="text-sm font-semibold text-white">
         Ainda não possui acesso ao material?
       </p>
@@ -105,6 +105,7 @@ function PlannerCta() {
         target="_blank"
         rel="noreferrer"
         className="student-action mt-3 inline-flex min-h-9 items-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-[var(--me-purple-dark)]"
+        style={{ color: "var(--me-purple-dark)" }}
       >
         Garantir meu planner
         <ArrowRight size={15} aria-hidden="true" />
