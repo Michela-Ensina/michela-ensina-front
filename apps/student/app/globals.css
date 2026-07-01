@@ -200,9 +200,9 @@ a {
 }
 
 .student-app-content .student-elevated-surface {
-  border-color: rgb(181 126 220 / 0.2);
-  background-color: rgb(77 35 117 / 0.25);
-  box-shadow: 0 8px 32px rgb(77 35 117 / 0.3);
+  border-color: rgb(228 206 244 / 0.16);
+  background-color: color-mix(in oklab, var(--me-lilac-light) 10%, var(--color-surface));
+  box-shadow: 0 8px 26px rgb(10 5 20 / 0.22);
 }
 
 .student-soft-surface {
@@ -211,8 +211,8 @@ a {
 }
 
 .student-app-content .student-soft-surface {
-  border-color: rgb(181 126 220 / 0.18);
-  background-color: rgb(181 126 220 / 0.08);
+  border-color: rgb(228 206 244 / 0.14);
+  background-color: color-mix(in oklab, var(--me-lilac-light) 7%, var(--color-surface-soft));
 }
 
 .student-hero-surface {
@@ -232,14 +232,13 @@ a {
 :root[data-theme="light"] .student-elevated-surface,
 .light .student-elevated-surface {
   border-color: color-mix(in oklab, var(--me-lavender) 32%, var(--color-border));
-  background-color: color-mix(in oklab, var(--me-lilac-light) 34%, var(--color-surface));
+  background-color: color-mix(in oklab, var(--me-lilac-light) 22%, var(--color-surface));
 }
 
 :root[data-theme="light"] .student-app-content .student-elevated-surface,
 .light .student-app-content .student-elevated-surface {
   border-color: color-mix(in oklab, var(--me-lavender) 36%, var(--color-border));
-  background:
-    linear-gradient(145deg, rgb(228 206 244 / 0.58), rgb(255 254 250 / 0.88));
+  background-color: color-mix(in oklab, var(--me-lilac-light) 26%, var(--color-surface));
   box-shadow: 0 8px 22px rgb(77 35 117 / 0.09);
 }
 
@@ -252,7 +251,7 @@ a {
 :root[data-theme="light"] .student-app-content .student-soft-surface,
 .light .student-app-content .student-soft-surface {
   border-color: color-mix(in oklab, var(--me-lavender) 30%, var(--color-border));
-  background-color: color-mix(in oklab, var(--me-lilac-light) 46%, var(--color-surface));
+  background-color: color-mix(in oklab, var(--me-lilac-light) 20%, var(--color-surface));
 }
 
 :root[data-theme="light"] .student-hero-surface,
