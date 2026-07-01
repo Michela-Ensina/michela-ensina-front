@@ -219,13 +219,13 @@ export function PdfMaterialViewer({
       aria-label={title}
       className={
         isTheaterMode
-          ?"max-h-[min(72vh,760px)] min-h-[520px] overflow-auto bg-[rgb(13_7_24)] p-4 sm:p-6"
-          : "h-[72vh] min-h-[520px] overflow-auto bg-[var(--color-surface)] p-4 sm:p-6"
+          ?"flex max-h-[min(72vh,760px)] min-h-[520px] flex-col overflow-hidden bg-[rgb(13_7_24)]"
+          : "flex h-[72vh] min-h-[520px] flex-col overflow-hidden bg-[var(--color-surface)]"
       }
       onContextMenu={(event) => event.preventDefault()}
       role="region"
     >
-      <div className="sticky top-0 z-20 -mx-4 -mt-4 mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-4 shadow-[0_10px_24px_rgb(13_7_24_/_0.24)] sm:-mx-6 sm:-mt-6 sm:px-6">
+      <div className="z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-4 shadow-[0_10px_24px_rgb(13_7_24_/_0.24)] sm:px-6">
         <div>
           <p className="text-sm font-semibold text-[var(--color-text)]">
             Visualização do PDF
@@ -281,16 +281,18 @@ export function PdfMaterialViewer({
           </Button>
         </div>
       </div>
-      <div className="mx-auto grid w-full gap-5">
-        {Array.from({ length: loadState.pageCount }, (_, index) => (
-          <PdfCanvasPage
-            key={index + 1}
-            document={loadState.document}
-            maxPageWidth={pageMaxWidth}
-            pageNumber={index + 1}
-            zoom={zoom}
-          />
-        ))}
+      <div className="min-h-0 flex-1 overflow-auto p-4 sm:p-6">
+        <div className="mx-auto grid w-full gap-5">
+          {Array.from({ length: loadState.pageCount }, (_, index) => (
+            <PdfCanvasPage
+              key={index + 1}
+              document={loadState.document}
+              maxPageWidth={pageMaxWidth}
+              pageNumber={index + 1}
+              zoom={zoom}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
