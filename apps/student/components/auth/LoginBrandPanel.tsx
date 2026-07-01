@@ -98,7 +98,7 @@ function PlannerCta() {
         Ainda não possui acesso ao material?
       </p>
       <p className="mt-1 text-sm leading-5 text-white/72">
-        Conheça o planner e veja como começar seus estudos com a Michela.
+        Conheça o Modo Fluente e aprenda um novo idioma ainda hoje.
       </p>
       <Link
         href={STUDENT_BRAND_LINKS.planner}
@@ -107,7 +107,7 @@ function PlannerCta() {
         className="student-action mt-3 inline-flex min-h-9 items-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-[var(--me-purple-dark)]"
         style={{ color: "var(--me-purple-dark)" }}
       >
-        Garantir meu planner
+        Garanta o seu
         <ArrowRight size={15} aria-hidden="true" />
       </Link>
     </div>

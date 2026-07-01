@@ -49,7 +49,7 @@ export function MaterialDetailSidebar({
       </summary>
 
       <div
-        className="absolute right-0 z-50 mt-2 w-[min(22rem,calc(100vw-2.5rem))] space-y-3 rounded-[var(--radius-md)] border p-3 shadow-[var(--shadow-md)]"
+        className="fixed left-3 right-3 top-20 z-50 mt-2 max-h-[calc(100vh-7rem)] space-y-3 overflow-auto rounded-[var(--radius-md)] border p-3 shadow-[var(--shadow-md)] sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:max-h-none sm:w-[min(22rem,calc(100vw-2.5rem))] sm:overflow-visible"
         style={{
           borderColor: "var(--color-border)",
           backgroundColor: "var(--color-surface)",

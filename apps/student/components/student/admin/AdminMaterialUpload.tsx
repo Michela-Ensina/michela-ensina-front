@@ -77,7 +77,7 @@ export function AdminMaterialUpload({
         : "Arquivo do anexo";
 
   return (
-    <div className="student-soft-surface rounded-[var(--radius-md)] border p-4">
+    <div className="student-soft-surface min-w-0 rounded-[var(--radius-md)] border p-4">
       <Label htmlFor="materialFile">{fieldLabel}</Label>
       <input
         id="materialFile"
@@ -92,7 +92,7 @@ export function AdminMaterialUpload({
           type="button"
           variant="outline"
           size="sm"
-          className="gap-2"
+          className="w-full gap-2 sm:w-auto"
           onClick={() => inputRef.current?.click()}
         >
           <FileUp size={16} aria-hidden="true" />
@@ -142,7 +142,7 @@ export function AdminMaterialUpload({
         type="button"
         variant="outline"
         size="sm"
-        className="mt-3 gap-2"
+        className="mt-3 w-full gap-2 sm:w-auto"
         disabled={!file || isUploading}
         onClick={onUpload}
       >

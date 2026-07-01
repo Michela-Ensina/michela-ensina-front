@@ -21,7 +21,7 @@ export function ContinueStudySection({
   return (
     <SurfaceCard className="space-y-4">
       <SectionHeader
-        title="Continuar estudando"
+        title="Continue estudando"
         description="O próximo conteúdo aparece em destaque para manter o fluxo de estudo simples."
         action={
           <Link

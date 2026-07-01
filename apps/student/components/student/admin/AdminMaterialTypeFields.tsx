@@ -43,7 +43,7 @@ export function AdminMaterialTypeFields({
 
   return (
     <>
-      <div>
+      <div className="min-w-0">
         <Label htmlFor="materialType">Tipo</Label>
         <Select
           id="materialType"
@@ -74,7 +74,7 @@ export function AdminMaterialTypeFields({
       />
 
       {form.type === "video" ? (
-        <div>
+        <div className="min-w-0">
           <Label htmlFor="materialUrl">URL do YouTube</Label>
           <Input
             id="materialUrl"
@@ -86,7 +86,7 @@ export function AdminMaterialTypeFields({
       ) : null}
 
       {form.type === "other" ? (
-        <div>
+        <div className="min-w-0">
           <Label htmlFor="materialUrl">Link do material</Label>
           <Input
             id="materialUrl"
@@ -97,7 +97,7 @@ export function AdminMaterialTypeFields({
         </div>
       ) : null}
 
-      <div>
+      <div className="min-w-0">
         <Label htmlFor="materialReleasedAt">Liberar em</Label>
         <DateTimePicker
           id="materialReleasedAt"

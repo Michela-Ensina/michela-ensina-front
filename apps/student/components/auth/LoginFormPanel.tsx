@@ -41,6 +41,8 @@ export function LoginFormPanel({
   password,
   theme,
 }: LoginFormPanelProps) {
+  const currentYear = new Date().getFullYear();
+
   return (
     <section className="relative flex min-h-screen flex-1 flex-col bg-(--color-background) px-5 py-6 lg:h-dvh lg:min-h-0 lg:overflow-hidden lg:[@media_(max-height:760px)]:py-4">
       <div className="flex justify-end">
@@ -161,7 +163,7 @@ export function LoginFormPanel({
         </SurfaceCard>
 
         <p className="student-muted-text mt-6 pt-6 text-center text-xs lg:[@media_(max-height:760px)]:mt-4">
-          © 2024 Michela Ensina · Todos os direitos reservados
+          © {currentYear} Michela Ensina · Todos os direitos reservados
         </p>
       </div>
     </section>

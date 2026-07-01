@@ -50,7 +50,7 @@ export function AdminMaterialForm({
   onRemoveAttachment,
 }: AdminMaterialFormProps) {
   return (
-    <SurfaceCard>
+    <SurfaceCard className="min-w-0 overflow-hidden">
       <SectionHeader
         title={selectedMaterial ?"Editar material" : "Novo material"}
         description="Cadastre vídeos do YouTube, PDFs de leitura ou anexos da fase 1."
@@ -58,8 +58,8 @@ export function AdminMaterialForm({
 
       {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
 
-      <form className="mt-5 space-y-4" onSubmit={onSubmit}>
-        <div>
+      <form className="mt-5 min-w-0 space-y-4" onSubmit={onSubmit}>
+        <div className="min-w-0">
           <Label htmlFor="materialTitle">Título</Label>
           <Input
             id="materialTitle"
@@ -69,7 +69,7 @@ export function AdminMaterialForm({
           />
         </div>
 
-        <div>
+        <div className="min-w-0">
           <Label htmlFor="materialDescription">Descrição</Label>
           <Textarea
             id="materialDescription"
@@ -92,7 +92,7 @@ export function AdminMaterialForm({
           onRemoveAttachment={onRemoveAttachment}
         />
 
-        <label className="student-action student-hover-surface flex w-fit items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold">
+        <label className="student-action student-hover-surface flex w-fit max-w-full items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold">
           <Checkbox
             checked={form.isActive}
             onCheckedChange={(checked) => onFieldChange("isActive", checked)}
@@ -101,11 +101,11 @@ export function AdminMaterialForm({
         </label>
 
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" className="gap-2" onClick={onReset}>
+          <Button type="button" variant="outline" className="w-full gap-2 sm:w-auto" onClick={onReset}>
             <RotateCcw size={16} aria-hidden="true" />
             Limpar
           </Button>
-          <Button type="submit" variant="primary" className="gap-2" disabled={isSaving || isUploading}>
+          <Button type="submit" variant="primary" className="w-full gap-2 sm:w-auto" disabled={isSaving || isUploading}>
             <Plus size={16} aria-hidden="true" />
             {isSaving ?"Salvando..." : selectedMaterial ?"Atualizar" : "Criar"}
           </Button>

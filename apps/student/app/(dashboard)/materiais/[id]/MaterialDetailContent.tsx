@@ -10,6 +10,7 @@ import { MaterialDetailSidebar } from "@/components/student/materials/MaterialDe
 import { getMaterialStatus, getMaterialTypeMeta } from "@/components/student/materials/material-display";
 import { MaterialTheaterShell } from "@/components/student/materials/MaterialTheaterShell";
 import { MaterialViewer } from "@/components/student/materials/MaterialViewer";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
@@ -77,6 +78,49 @@ function MaterialDetailSkeleton() {
   );
 }
 
+type MaterialCompletionActionProps = {
+  isCompleted: boolean;
+  isUpdating: boolean;
+  errorMessage: string | null;
+  onMarkAsCompleted: () => void;
+};
+
+function MaterialCompletionAction({
+  isCompleted,
+  isUpdating,
+  errorMessage,
+  onMarkAsCompleted,
+}: MaterialCompletionActionProps) {
+  return (
+    <SurfaceCard className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p className="text-base font-semibold">
+          {isCompleted ? "Material concluído" : "Concluir este material"}
+        </p>
+        <p className="student-muted-text mt-1 text-sm">
+          {isCompleted
+            ? "Este conteúdo já está marcado como concluído no seu progresso."
+            : "Marque quando terminar a leitura ou a aula para atualizar seu progresso."}
+        </p>
+        {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
+      </div>
+      <Button
+        type="button"
+        onClick={onMarkAsCompleted}
+        disabled={isUpdating || isCompleted}
+        variant={isCompleted ? "outline" : "primary"}
+        className="shrink-0"
+      >
+        {isUpdating
+          ? "Atualizando..."
+          : isCompleted
+            ? "Material concluído"
+            : "Marcar como concluído"}
+      </Button>
+    </SurfaceCard>
+  );
+}
+
 export function MaterialDetailContent({ materialId }: MaterialDetailContentProps) {
   const { token, user } = useAuth();
   const detail = useMaterialDetail(materialId);
@@ -124,6 +168,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
   }
 
   const attachments = getSupportingMaterialAttachments(detail.material);
+  const isCompleted = status.tone === "concluído";
   const actions = (
     <div className="flex flex-wrap items-center gap-2">
       <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => setIsTheaterMode((current) => !current)}>
@@ -179,7 +224,13 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
         </div>
       </div>
 
-      <div className={cn(isTheaterMode ?"mx-auto w-full max-w-7xl" : "")}>
+      <div className={cn("space-y-5", isTheaterMode ?"mx-auto w-full max-w-7xl" : "")}>
+        <MaterialCompletionAction
+          isCompleted={isCompleted}
+          isUpdating={detail.isUpdatingProgress}
+          errorMessage={detail.progressErrorMessage}
+          onMarkAsCompleted={() => void detail.markAsCompleted()}
+        />
         <MaterialAttachmentsList
           attachments={attachments}
           materialId={detail.material.id}

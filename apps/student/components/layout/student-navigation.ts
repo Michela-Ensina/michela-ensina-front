@@ -8,7 +8,7 @@ type StudentPageMeta = {
 };
 
 const NAV_ITEMS: StudentNavItem[] = [
-  { href: "/dashboard", label: "Dashboard", icon: Home },
+  { href: "/dashboard", label: "Página inicial", icon: Home },
   { href: "/materiais", label: "Materiais", icon: BookOpen },
   { href: "/progresso", label: "Progresso", icon: BarChart3 },
   { href: "/configuracoes", label: "Configurações", icon: Settings },
@@ -22,7 +22,7 @@ const ADMIN_NAV_ITEM: StudentNavItem = {
 
 const PAGE_META: Record<string, StudentPageMeta> = {
   "/dashboard": {
-    title: "Dashboard",
+    title: "Página inicial",
     subtitle: "Visão geral da sua jornada de estudos.",
   },
   "/materiais": {

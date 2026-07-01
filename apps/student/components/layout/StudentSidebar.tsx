@@ -68,7 +68,9 @@ function SidebarHeader({ isCollapsed, onToggle }: SidebarHeaderProps) {
           : "items-center justify-between",
       )}
     >
-      <div
+      <Link
+        href="/dashboard"
+        aria-label="Ir para a página inicial"
         className={cn(
           "flex h-8 shrink-0 items-center",
           isCollapsed ?"lg:w-8 lg:justify-center xl:w-auto" : "",
@@ -89,7 +91,7 @@ function SidebarHeader({ isCollapsed, onToggle }: SidebarHeaderProps) {
             className="hidden h-8 w-auto shrink-0 xl:block"
           />
         ) : null}
-      </div>
+      </Link>
       <button
         type="button"
         onClick={onToggle}

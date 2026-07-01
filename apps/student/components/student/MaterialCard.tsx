@@ -50,7 +50,7 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
         className="student-text-action -mx-2 mt-5 w-fit rounded-lg px-2 py-1 text-sm font-semibold"
         style={{ color: accent.color }}
       >
-        {status.tone === "concluído" ?"Revisar material" : "Continuar estudando"}
+        {status.tone === "concluído" ?"Revisar material" : "Continue estudando"}
       </Link>
     </SurfaceCard>
   );

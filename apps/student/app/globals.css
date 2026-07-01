@@ -231,25 +231,28 @@ a {
 
 :root[data-theme="light"] .student-elevated-surface,
 .light .student-elevated-surface {
-  background-color: color-mix(in oklab, var(--color-surface) 94%, var(--me-lilac-light));
+  border-color: color-mix(in oklab, var(--me-lavender) 32%, var(--color-border));
+  background-color: color-mix(in oklab, var(--me-lilac-light) 34%, var(--color-surface));
 }
 
 :root[data-theme="light"] .student-app-content .student-elevated-surface,
 .light .student-app-content .student-elevated-surface {
-  border-color: var(--color-border);
-  background-color: color-mix(in oklab, var(--color-surface) 94%, var(--me-lilac-light));
-  box-shadow: var(--shadow-sm);
+  border-color: color-mix(in oklab, var(--me-lavender) 36%, var(--color-border));
+  background:
+    linear-gradient(145deg, rgb(228 206 244 / 0.58), rgb(255 254 250 / 0.88));
+  box-shadow: 0 8px 22px rgb(77 35 117 / 0.09);
 }
 
 :root[data-theme="light"] .student-soft-surface,
 .light .student-soft-surface {
-  background-color: color-mix(in oklab, var(--color-surface-soft) 74%, var(--color-surface));
+  border-color: color-mix(in oklab, var(--me-lavender) 28%, var(--color-border));
+  background-color: color-mix(in oklab, var(--me-lilac-light) 42%, var(--color-surface));
 }
 
 :root[data-theme="light"] .student-app-content .student-soft-surface,
 .light .student-app-content .student-soft-surface {
-  border-color: var(--color-border);
-  background-color: color-mix(in oklab, var(--color-surface-soft) 74%, var(--color-surface));
+  border-color: color-mix(in oklab, var(--me-lavender) 30%, var(--color-border));
+  background-color: color-mix(in oklab, var(--me-lilac-light) 46%, var(--color-surface));
 }
 
 :root[data-theme="light"] .student-hero-surface,
