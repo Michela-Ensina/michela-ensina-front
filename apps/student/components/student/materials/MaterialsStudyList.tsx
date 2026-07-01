@@ -8,6 +8,12 @@ type MaterialsStudyListProps = {
   progressItems: ProgressItem[];
 };
 
+function getVisibleMaterialsLabel(visibleCount: number, totalCount: number) {
+  const noun = totalCount === 1 ? "material" : "materiais";
+
+  return `Exibindo ${visibleCount} de ${totalCount} ${noun}.`;
+}
+
 export function MaterialsStudyList({ materials, totalMaterials, progressItems }: MaterialsStudyListProps) {
   return (
     <section
@@ -24,7 +30,7 @@ export function MaterialsStudyList({ materials, totalMaterials, progressItems }:
         <div>
           <h2 className="text-xl">Lista de estudo</h2>
           <p className="student-muted-text mt-1 text-sm">
-            {materials.length} de {totalMaterials} materiais exibidos.
+            {getVisibleMaterialsLabel(materials.length, totalMaterials)}
           </p>
         </div>
       </div>
@@ -38,7 +44,7 @@ export function MaterialsStudyList({ materials, totalMaterials, progressItems }:
       ) : (
         <div className="py-6">
           <EmptyState
-            title="Nenhum material nesse filtro"
+            title="Nenhum material neste filtro"
             description="Ajuste os filtros para ver outros conteúdos liberados."
           />
         </div>

@@ -36,7 +36,7 @@ export function DashboardHero({
         className="pointer-events-none absolute bottom-7 right-10 opacity-20"
       />
 
-      <div className="relative grid gap-6 lg:grid-cols-[1.45fr_0.82fr] lg:items-end">
+      <div className="relative grid gap-6 lg:grid-cols-[1.45fr_0.82fr] lg:items-center">
         <div className="max-w-3xl">
           <div className="flex flex-wrap items-center gap-2">
             <StatusBadge
