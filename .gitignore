@@ -49,3 +49,5 @@ next-env.d.ts
 .playwright-mcp/
 landing-*.png
 
+# local student delivery notes
+student-area/local-notes/
