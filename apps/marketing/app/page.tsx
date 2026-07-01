@@ -19,6 +19,7 @@ import {
   SITE_OG_IMAGE,
   SITE_URL,
 } from "@/lib/seo/site";
+import { getIsReleased, MODO_FLUENTE_HOTMART_URL } from "@/lib/release";
 
 export const metadata: Metadata = {
   title: SITE_DEFAULT_TITLE,
@@ -52,6 +53,8 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  const isReleased = getIsReleased();
+
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -78,10 +81,12 @@ export default function Home() {
     },
     offers: {
       "@type": "Offer",
-      url: SITE_URL,
+      url: isReleased ? MODO_FLUENTE_HOTMART_URL : SITE_URL,
       priceCurrency: "BRL",
       price: "64.90",
-      availability: "https://schema.org/PreOrder",
+      availability: isReleased
+        ? "https://schema.org/InStock"
+        : "https://schema.org/PreOrder",
       itemCondition: "https://schema.org/NewCondition",
     },
   };
@@ -100,17 +105,17 @@ export default function Home() {
           __html: JSON.stringify(productJsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <Header />
+      <Header isReleased={isReleased} />
       <main>
-        <HeroSection />
+        <HeroSection isReleased={isReleased} />
         <PainPointsSection />
         <GuideIntroSection />
         <LearningPillarsSection />
         <ProductIncludesSection />
         <PlannerSection />
-        <LeadCaptureSection />
+        <LeadCaptureSection isReleased={isReleased} />
         <AboutMichelaSection />
-        <FinalCtaSection />
+        <FinalCtaSection isReleased={isReleased} />
       </main>
       <Footer />
     </div>

@@ -5,9 +5,14 @@ import { Magnet } from "@/components/motion/Magnet";
 import { Reveal } from "@/components/motion/Reveal";
 import { ShapeGrid } from "@/components/motion/ShapeGrid";
 import { Section } from "@/components/ui/Section";
+import { MODO_FLUENTE_HOTMART_URL, STUDENT_AREA_URL } from "@/lib/release";
 import Image from "next/image";
 
-export function FinalCtaSection() {
+type FinalCtaSectionProps = {
+  isReleased?: boolean;
+};
+
+export function FinalCtaSection({ isReleased = false }: FinalCtaSectionProps) {
   return (
     <Section className="relative overflow-hidden bg-surface py-16" tone="soft">
       <div
@@ -37,13 +42,26 @@ export function FinalCtaSection() {
                 direction="bottom"
                 rootMargin="0px 0px -10% 0px"
                 stepDuration={0.28}
-                text="Garanta seu aviso de lançamento"
+                text={
+                  isReleased
+                    ? "Comece pelo Modo Fluente"
+                    : "Garanta seu aviso de lançamento"
+                }
                 threshold={0.25}
               />
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-secondary sm:text-lg">
-              Modo Fluente chega em breve com guia completo
-              <br />+ Planner Semanal gratuito.
+              {isReleased ? (
+                <>
+                  O guia completo já está disponível
+                  <br />+ Planner Semanal gratuito.
+                </>
+              ) : (
+                <>
+                  Modo Fluente chega em breve com guia completo
+                  <br />+ Planner Semanal gratuito.
+                </>
+              )}
             </p>
             <div className="mt-8 flex justify-between group">
               <Image
@@ -61,13 +79,27 @@ export function FinalCtaSection() {
               >
                 <ButtonLink
                   className="w-full justify-center sm:w-auto"
-                  href="#captura"
+                  href={isReleased ? STUDENT_AREA_URL : "#captura"}
+                  rel={isReleased ? "noopener noreferrer" : undefined}
                   size="lg"
+                  target={isReleased ? "_blank" : undefined}
                   variant="primary"
                 >
-                  Quero receber o aviso
+                  {isReleased ? "ÁREA DO ALUNO" : "Quero receber o aviso"}
                 </ButtonLink>
               </Magnet>
+              {isReleased ? (
+                <ButtonLink
+                  className="ml-0 mt-3 w-full justify-center sm:ml-3 sm:mt-0 sm:w-auto"
+                  href={MODO_FLUENTE_HOTMART_URL}
+                  rel="noopener noreferrer"
+                  size="lg"
+                  target="_blank"
+                  variant="outline"
+                >
+                  Comprar o Modo Fluente
+                </ButtonLink>
+              ) : null}
               <Image
                 alt="Elemento gráfico da marca"
                 aria-hidden

@@ -4,14 +4,21 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { SITE_NAVIGATION } from "@/data/navigation";
+import { STUDENT_AREA_URL } from "@/lib/release";
 
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import { ButtonLink } from "@/components/ui/Button";
 
-export function Header() {
+type HeaderProps = {
+  isReleased?: boolean;
+};
+
+export function Header({ isReleased = false }: HeaderProps) {
   const [isVisibleOnMobile, setIsVisibleOnMobile] = useState(true);
   const lastScrollY = useRef(0);
+  const ctaHref = isReleased ? STUDENT_AREA_URL : "/#captura";
+  const ctaLabel = isReleased ? "ÁREA DO ALUNO" : "Quero ser avisado";
 
   useEffect(() => {
     const MOBILE_BREAKPOINT = 768;
@@ -65,8 +72,15 @@ export function Header() {
         <Link href="/#top" aria-label="Voltar ao início">
           <Logo className="w-24 py-2 sm:w-30 sm:py-3" variant="purpleDark" />
         </Link>
-        <ButtonLink className="md:hidden" href="/#captura" size="sm" variant="primary">
-          Quero ser avisado
+        <ButtonLink
+          className="md:hidden"
+          href={ctaHref}
+          rel={isReleased ? "noopener noreferrer" : undefined}
+          size="sm"
+          target={isReleased ? "_blank" : undefined}
+          variant="primary"
+        >
+          {ctaLabel}
         </ButtonLink>
         <nav aria-label="Navegação principal" className="hidden md:block">
           <ul className="flex items-center gap-2">
@@ -81,8 +95,14 @@ export function Header() {
               </li>
             ))}
             <li>
-              <ButtonLink href="/#captura" size="sm" variant="primary">
-                Quero ser avisado
+              <ButtonLink
+                href={ctaHref}
+                rel={isReleased ? "noopener noreferrer" : undefined}
+                size="sm"
+                target={isReleased ? "_blank" : undefined}
+                variant="primary"
+              >
+                {ctaLabel}
               </ButtonLink>
             </li>
           </ul>

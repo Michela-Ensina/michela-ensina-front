@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 
 import { HERO_COPY, PRODUCT_INFO } from "@/data/landing";
+import { MODO_FLUENTE_HOTMART_URL, STUDENT_AREA_URL } from "@/lib/release";
 
 import { AnimatedBrandStroke } from "@/components/brand/AnimatedBrandStroke";
 import { HeroEbookCard } from "@/components/sections/landing/HeroEbookCard";
@@ -11,9 +12,11 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 
-const PLANNER_HOTMART_URL = "https://pay.hotmart.com/S105574036H";
+type HeroSectionProps = {
+  isReleased?: boolean;
+};
 
-export function HeroSection() {
+export function HeroSection({ isReleased = false }: HeroSectionProps) {
   return (
     <Section
       className="overflow-hidden pb-12 pt-10 sm:pb-18 sm:pt-16 lg:pt-20"
@@ -231,22 +234,26 @@ export function HeroSection() {
                 >
                   <ButtonLink
                     className="w-full justify-center whitespace-normal text-center leading-snug sm:w-auto"
-                    href={HERO_COPY.primaryCtaHref}
+                    href={isReleased ? STUDENT_AREA_URL : HERO_COPY.primaryCtaHref}
+                    rel={isReleased ? "noopener noreferrer" : undefined}
                     size="lg"
+                    target={isReleased ? "_blank" : undefined}
                     variant="primary"
                   >
-                    Quero ser avisado no lançamento
+                    {isReleased
+                      ? "ÁREA DO ALUNO"
+                      : "Quero ser avisado no lançamento"}
                   </ButtonLink>
                 </Magnet>
                 <ButtonLink
                   className="relative z-10 w-full justify-center sm:w-auto"
-                  href={PLANNER_HOTMART_URL}
+                  href={MODO_FLUENTE_HOTMART_URL}
                   rel="noopener noreferrer"
                   size="lg"
                   target="_blank"
                   variant="outline"
                 >
-                  Garanta o seu planner
+                  {isReleased ? "Comprar o Modo Fluente" : "Garanta o seu planner"}
                 </ButtonLink>
               </div>
             </Reveal>

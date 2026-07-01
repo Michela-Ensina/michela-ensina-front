@@ -1,13 +1,12 @@
 import Image from "next/image";
 
 import { PLANNER_COPY } from "@/data/landing";
+import { MODO_FLUENTE_HOTMART_URL } from "@/lib/release";
 
 import { Reveal } from "@/components/motion/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-
-const PLANNER_HOTMART_URL = "https://pay.hotmart.com/S105574036H";
 
 const PLANNER_SKILLS = [
   "Vocabulário",
@@ -294,7 +293,7 @@ export function PlannerSection() {
 
                     <ButtonLink
                       className="w-full justify-center sm:w-auto"
-                      href={PLANNER_HOTMART_URL}
+                      href={MODO_FLUENTE_HOTMART_URL}
                       rel="noopener noreferrer"
                       size="lg"
                       target="_blank"
