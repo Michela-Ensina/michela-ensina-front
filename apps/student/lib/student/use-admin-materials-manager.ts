@@ -36,6 +36,7 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
   const [isUploading, setIsUploading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [materialPendingDeletion, setMaterialPendingDeletion] = useState<AdminMaterial | null>(null);
+  const [loadErrorMessage, setLoadErrorMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const uploadType = useMemo(() => getAdminUploadType(form.type), [form.type]);
@@ -44,13 +45,13 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     if (!token || !isAdmin) return;
 
     setIsLoading(true);
-    setErrorMessage(null);
+    setLoadErrorMessage(null);
 
     try {
       const nextMaterials = await getAdminMaterials(token);
       setMaterials(nextMaterials);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Não foi possível carregar os materiais.");
+      setLoadErrorMessage(error instanceof Error ? error.message : "Não foi possível carregar os materiais.");
     } finally {
       setIsLoading(false);
     }
@@ -101,7 +102,7 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
   function applyUploadedFile(upload: AdminUpload) {
     const shouldReplacePrimaryFile = form.type === "pdf" || form.type === "attachment";
     const nextAttachmentIds = shouldReplacePrimaryFile
-      ? [upload.id]
+      ?[upload.id]
       : uniqueAttachmentIds([...form.attachmentIds, upload.id]);
 
     if (shouldReplacePrimaryFile) {
@@ -168,7 +169,7 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
         attachmentIds: nextAttachmentIds,
         url:
           (current.type === "pdf" || current.type === "attachment") && nextAttachmentIds.length === 0
-            ? ""
+            ?""
             : current.url,
       };
     });
@@ -294,6 +295,7 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     isUploading,
     isDeleting,
     errorMessage,
+    loadErrorMessage,
     materialPendingDeletion,
     uploadType,
     cancelDeleteMaterial,

@@ -48,7 +48,7 @@ export function DashboardContent() {
         totalMaterials={data.materials.length}
       />
 
-      {isEmpty ? (
+      {isEmpty ?(
         <EmptyState
           title="Ainda não há materiais disponíveis"
           description="Assim que os conteúdos forem liberados, você verá seu progresso aqui."

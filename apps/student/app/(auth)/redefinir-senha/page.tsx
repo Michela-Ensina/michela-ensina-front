@@ -60,7 +60,7 @@ export default function RedefinirSenhaPage() {
         </div>
 
         <AuthSubmitButton isSubmitting={resetPasswordForm.isSubmitting}>
-          {resetPasswordForm.isSubmitting ? "Redefinindo..." : "Redefinir senha"}
+          {resetPasswordForm.isSubmitting ?"Redefinindo..." : "Redefinir senha"}
         </AuthSubmitButton>
       </form>
     </AuthFormCard>

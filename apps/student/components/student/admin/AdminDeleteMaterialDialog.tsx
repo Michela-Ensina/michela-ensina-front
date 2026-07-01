@@ -74,7 +74,7 @@ export function AdminDeleteMaterialDialog({
             </BaseDialog.Close>
           </div>
 
-          {material ? (
+          {material ?(
             <div
               className="mt-5 rounded-[var(--radius-md)] border p-3 text-sm"
               style={{
@@ -92,7 +92,7 @@ export function AdminDeleteMaterialDialog({
               Cancelar
             </Button>
             <Button type="button" variant="danger" disabled={isDeleting} onClick={onConfirm}>
-              {isDeleting ? "Removendo..." : "Remover material"}
+              {isDeleting ?"Removendo..." : "Remover material"}
             </Button>
           </div>
         </BaseDialog.Popup>

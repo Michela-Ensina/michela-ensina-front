@@ -72,21 +72,21 @@ export function MaterialDetailSidebar({
 
         <SurfaceCard>
           <ProgressBar value={progressPercentage} label="Conclusão geral" />
-          {progressErrorMessage ? (
+          {progressErrorMessage ?(
             <Alert tone="error">{progressErrorMessage}</Alert>
           ) : null}
           <Button
             type="button"
             onClick={onMarkAsCompleted}
             disabled={isUpdatingProgress || isCompleted}
-            variant={isCompleted ? "outline" : "primary"}
+            variant={isCompleted ?"outline" : "primary"}
             fullWidth
             className="mt-4"
           >
             {isUpdatingProgress
-              ? "Atualizando..."
+              ?"Atualizando..."
               : isCompleted
-                ? "Material concluído"
+                ?"Material concluído"
                 : "Marcar como concluído"}
           </Button>
         </SurfaceCard>

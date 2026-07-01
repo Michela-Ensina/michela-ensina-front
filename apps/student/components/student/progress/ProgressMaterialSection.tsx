@@ -27,7 +27,7 @@ export function ProgressMaterialSection({
         <h3 className="text-lg">{title}</h3>
       </div>
       <div className="mt-3 space-y-3">
-        {materials.length > 0 ? (
+        {materials.length > 0 ?(
           materials.map((material) => (
             <MaterialListItem key={material.id} material={material} progressItems={progressItems} density="compact" />
           ))

@@ -60,7 +60,7 @@ export function LoginFormPanel({
         <Image
           src={
             theme === "dark"
-              ? "/assets/brand/logos/SIMBOLO-BRANCO.svg"
+              ?"/assets/brand/logos/SIMBOLO-BRANCO.svg"
               : "/assets/brand/logos/SIMBOLO-ROXO-ESCURO.svg"
           }
           alt="Símbolo Michela Ensina"
@@ -85,15 +85,15 @@ export function LoginFormPanel({
             Acesse sua conta para continuar seus estudos.
           </p>
 
-          {motivoFeedback ? (
+          {motivoFeedback ?(
             <Alert
-              tone={motivoFeedback.tone === "success" ? "success" : "default"}
+              tone={motivoFeedback.tone === "success" ?"success" : "default"}
             >
               {motivoFeedback.message}
             </Alert>
           ) : null}
 
-          {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
+          {errorMessage ?<Alert tone="error">{errorMessage}</Alert> : null}
 
           <form
             className="mt-7 space-y-5 lg:[@media_(max-height:760px)]:mt-5 lg:[@media_(max-height:760px)]:space-y-4"
@@ -136,7 +136,7 @@ export function LoginFormPanel({
                   "linear-gradient(135deg, var(--me-purple-dark), var(--me-purple))",
               }}
             >
-              {isSubmitting ? "Entrando..." : "Entrar"}
+              {isSubmitting ?"Entrando..." : "Entrar"}
             </Button>
           </form>
 

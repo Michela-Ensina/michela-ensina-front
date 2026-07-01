@@ -19,7 +19,7 @@ export function MetricTile({ label, value, detail, icon }: MetricTileProps) {
           </p>
           <p className="mt-2 text-3xl font-bold leading-none">{value}</p>
         </div>
-        {icon ? (
+        {icon ?(
           <div
             className="flex size-10 shrink-0 items-center justify-center rounded-xl"
             style={{

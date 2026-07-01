@@ -29,7 +29,7 @@ export function MaterialsStudyList({ materials, totalMaterials, progressItems }:
         </div>
       </div>
 
-      {materials.length > 0 ? (
+      {materials.length > 0 ?(
         <div className="space-y-3 py-4">
           {materials.map((material) => (
             <MaterialListItem key={material.id} material={material} progressItems={progressItems} />

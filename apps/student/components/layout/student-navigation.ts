@@ -44,7 +44,7 @@ const PAGE_META: Record<string, StudentPageMeta> = {
 };
 
 export function getStudentNavItems(isAdmin: boolean): StudentNavItem[] {
-  return isAdmin ? [...NAV_ITEMS, ADMIN_NAV_ITEM] : NAV_ITEMS;
+  return isAdmin ?[...NAV_ITEMS, ADMIN_NAV_ITEM] : NAV_ITEMS;
 }
 
 export function getStudentPageMeta(pathname: string): StudentPageMeta {

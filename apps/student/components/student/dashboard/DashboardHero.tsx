@@ -40,10 +40,10 @@ export function DashboardHero({
         <div className="max-w-3xl">
           <div className="flex flex-wrap items-center gap-2">
             <StatusBadge
-              label={student.is_active ? "Acesso ativo" : "Acesso limitado"}
-              tone={student.is_active ? "concluído" : "bloqueado"}
+              label={student.is_active ?"Acesso ativo" : "Acesso limitado"}
+              tone={student.is_active ?"concluído" : "bloqueado"}
             />
-            {student.must_change_password ? (
+            {student.must_change_password ?(
               <StatusBadge label="Senha recomendada" tone="em-andamento" />
             ) : null}
           </div>

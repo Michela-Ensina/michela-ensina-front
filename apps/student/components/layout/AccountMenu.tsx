@@ -32,7 +32,7 @@ export function AccountMenu() {
         <span className="hidden min-w-0 text-left sm:block">
           <span className="block max-w-36 truncate text-sm font-semibold">{user?.name ?? "Aluno"}</span>
           <span className="student-muted-text block max-w-36 truncate text-xs">
-            {user?.email ?? "Área do aluno"}
+            {user?.email ?? "?rea do aluno"}
           </span>
         </span>
       </summary>

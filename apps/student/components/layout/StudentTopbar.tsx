@@ -25,7 +25,7 @@ export function StudentTopbar({ title, subtitle }: StudentTopbarProps) {
       <div className="relative flex items-center justify-between gap-4">
         <div className="min-w-0">
           <h1 className="text-2xl leading-tight">{title}</h1>
-          {subtitle ? (
+          {subtitle ?(
             <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
               {subtitle}
             </p>

@@ -38,9 +38,9 @@ export function SegmentedControl<TValue extends string>({
               onClick={() => onChange(option.value)}
               className="student-action min-h-9 rounded-xl px-3 text-sm font-semibold"
               style={{
-                color: isActive ? "var(--color-brand-cream)" : "var(--color-text-muted)",
-                backgroundColor: isActive ? "var(--color-secondary)" : "transparent",
-                boxShadow: isActive ? "var(--shadow-sm)" : "none",
+                color: isActive ?"var(--color-brand-cream)" : "var(--color-text-muted)",
+                backgroundColor: isActive ?"var(--color-secondary)" : "transparent",
+                boxShadow: isActive ?"var(--shadow-sm)" : "none",
               }}
             >
               {option.label}

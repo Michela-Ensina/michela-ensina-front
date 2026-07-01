@@ -42,7 +42,7 @@ export function SettingsContent() {
         <SettingRow title="Perfil" description="Informações usadas para identificar sua conta.">
           <div className="flex items-center gap-2 text-sm font-semibold">
             <UserRound size={16} aria-hidden="true" />
-            {user?.name ?? "Não informado"}
+            {user?.name ?? "N?o informado"}
           </div>
         </SettingRow>
 

@@ -30,7 +30,7 @@ export default function EsqueciSenhaPage() {
         </div>
 
         <AuthSubmitButton isSubmitting={forgotPasswordForm.isSubmitting}>
-          {forgotPasswordForm.isSubmitting ? "Enviando..." : "Enviar instruções"}
+          {forgotPasswordForm.isSubmitting ?"Enviando..." : "Enviar instruções"}
         </AuthSubmitButton>
       </form>
     </AuthFormCard>

@@ -42,7 +42,7 @@ export function AdminMaterialsList({
         />
       </div>
 
-      {materials.length > 0 ? (
+      {materials.length > 0 ?(
         <div className="space-y-3 py-4">
           {materials.map((material) => (
             <article
@@ -58,27 +58,27 @@ export function AdminMaterialsList({
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="text-lg leading-tight">{material.title}</h3>
                   <StatusBadge
-                    label={material.is_active ? "Ativo" : "Inativo"}
-                    tone={material.is_active ? "concluído" : "bloqueado"}
+                    label={material.is_active ?"Ativo" : "Inativo"}
+                    tone={material.is_active ?"concluído" : "bloqueado"}
                   />
                 </div>
                 <div className="student-muted-text mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
                   <span>{getMaterialTypeMeta(material.type).label}</span>
-                  {material.attachments?.length ? (
+                  {material.attachments?.length ?(
                     <span className="inline-flex items-center gap-1">
                       <Paperclip size={14} aria-hidden="true" />
                       {material.attachments.length} anexo
-                      {material.attachments.length > 1 ? "s" : ""}
+                      {material.attachments.length > 1 ?"s" : ""}
                     </span>
                   ) : null}
-                  {formatReleaseDate(material.released_at) ? (
+                  {formatReleaseDate(material.released_at) ?(
                     <span className="inline-flex items-center gap-1">
                       <CalendarClock size={14} aria-hidden="true" />
                       {formatReleaseDate(material.released_at)}
                     </span>
                   ) : null}
                 </div>
-                {material.description ? (
+                {material.description ?(
                   <p className="student-muted-text mt-2 line-clamp-2 text-sm">
                     {material.description}
                   </p>

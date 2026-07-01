@@ -23,7 +23,7 @@ export function resolveYoutubeEmbedUrl(rawUrl: string): string | null {
     if (host === "youtube.com" || host === "m.youtube.com") {
       if (parsed.pathname === "/watch") {
         const videoId = parsed.searchParams.get("v");
-        return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+        return videoId ?`https://www.youtube.com/embed/${videoId}` : null;
       }
 
       const pathParts = parsed.pathname.split("/").filter(Boolean);
@@ -35,7 +35,7 @@ export function resolveYoutubeEmbedUrl(rawUrl: string): string | null {
 
     if (host === "youtu.be") {
       const videoId = parsed.pathname.split("/").filter(Boolean)[0];
-      return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+      return videoId ?`https://www.youtube.com/embed/${videoId}` : null;
     }
   } catch {
     return null;

@@ -50,7 +50,7 @@ export default function PrimeiroAcessoPage() {
         </div>
 
         <AuthSubmitButton isSubmitting={firstAccessForm.isSubmitting}>
-          {firstAccessForm.isSubmitting ? "Concluindo..." : "Concluir primeiro acesso"}
+          {firstAccessForm.isSubmitting ?"Concluindo..." : "Concluir primeiro acesso"}
         </AuthSubmitButton>
       </form>
     </AuthFormCard>

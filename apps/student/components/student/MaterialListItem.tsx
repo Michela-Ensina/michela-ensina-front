@@ -50,7 +50,7 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
         <h3 className="mt-1 text-lg leading-tight">{material.title}</h3>
         {density === "comfortable" ? (
           <p className="student-muted-text mt-1 max-w-2xl text-sm">
-            {material.description ?? "Material disponível para estudo."}
+            {material.description ?? "Material dispon?vel para estudo."}
           </p>
         ) : null}
       </div>
@@ -66,7 +66,7 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
           backgroundColor: "var(--color-secondary)",
         }}
       >
-        {status.tone === "concluído" ? "Revisar" : "Continuar"}
+        {status.tone === "concluído" ?"Revisar" : "Continuar"}
       </Link>
     </article>
   );

@@ -41,7 +41,7 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
         </p>
         <h3 className="mt-2 text-xl leading-tight">{material.title}</h3>
         <p className="student-muted-text mt-2 text-sm">
-          {material.description ?? "Material disponível para estudo."}
+          {material.description ?? "Material dispon?vel para estudo."}
         </p>
       </div>
 
@@ -50,7 +50,7 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
         className="student-text-action -mx-2 mt-5 w-fit rounded-lg px-2 py-1 text-sm font-semibold"
         style={{ color: accent.color }}
       >
-        {status.tone === "concluído" ? "Revisar material" : "Continuar estudando"}
+        {status.tone === "concluído" ?"Revisar material" : "Continuar estudando"}
       </Link>
     </SurfaceCard>
   );

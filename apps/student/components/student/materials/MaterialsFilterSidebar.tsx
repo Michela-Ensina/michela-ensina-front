@@ -64,7 +64,7 @@ export function MaterialsFilterSidebar({
         </div>
       </SurfaceCard>
 
-      {featuredMaterial ? (
+      {featuredMaterial ?(
         <div>
           <p className="student-muted-text mb-3 text-sm font-semibold">
             Em destaque

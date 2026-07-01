@@ -45,7 +45,7 @@ export function MaterialViewer({
       className={cn(
         "overflow-hidden border",
         isTheaterMode
-          ? "rounded-[var(--radius-md)] border-[rgb(228_206_244_/_0.14)] bg-[rgb(13_7_24)] shadow-[0_18px_56px_rgb(10_5_20_/_0.34)]"
+          ?"rounded-[var(--radius-md)] border-[rgb(228_206_244_/_0.14)] bg-[rgb(13_7_24)] shadow-[0_18px_56px_rgb(10_5_20_/_0.34)]"
           : "rounded-[var(--radius-lg)]",
       )}
       style={
@@ -57,9 +57,9 @@ export function MaterialViewer({
             }
       }
     >
-      {material.type === "video" ? (
+      {material.type === "video" ?(
         <VideoMaterialViewer title={material.title} url={material.url} />
-      ) : shouldRenderPdfViewer ? (
+      ) : shouldRenderPdfViewer ?(
         <PdfMaterialViewer
           key={pdfUrl}
           title={material.title}
@@ -83,10 +83,10 @@ export function MaterialViewer({
             <h3 className="mt-4 text-2xl">{typeLabel}</h3>
             <p className="student-muted-text mx-auto mt-2 max-w-md text-sm">
               {canOpenExternalMaterial
-                ? "Este conteúdo está disponível em um link externo."
+                ?"Este conteúdo está disponível em um link externo."
                 : "Este arquivo principal ainda não possui visualização interna para este formato."}
             </p>
-            {canOpenExternalMaterial ? (
+            {canOpenExternalMaterial ?(
               <a
                 href={fileUrl}
                 target="_blank"

@@ -29,9 +29,9 @@ export function StudentMobileNav({ items, currentPath }: StudentMobileNavProps) 
                 href={item.href}
                 className="student-action student-hover-surface flex min-h-12 flex-col items-center justify-center gap-1 rounded-lg px-2 py-1.5 text-center text-[11px] font-semibold"
                 style={{
-                  color: isActive ? "var(--color-brand-cream)" : "var(--color-text-muted)",
+                  color: isActive ?"var(--color-brand-cream)" : "var(--color-text-muted)",
                   backgroundColor: isActive
-                    ? "var(--color-secondary)"
+                    ?"var(--color-secondary)"
                     : "transparent",
                 }}
               >

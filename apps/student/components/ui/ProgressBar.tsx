@@ -8,7 +8,7 @@ export function ProgressBar({ value, label }: ProgressBarProps) {
 
   return (
     <div className="space-y-2">
-      {label ? (
+      {label ?(
         <div className="flex items-center justify-between gap-3 text-xs font-semibold" style={{ color: "var(--color-text-muted)" }}>
           <span>{label}</span>
           <span>{normalizedValue}%</span>

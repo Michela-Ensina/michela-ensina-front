@@ -18,12 +18,12 @@ export function SettingsAccountCard({ user }: SettingsAccountCardProps) {
         <div className="min-w-0">
           <p className="font-semibold">{user?.name ?? "Aluno"}</p>
           <p className="student-muted-text truncate text-sm">
-            {user?.email ?? "Área do aluno"}
+            {user?.email ?? "?rea do aluno"}
           </p>
         </div>
       </div>
       <div className="mt-4 flex flex-wrap gap-2">
-        <StatusBadge label={userStatusLabel} tone={user?.is_active ? "concluído" : "bloqueado"} />
+        <StatusBadge label={userStatusLabel} tone={user?.is_active ?"concluído" : "bloqueado"} />
         {user?.must_change_password ? (
           <StatusBadge label="Troca de senha obrigatória" tone="em-andamento" />
         ) : null}

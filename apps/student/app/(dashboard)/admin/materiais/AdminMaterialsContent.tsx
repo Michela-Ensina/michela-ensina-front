@@ -34,8 +34,8 @@ export function AdminMaterialsContent() {
     );
   }
 
-  if (manager.errorMessage && manager.materials.length === 0) {
-    return <LoadErrorCard message={manager.errorMessage} onRetry={() => void manager.loadMaterials()} />;
+  if (manager.loadErrorMessage && manager.materials.length === 0) {
+    return <LoadErrorCard message={manager.loadErrorMessage} onRetry={() => void manager.loadMaterials()} />;
   }
 
   return (

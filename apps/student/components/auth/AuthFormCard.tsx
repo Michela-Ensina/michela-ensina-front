@@ -28,8 +28,8 @@ export function AuthFormCard({
       <SurfaceCard className="mx-auto w-full max-w-md p-6 sm:p-7">
         <AuthCardHeader title={title} description={description} />
 
-        {errorMessage ? <Alert tone="error">{errorMessage}</Alert> : null}
-        {successMessage ? <Alert tone="success">{successMessage}</Alert> : null}
+        {errorMessage ?<Alert tone="error">{errorMessage}</Alert> : null}
+        {successMessage ?<Alert tone="success">{successMessage}</Alert> : null}
 
         {children}
 

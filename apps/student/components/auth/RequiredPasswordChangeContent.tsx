@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
+import { STRONG_PASSWORD_DESCRIPTION } from "@/lib/auth/password-change";
 import { useAuth } from "@/lib/auth/use-auth";
 import { useTheme } from "@/lib/theme/use-theme";
 import { useRequiredPasswordChangeForm } from "./use-required-password-change-form";
@@ -91,7 +92,7 @@ export function RequiredPasswordChangeContent() {
           </div>
           <h2 className="mt-3 text-3xl leading-tight">Crie sua nova senha</h2>
           <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
-            Use pelo menos 8 caracteres e escolha uma senha diferente da atual.
+            {STRONG_PASSWORD_DESCRIPTION} Escolha uma senha diferente da atual.
           </p>
 
           {passwordForm.errorMessage ? <Alert tone="error">{passwordForm.errorMessage}</Alert> : null}

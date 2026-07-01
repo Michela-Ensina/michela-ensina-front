@@ -10,8 +10,8 @@ type DashboardProgressSummaryProps = {
 function SummaryCount({ label, value, withDivider = false }: { label: string; value: number; withDivider?: boolean }) {
   return (
     <div
-      className={withDivider ? "border-x px-3 py-3" : "px-3 py-3"}
-      style={withDivider ? { borderColor: "var(--color-border)" } : undefined}
+      className={withDivider ?"border-x px-3 py-3" : "px-3 py-3"}
+      style={withDivider ?{ borderColor: "var(--color-border)" } : undefined}
     >
       <p className="text-lg font-bold">{value}</p>
       <p className="student-muted-text text-xs">{label}</p>

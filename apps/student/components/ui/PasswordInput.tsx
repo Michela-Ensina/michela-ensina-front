@@ -23,17 +23,17 @@ export function PasswordInput({
       <Input
         {...props}
         disabled={disabled}
-        type={isVisible ? "text" : "password"}
+        type={isVisible ?"text" : "password"}
         className={cn("pr-11", className)}
       />
       <button
         type="button"
         disabled={disabled}
         className="student-action student-hover-surface student-muted-text absolute right-2 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-lg disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60"
-        aria-label={isVisible ? "Esconder senha" : "Mostrar senha"}
+        aria-label={isVisible ?"Esconder senha" : "Mostrar senha"}
         onClick={onToggleVisibility}
       >
-        {isVisible ? (
+        {isVisible ?(
           <EyeOff size={17} aria-hidden="true" />
         ) : (
           <Eye size={17} aria-hidden="true" />

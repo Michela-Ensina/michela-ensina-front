@@ -1,4 +1,5 @@
 import { isValidEmail } from "@/lib/utils/validation";
+import { getStrongPasswordValidationError } from "@/lib/auth/password-change";
 
 type PasswordPairValidation = {
   password: string;
@@ -39,8 +40,11 @@ export function validatePasswordPair({
     return "Confirme a nova senha.";
   }
 
-  if (password.length < 8) {
-    return minLengthMessage;
+  const strongPasswordError = getStrongPasswordValidationError(password);
+  if (strongPasswordError) {
+    return strongPasswordError === "A senha deve ter pelo menos 8 caracteres."
+      ? minLengthMessage
+      : strongPasswordError;
   }
 
   if (password !== passwordConfirmation) {

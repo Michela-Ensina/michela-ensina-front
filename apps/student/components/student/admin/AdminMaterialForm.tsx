@@ -51,11 +51,11 @@ export function AdminMaterialForm({
   return (
     <SurfaceCard>
       <SectionHeader
-        title={selectedMaterial ? "Editar material" : "Novo material"}
+        title={selectedMaterial ?"Editar material" : "Novo material"}
         description="Cadastre vídeos do YouTube, PDFs de leitura ou anexos da fase 1."
       />
 
-      {errorMessage ? (
+      {errorMessage ?(
         <p className="student-muted-text mt-4 text-sm">{errorMessage}</p>
       ) : null}
 
@@ -108,7 +108,7 @@ export function AdminMaterialForm({
           </Button>
           <Button type="submit" variant="primary" className="gap-2" disabled={isSaving || isUploading}>
             <Plus size={16} aria-hidden="true" />
-            {isSaving ? "Salvando..." : selectedMaterial ? "Atualizar" : "Criar"}
+            {isSaving ?"Salvando..." : selectedMaterial ?"Atualizar" : "Criar"}
           </Button>
         </div>
       </form>

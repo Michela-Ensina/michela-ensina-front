@@ -73,7 +73,7 @@ export function AdminMaterialUpload({
     materialType === "pdf"
       ? "PDF do material"
       : materialType === "video"
-        ? "Anexo de apoio ao vídeo"
+        ?"Anexo de apoio ao vídeo"
         : "Arquivo do anexo";
 
   return (
@@ -134,7 +134,7 @@ export function AdminMaterialUpload({
       ) : null}
       <p className="student-muted-text mt-3 text-xs">
         {replacesPrimaryFile
-          ? "O arquivo selecionado será enviado ao salvar. Enviar outro arquivo substitui o principal deste material."
+          ?"O arquivo selecionado será enviado ao salvar. Enviar outro arquivo substitui o principal deste material."
           : "O arquivo selecionado será enviado ao salvar. Use o envio manual para adicionar mais apoios antes de criar."}
       </p>
       <p className="student-muted-text mt-1 text-xs">{uploadHelpText}</p>

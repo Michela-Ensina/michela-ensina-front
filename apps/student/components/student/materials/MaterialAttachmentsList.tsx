@@ -38,7 +38,7 @@ function AttachmentCard({
 }: AttachmentCardProps) {
   const size = formatFileSize(attachment.size);
   const isPdf = isPdfAttachment(attachment);
-  const Icon = isPdf ? FileText : Paperclip;
+  const Icon = isPdf ?FileText : Paperclip;
   const content = (
     <>
       <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-[var(--color-surface-soft)] text-[var(--color-primary)]">

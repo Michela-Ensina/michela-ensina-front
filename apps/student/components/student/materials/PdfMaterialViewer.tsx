@@ -193,7 +193,7 @@ export function PdfMaterialViewer({
       aria-label={title}
       className={
         isTheaterMode
-          ? "max-h-[min(72vh,760px)] min-h-[520px] overflow-auto bg-[rgb(13_7_24)] p-4 sm:p-6"
+          ?"max-h-[min(72vh,760px)] min-h-[520px] overflow-auto bg-[rgb(13_7_24)] p-4 sm:p-6"
           : "h-[72vh] min-h-[520px] overflow-auto bg-[var(--color-surface)] p-4 sm:p-6"
       }
       onContextMenu={(event) => event.preventDefault()}

@@ -5,7 +5,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/PasswordInput";
-import type { PasswordVisibilityField } from "@/lib/auth/password-change";
+import { STRONG_PASSWORD_DESCRIPTION, type PasswordVisibilityField } from "@/lib/auth/password-change";
 
 type SettingsPasswordDialogProps = {
   currentPassword: string;
@@ -57,7 +57,7 @@ export function SettingsPasswordDialog({
               Trocar senha
             </h2>
             <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
-              Use uma senha forte e diferente da senha atual.
+              {STRONG_PASSWORD_DESCRIPTION}
             </p>
           </div>
           <button

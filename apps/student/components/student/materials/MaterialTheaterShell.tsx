@@ -77,11 +77,11 @@ export function MaterialTheaterShell({
       className={cn(
         "mx-auto w-full pb-8",
         isTheaterMode
-          ? "max-w-none space-y-4"
+          ?"max-w-none space-y-4"
           : "max-w-7xl space-y-6",
       )}
     >
-      <div className={cn("flex flex-wrap items-center justify-between gap-3", isTheaterMode ? "hidden" : "")}>
+      <div className={cn("flex flex-wrap items-center justify-between gap-3", isTheaterMode ?"hidden" : "")}>
         <div className="flex flex-wrap items-center gap-2">
           <Link
             href="/materiais"
@@ -94,7 +94,7 @@ export function MaterialTheaterShell({
         {actions}
       </div>
 
-      {isTheaterMode ? (
+      {isTheaterMode ?(
         <div className="student-theater-header relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen border-y">
           <div className="mx-auto flex min-h-14 w-full max-w-[96rem] items-center justify-between gap-3 px-4 sm:px-6">
             <div className="flex min-w-0 items-center gap-3">
