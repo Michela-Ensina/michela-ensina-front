@@ -225,7 +225,7 @@ export function PdfMaterialViewer({
       onContextMenu={(event) => event.preventDefault()}
       role="region"
     >
-      <div className="sticky top-0 z-10 mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--color-border)] bg-[var(--color-surface)]/95 pb-4 backdrop-blur">
+      <div className="sticky top-0 z-20 -mx-4 -mt-4 mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-4 shadow-[0_10px_24px_rgb(13_7_24_/_0.24)] sm:-mx-6 sm:-mt-6 sm:px-6">
         <div>
           <p className="text-sm font-semibold text-[var(--color-text)]">
             Visualização do PDF
