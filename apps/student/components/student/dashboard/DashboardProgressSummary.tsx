@@ -19,6 +19,10 @@ function SummaryCount({ label, value, withDivider = false }: { label: string; va
   );
 }
 
+function getCompletedCountLabel(count: number) {
+  return count === 1 ? "Concluído" : "Concluídos";
+}
+
 export function DashboardProgressSummary({
   percentage,
   viewedCount,
@@ -35,7 +39,10 @@ export function DashboardProgressSummary({
           backgroundColor: "var(--color-surface)",
         }}
       >
-        <SummaryCount label="Concluídos" value={viewedCount} />
+        <SummaryCount
+          label={getCompletedCountLabel(viewedCount)}
+          value={viewedCount}
+        />
         <SummaryCount label="Em aberto" value={pendingCount} withDivider />
         <SummaryCount label="Materiais" value={totalMaterials} />
       </div>

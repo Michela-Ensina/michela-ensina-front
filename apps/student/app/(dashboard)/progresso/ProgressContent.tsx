@@ -21,6 +21,10 @@ type ProgressMaterialGroups = {
   openMaterials: Material[];
 };
 
+function getCompletedCountLabel(count: number) {
+  return count === 1 ? "Concluído" : "Concluídos";
+}
+
 function groupMaterialsByProgress(materials: Material[], progressItems: ProgressItem[]): ProgressMaterialGroups {
   return materials.reduce<ProgressMaterialGroups>(
     (groups, material) => {
@@ -86,7 +90,7 @@ export function ProgressContent() {
             <div className="mt-5 grid grid-cols-2 gap-3">
               <ProgressCountTile
                 count={completedMaterials.length}
-                label="Concluídos"
+                label={getCompletedCountLabel(completedMaterials.length)}
                 accentColor="#48b08c"
               />
               <ProgressCountTile

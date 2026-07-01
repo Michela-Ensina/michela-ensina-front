@@ -1,7 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FileText, Maximize2, RotateCcw, ZoomIn, ZoomOut } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  Maximize2,
+  Minimize2,
+  RotateCcw,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import * as pdfjs from "pdfjs-dist";
 import type { PDFDocumentProxy, RenderTask } from "pdfjs-dist";
 
@@ -153,6 +162,7 @@ export function PdfMaterialViewer({
     message: null,
   });
   const [fitMode, setFitMode] = useState<PdfFitMode>("page");
+  const [currentPage, setCurrentPage] = useState(1);
   const [viewerHeight, setViewerHeight] = useState(0);
   const [zoom, setZoom] = useState(PDF_DEFAULT_ZOOM);
 
@@ -190,6 +200,7 @@ export function PdfMaterialViewer({
           pageCount: nextDocument.numPages,
           message: null,
         });
+        setCurrentPage(1);
       })
       .catch((error: unknown) => {
         if (controller.signal.aborted) return;
@@ -238,6 +249,8 @@ export function PdfMaterialViewer({
 
   const pageMaxWidth = isTheaterMode ? 1320 : 1120;
   const zoomPercent = Math.round(zoom * 100);
+  const canGoToPreviousPage = currentPage > 1;
+  const canGoToNextPage = currentPage < loadState.pageCount;
 
   return (
     <div
@@ -260,6 +273,41 @@ export function PdfMaterialViewer({
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {fitMode === "page" ? (
+            <div className="flex items-center gap-1 rounded-full border border-[var(--color-border)] px-1 py-1">
+              <Button
+                aria-label="Página anterior"
+                disabled={!canGoToPreviousPage}
+                onClick={() =>
+                  setCurrentPage((page) => Math.max(1, page - 1))
+                }
+                size="icon"
+                title="Página anterior"
+                type="button"
+                variant="ghost"
+              >
+                <ChevronLeft size={17} aria-hidden="true" />
+              </Button>
+              <span className="min-w-16 px-2 text-center text-xs font-semibold text-[var(--color-text)]">
+                {currentPage}/{loadState.pageCount}
+              </span>
+              <Button
+                aria-label="Próxima página"
+                disabled={!canGoToNextPage}
+                onClick={() =>
+                  setCurrentPage((page) =>
+                    Math.min(loadState.pageCount, page + 1),
+                  )
+                }
+                size="icon"
+                title="Próxima página"
+                type="button"
+                variant="ghost"
+              >
+                <ChevronRight size={17} aria-hidden="true" />
+              </Button>
+            </div>
+          ) : null}
           <Button
             aria-label="Diminuir zoom"
             disabled={zoom <= PDF_MIN_ZOOM}
@@ -281,14 +329,24 @@ export function PdfMaterialViewer({
           <Button
             aria-pressed={fitMode === "page"}
             className="gap-2"
-            onClick={() => setFitMode((current) => (current === "page" ? "width" : "page"))}
+            onClick={() =>
+              setFitMode((current) => (current === "page" ? "width" : "page"))
+            }
             size="sm"
-            title={fitMode === "page" ? "Ajustar pela largura" : "Ver página inteira"}
+            title={
+              fitMode === "page"
+                ? "Preencher pela largura"
+                : "Ver página inteira"
+            }
             type="button"
             variant="outline"
           >
-            <Maximize2 size={16} aria-hidden="true" />
-            {fitMode === "page" ? "Página inteira" : "Largura"}
+            {fitMode === "page" ? (
+              <Maximize2 size={16} aria-hidden="true" />
+            ) : (
+              <Minimize2 size={16} aria-hidden="true" />
+            )}
+            {fitMode === "page" ? "Preencher largura" : "Página inteira"}
           </Button>
           <Button
             aria-label="Aumentar zoom"
@@ -307,27 +365,36 @@ export function PdfMaterialViewer({
           </Button>
           <Button
             className="gap-2"
-            onClick={() => setZoom(PDF_DEFAULT_ZOOM)}
+            onClick={() => {
+              setFitMode("page");
+              setZoom(PDF_DEFAULT_ZOOM);
+            }}
             size="sm"
-            title="Voltar ao ajuste padrão"
+            title="Voltar para página inteira em 100%"
             type="button"
             variant="outline"
           >
             <RotateCcw size={16} aria-hidden="true" />
-            Ajustar
+            Página 100%
           </Button>
         </div>
       </div>
       <div ref={scrollAreaRef} className="min-h-0 flex-1 overflow-auto p-2 sm:p-3">
         <div className="mx-auto grid w-full gap-5">
-          {Array.from({ length: loadState.pageCount }, (_, index) => (
+          {(fitMode === "page"
+            ? [currentPage]
+            : Array.from(
+                { length: loadState.pageCount },
+                (_, index) => index + 1,
+              )
+          ).map((pageNumber) => (
             <PdfCanvasPage
-              key={index + 1}
+              key={pageNumber}
               availableHeight={viewerHeight}
               document={loadState.document}
               fitMode={fitMode}
               maxPageWidth={pageMaxWidth}
-              pageNumber={index + 1}
+              pageNumber={pageNumber}
               zoom={zoom}
             />
           ))}
