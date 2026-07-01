@@ -72,34 +72,51 @@ export function FinalCtaSection({ isReleased = false }: FinalCtaSectionProps) {
                 src="/assets/brand/graphics/estrela.svg"
                 width={120}
               />
-              <Magnet
-                className="w-full sm:w-auto will-change-transform"
-                magnetStrength={24}
-                padding={40}
-              >
-                <ButtonLink
-                  className="w-full justify-center sm:w-auto"
-                  href={isReleased ? STUDENT_AREA_URL : "#captura"}
-                  rel={isReleased ? "noopener noreferrer" : undefined}
-                  size="lg"
-                  target={isReleased ? "_blank" : undefined}
-                  variant="primary"
-                >
-                  {isReleased ? "ÁREA DO ALUNO" : "Quero receber o aviso"}
-                </ButtonLink>
-              </Magnet>
               {isReleased ? (
-                <ButtonLink
-                  className="ml-0 mt-3 w-full justify-center sm:ml-3 sm:mt-0 sm:w-auto"
-                  href={MODO_FLUENTE_HOTMART_URL}
-                  rel="noopener noreferrer"
-                  size="lg"
-                  target="_blank"
-                  variant="outline"
+                <>
+                  <Magnet
+                    className="w-full sm:w-auto will-change-transform"
+                    magnetStrength={24}
+                    padding={40}
+                  >
+                    <ButtonLink
+                      className="w-full justify-center sm:w-auto"
+                      href={MODO_FLUENTE_HOTMART_URL}
+                      rel="noopener noreferrer"
+                      size="lg"
+                      target="_blank"
+                      variant="primary"
+                    >
+                      Comprar o Modo Fluente
+                    </ButtonLink>
+                  </Magnet>
+                  <ButtonLink
+                    className="ml-0 mt-3 w-full justify-center sm:ml-3 sm:mt-0 sm:w-auto"
+                    href={STUDENT_AREA_URL}
+                    rel="noopener noreferrer"
+                    size="lg"
+                    target="_blank"
+                    variant="outline"
+                  >
+                    ÁREA DO ALUNO
+                  </ButtonLink>
+                </>
+              ) : (
+                <Magnet
+                  className="w-full sm:w-auto will-change-transform"
+                  magnetStrength={24}
+                  padding={40}
                 >
-                  Comprar o Modo Fluente
-                </ButtonLink>
-              ) : null}
+                  <ButtonLink
+                    className="w-full justify-center sm:w-auto"
+                    href="#captura"
+                    size="lg"
+                    variant="primary"
+                  >
+                    Quero receber o aviso
+                  </ButtonLink>
+                </Magnet>
+              )}
               <Image
                 alt="Elemento gráfico da marca"
                 aria-hidden

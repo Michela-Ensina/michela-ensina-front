@@ -299,24 +299,24 @@ export function LeadCaptureSection({
                         >
                           <ButtonLink
                             className="h-14 w-full justify-center rounded-2xl text-base sm:h-16"
-                            href={STUDENT_AREA_URL}
+                            href={MODO_FLUENTE_HOTMART_URL}
                             rel="noopener noreferrer"
                             size="lg"
                             target="_blank"
                             variant="primary"
                           >
-                            ÁREA DO ALUNO
+                            Comprar o Modo Fluente
                           </ButtonLink>
                         </Magnet>
                         <ButtonLink
                           className="h-14 w-full justify-center rounded-2xl text-base sm:h-16"
-                          href={MODO_FLUENTE_HOTMART_URL}
+                          href={STUDENT_AREA_URL}
                           rel="noopener noreferrer"
                           size="lg"
                           target="_blank"
                           variant="outline"
                         >
-                          Comprar o Modo Fluente
+                          ÁREA DO ALUNO
                         </ButtonLink>
                       </div>
                     </div>

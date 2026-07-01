@@ -227,34 +227,51 @@ export function HeroSection({ isReleased = false }: HeroSectionProps) {
 
             <Reveal delay={0.14} variant="fade-up">
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                {isReleased ? (
+                  <ButtonLink
+                    className="relative z-10 w-full justify-center sm:w-auto"
+                    href={STUDENT_AREA_URL}
+                    rel="noopener noreferrer"
+                    size="lg"
+                    target="_blank"
+                    variant="outline"
+                  >
+                    ÁREA DO ALUNO
+                  </ButtonLink>
+                ) : (
+                  <Magnet
+                    className="w-full will-change-transform sm:w-auto"
+                    magnetStrength={24}
+                    padding={40}
+                  >
+                    <ButtonLink
+                      className="w-full justify-center whitespace-normal text-center leading-snug sm:w-auto"
+                      href={HERO_COPY.primaryCtaHref}
+                      size="lg"
+                      variant="primary"
+                    >
+                      Quero ser avisado no lançamento
+                    </ButtonLink>
+                  </Magnet>
+                )}
                 <Magnet
                   className="w-full will-change-transform sm:w-auto"
                   magnetStrength={24}
                   padding={40}
                 >
                   <ButtonLink
-                    className="w-full justify-center whitespace-normal text-center leading-snug sm:w-auto"
-                    href={isReleased ? STUDENT_AREA_URL : HERO_COPY.primaryCtaHref}
-                    rel={isReleased ? "noopener noreferrer" : undefined}
+                    className="relative z-10 w-full justify-center sm:w-auto"
+                    href={MODO_FLUENTE_HOTMART_URL}
+                    rel="noopener noreferrer"
                     size="lg"
-                    target={isReleased ? "_blank" : undefined}
-                    variant="primary"
+                    target="_blank"
+                    variant={isReleased ? "primary" : "outline"}
                   >
                     {isReleased
-                      ? "ÁREA DO ALUNO"
-                      : "Quero ser avisado no lançamento"}
+                      ? "Comprar o Modo Fluente"
+                      : "Garanta o seu planner"}
                   </ButtonLink>
                 </Magnet>
-                <ButtonLink
-                  className="relative z-10 w-full justify-center sm:w-auto"
-                  href={MODO_FLUENTE_HOTMART_URL}
-                  rel="noopener noreferrer"
-                  size="lg"
-                  target="_blank"
-                  variant="outline"
-                >
-                  {isReleased ? "Comprar o Modo Fluente" : "Garanta o seu planner"}
-                </ButtonLink>
               </div>
             </Reveal>
 
