@@ -48,7 +48,7 @@ export function toAdminMaterialPayload(form: MaterialFormState): AdminMaterialPa
     type: form.type,
     url: form.url.trim(),
     order: Number(form.order || 0),
-    released_at: form.releasedAt || null,
+    released_at: form.releasedAt || new Date().toISOString(),
     is_active: form.isActive,
     attachment_ids: uniqueAttachmentIds(form.attachmentIds),
   };

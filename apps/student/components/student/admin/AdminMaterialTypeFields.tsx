@@ -104,7 +104,9 @@ export function AdminMaterialTypeFields({
           value={form.releasedAt}
           onChange={(value) => onFieldChange("releasedAt", value)}
         />
-        <p className="student-muted-text mt-1 text-xs">Deixe em branco para liberar imediatamente.</p>
+        <p className="student-muted-text mt-1 text-xs">
+          Se ficar em branco, o material será liberado imediatamente ao salvar.
+        </p>
       </div>
     </>
   );

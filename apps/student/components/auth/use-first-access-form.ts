@@ -10,14 +10,30 @@ import {
   validateRequiredToken,
 } from "./password-recovery-validation";
 
-export function useFirstAccessForm() {
+type FirstAccessPasswordField = "password" | "passwordConfirmation";
+
+export function useFirstAccessForm(initialToken = "") {
   const router = useRouter();
-  const [token, setToken] = useState("");
+  const tokenFromUrl = initialToken.trim();
+  const [token, setToken] = useState(tokenFromUrl);
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [visiblePasswordFields, setVisiblePasswordFields] = useState<
+    Record<FirstAccessPasswordField, boolean>
+  >({
+    password: false,
+    passwordConfirmation: false,
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  function togglePasswordVisibility(field: FirstAccessPasswordField) {
+    setVisiblePasswordFields((current) => ({
+      ...current,
+      [field]: !current[field],
+    }));
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -61,6 +77,7 @@ export function useFirstAccessForm() {
     errorMessage,
     handleSubmit,
     isSubmitting,
+    isTokenLocked: Boolean(tokenFromUrl),
     password,
     passwordConfirmation,
     setPassword,
@@ -68,5 +85,7 @@ export function useFirstAccessForm() {
     setToken,
     successMessage,
     token,
+    togglePasswordVisibility,
+    visiblePasswordFields,
   };
 }
