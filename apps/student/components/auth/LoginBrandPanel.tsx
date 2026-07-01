@@ -8,14 +8,17 @@ const loginHighlights = [
   {
     icon: FileText,
     label: "Materiais do curso",
+    description: "Acesse os conteúdos liberados para seus estudos.",
   },
   {
     icon: CheckCircle2,
     label: "Progresso dos estudos",
+    description: "Acompanhe o que já foi concluído.",
   },
   {
     icon: Settings,
     label: "Conta do aluno",
+    description: "Gerencie seus dados, senha e preferências.",
   },
 ];
 
@@ -77,18 +80,28 @@ function LoginBrandDivider() {
 
 function LoginHighlightList() {
   return (
-    <div className="mt-10 grid w-full max-w-sm gap-2.5 lg:[@media_(max-height:760px)]:mt-7">
-      {loginHighlights.map(({ icon: Icon, label }) => (
-        <div
-          key={label}
-          className="flex items-center gap-3 rounded-2xl border border-white/14 bg-white/13 px-4 py-3 text-left text-sm font-semibold text-white shadow-[inset_0_1px_0_rgb(255_255_255_/_0.13)]"
-        >
-          <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-white/14 text-white/90">
-            <Icon size={17} aria-hidden="true" />
-          </span>
-          <span className="min-w-0">{label}</span>
-        </div>
-      ))}
+    <div className="mt-10 w-full max-w-sm rounded-2xl border border-white/14 bg-white/11 p-4 text-left shadow-[inset_0_1px_0_rgb(255_255_255_/_0.12)] lg:[@media_(max-height:760px)]:mt-7">
+      <p className="text-sm font-semibold text-white">
+        O que você encontra por aqui
+      </p>
+
+      <div className="mt-3 divide-y divide-white/12">
+        {loginHighlights.map(({ icon: Icon, label, description }) => (
+          <div key={label} className="flex gap-3 py-3 first:pt-0 last:pb-0">
+            <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-xl bg-white/12 text-white/88">
+              <Icon size={17} aria-hidden="true" />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-sm font-semibold text-white">
+                {label}
+              </span>
+              <span className="mt-0.5 block text-xs leading-5 text-white/72">
+                {description}
+              </span>
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
