@@ -2,7 +2,7 @@ import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 
 import { HERO_COPY, PRODUCT_INFO } from "@/data/landing";
-import { MODO_FLUENTE_HOTMART_URL, STUDENT_AREA_URL } from "@/lib/release";
+import { MODO_FLUENTE_HOTMART_URL } from "@/lib/release";
 
 import { AnimatedBrandStroke } from "@/components/brand/AnimatedBrandStroke";
 import { HeroEbookCard } from "@/components/sections/landing/HeroEbookCard";
@@ -227,18 +227,7 @@ export function HeroSection({ isReleased = false }: HeroSectionProps) {
 
             <Reveal delay={0.14} variant="fade-up">
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                {isReleased ? (
-                  <ButtonLink
-                    className="relative z-10 w-full justify-center sm:w-auto"
-                    href={STUDENT_AREA_URL}
-                    rel="noopener noreferrer"
-                    size="lg"
-                    target="_blank"
-                    variant="outline"
-                  >
-                    ÁREA DO ALUNO
-                  </ButtonLink>
-                ) : (
+                {isReleased ? null : (
                   <Magnet
                     className="w-full will-change-transform sm:w-auto"
                     magnetStrength={24}

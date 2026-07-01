@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 import { LEAD_CAPTURE_COPY } from "@/data/landing";
 import { submitWaitlist } from "@/lib/api/waitlist";
-import { MODO_FLUENTE_HOTMART_URL, STUDENT_AREA_URL } from "@/lib/release";
+import { MODO_FLUENTE_HOTMART_URL } from "@/lib/release";
 
 import { Magnet } from "@/components/motion/Magnet";
 import { Reveal } from "@/components/motion/Reveal";
@@ -308,16 +308,6 @@ export function LeadCaptureSection({
                             Garanta o seu
                           </ButtonLink>
                         </Magnet>
-                        <ButtonLink
-                          className="h-14 w-full justify-center rounded-2xl text-base sm:h-16"
-                          href={STUDENT_AREA_URL}
-                          rel="noopener noreferrer"
-                          size="lg"
-                          target="_blank"
-                          variant="outline"
-                        >
-                          ÁREA DO ALUNO
-                        </ButtonLink>
                       </div>
                     </div>
                   </Reveal>

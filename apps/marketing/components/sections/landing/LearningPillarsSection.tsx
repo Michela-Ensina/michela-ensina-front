@@ -24,7 +24,13 @@ const PILLAR_ICONS = [
 
 const PILLAR_LABELS = ["Base", "Direção", "Estratégia", "Prática", "Clareza"];
 
-export function LearningPillarsSection() {
+type LearningPillarsSectionProps = {
+  isReleased?: boolean;
+};
+
+export function LearningPillarsSection({
+  isReleased = false,
+}: LearningPillarsSectionProps) {
   return (
     <Section
       className="relative overflow-hidden bg-background"
@@ -431,7 +437,9 @@ export function LearningPillarsSection() {
               className="h-10 px-4 text-sm sm:h-12 sm:px-6 sm:text-base"
               variant="primary"
             >
-              Quero receber o aviso de lançamento
+              {isReleased
+                ? "Quero aprender um novo idioma"
+                : "Quero receber o aviso de lançamento"}
             </ButtonLink>
           </Reveal>
         </div>

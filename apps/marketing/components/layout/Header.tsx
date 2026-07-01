@@ -18,7 +18,7 @@ export function Header({ isReleased = false }: HeaderProps) {
   const [isVisibleOnMobile, setIsVisibleOnMobile] = useState(true);
   const lastScrollY = useRef(0);
   const ctaHref = isReleased ? STUDENT_AREA_URL : "/#captura";
-  const ctaLabel = isReleased ? "ÁREA DO ALUNO" : "Quero ser avisado";
+  const ctaLabel = isReleased ? "Área do aluno" : "Quero ser avisado";
 
   useEffect(() => {
     const MOBILE_BREAKPOINT = 768;

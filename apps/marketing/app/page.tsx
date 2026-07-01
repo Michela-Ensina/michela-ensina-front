@@ -110,7 +110,7 @@ export default function Home() {
         <HeroSection isReleased={isReleased} />
         <PainPointsSection />
         <GuideIntroSection />
-        <LearningPillarsSection />
+        <LearningPillarsSection isReleased={isReleased} />
         <ProductIncludesSection />
         <PlannerSection />
         <LeadCaptureSection isReleased={isReleased} />
