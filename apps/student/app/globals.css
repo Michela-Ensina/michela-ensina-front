@@ -200,9 +200,9 @@ a {
 }
 
 .student-app-content .student-elevated-surface {
-  border-color: rgb(228 206 244 / 0.16);
-  background-color: color-mix(in oklab, var(--me-lilac-light) 10%, var(--color-surface));
-  box-shadow: 0 8px 26px rgb(10 5 20 / 0.22);
+  border-color: rgb(181 126 220 / 0.2);
+  background-color: rgb(77 35 117 / 0.25);
+  box-shadow: 0 8px 32px rgb(77 35 117 / 0.3);
 }
 
 .student-soft-surface {
@@ -211,8 +211,8 @@ a {
 }
 
 .student-app-content .student-soft-surface {
-  border-color: rgb(228 206 244 / 0.14);
-  background-color: color-mix(in oklab, var(--me-lilac-light) 7%, var(--color-surface-soft));
+  border-color: rgb(181 126 220 / 0.18);
+  background-color: rgb(181 126 220 / 0.08);
 }
 
 .student-hero-surface {
