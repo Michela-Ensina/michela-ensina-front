@@ -52,7 +52,7 @@ type PdfCanvasPageProps = {
 type PdfFitMode = "page" | "width";
 
 const PDF_DEFAULT_ZOOM = 1;
-const PDF_MIN_ZOOM = 0.85;
+const PDF_MIN_ZOOM = 0.45;
 const PDF_MAX_ZOOM = 1.5;
 const PDF_ZOOM_STEP = 0.1;
 
