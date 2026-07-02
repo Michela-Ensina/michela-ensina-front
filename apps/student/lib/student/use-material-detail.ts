@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import useSWR from "swr";
 
 import { ApiClientError } from "@/lib/api/errors";
 import { getMaterialById } from "@/lib/api/materials";
@@ -10,103 +11,140 @@ import {
 import { useAuth } from "@/lib/auth/use-auth";
 import { isMaterialReleased } from "@/lib/student/material-availability";
 import { createEmptyProgressSummary } from "@/lib/student/progress-summary";
+import {
+  revalidateStudentReadData,
+  studentDataKeys,
+} from "@/lib/student/student-data-cache";
 import type { Material, ProgressItem } from "@/types/student";
 
+type MaterialDetailData = {
+  material: Material | null;
+  notFound: boolean;
+  progressItem: ProgressItem | null;
+  progressPercentage: number;
+};
+
+async function loadMaterialDetail(
+  materialId: string,
+  token: string,
+): Promise<MaterialDetailData> {
+  try {
+    const materialResponse = await getMaterialById(materialId, token);
+    if (!isMaterialReleased(materialResponse)) {
+      return {
+        material: null,
+        notFound: true,
+        progressItem: null,
+        progressPercentage: 0,
+      };
+    }
+
+    let progress = createEmptyProgressSummary();
+
+    try {
+      progress = await getProgress(token);
+    } catch (error) {
+      if (error instanceof ApiClientError && error.status === 401) {
+        throw error;
+      }
+    }
+
+    return {
+      material: materialResponse,
+      notFound: false,
+      progressItem:
+        progress.items.find((item) => item.material_id === materialId) ?? null,
+      progressPercentage: progress.percentage,
+    };
+  } catch (error) {
+    if (error instanceof ApiClientError && error.status === 404) {
+      return {
+        material: null,
+        notFound: true,
+        progressItem: null,
+        progressPercentage: 0,
+      };
+    }
+
+    throw error;
+  }
+}
+
 export function useMaterialDetail(materialId: string) {
-  const { token, logout } = useAuth();
-  const [material, setMaterial] = useState<Material | null>(null);
-  const [progressItem, setProgressItem] = useState<ProgressItem | null>(null);
-  const [progressPercentage, setProgressPercentage] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [notFound, setNotFound] = useState(false);
+  const { token, user, logout } = useAuth();
   const [isUpdatingProgress, setIsUpdatingProgress] = useState(false);
   const [progressErrorMessage, setProgressErrorMessage] = useState<string | null>(null);
 
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
-    setErrorMessage(null);
-    setProgressErrorMessage(null);
-    setNotFound(false);
-
-    try {
-      if (!token) {
-        throw new Error("Sua sessão não está disponível.");
-      }
-
-      const materialResponse = await getMaterialById(materialId, token);
-      if (!isMaterialReleased(materialResponse)) {
-        setNotFound(true);
-        setMaterial(null);
-        setProgressItem(null);
-        return;
-      }
-
-      let progress = createEmptyProgressSummary();
-
-      try {
-        progress = await getProgress(token);
-      } catch (error) {
-        if (error instanceof ApiClientError && error.status === 401) {
-          throw error;
-        }
-      }
-
-      setMaterial(materialResponse);
-      setProgressPercentage(progress.percentage);
-      setProgressItem(progress.items.find((item) => item.material_id === materialId) ?? null);
-    } catch (error) {
-      if (error instanceof ApiClientError && error.status === 404) {
-        setNotFound(true);
-        setMaterial(null);
-        setProgressItem(null);
-        return;
-      }
-
-      if (error instanceof ApiClientError && error.status === 401) {
-        await logout();
-      }
-
-      setErrorMessage(
-        error instanceof Error ? error.message : "Não foi possível carregar este material.",
-      );
-    } finally {
-      setIsLoading(false);
+  const cacheKey = useMemo(() => {
+    if (!token) {
+      return null;
     }
-  }, [logout, materialId, token]);
+
+    return studentDataKeys.materialDetail(token, materialId);
+  }, [materialId, token]);
+
+  const {
+    data,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR<MaterialDetailData>(cacheKey, async () => {
+    if (!token) {
+      throw new Error("Sua sessão não está disponível.");
+    }
+
+    return loadMaterialDetail(materialId, token);
+  });
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      void fetchData();
-    }, 0);
+    if (!(error instanceof ApiClientError) || error.status !== 401) {
+      return;
+    }
 
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [fetchData]);
+    void logout();
+  }, [error, logout]);
+
+  const fetchData = useCallback(async () => {
+    setProgressErrorMessage(null);
+    await mutate();
+  }, [mutate]);
 
   async function markAsCompleted() {
-    if (!material) return;
+    if (!data?.material || !token) return;
 
     setIsUpdatingProgress(true);
     setProgressErrorMessage(null);
 
     try {
-      if (!token) {
-        throw new Error("Sua sessão não está disponível.");
-      }
-
-      const updatedItem = await updateMaterialProgress(material.id, token);
+      const updatedItem = await updateMaterialProgress(data.material.id, token);
       const progress = await getProgress(token);
-      setProgressItem(updatedItem);
-      setProgressPercentage(progress.percentage);
+
+      await mutate(
+        (current) =>
+          current
+            ? {
+                ...current,
+                progressItem: updatedItem,
+                progressPercentage: progress.percentage,
+              }
+            : current,
+        { revalidate: false },
+      );
+
+      await revalidateStudentReadData({
+        materialId,
+        token,
+        userId: user?.id,
+      });
     } catch (error) {
       if (error instanceof ApiClientError && error.status === 401) {
         await logout();
       }
 
       setProgressErrorMessage(
-        error instanceof Error ? error.message : "Não foi possível atualizar o progresso.",
+        error instanceof Error
+          ? error.message
+          : "Não foi possível atualizar o progresso.",
       );
     } finally {
       setIsUpdatingProgress(false);
@@ -114,21 +152,34 @@ export function useMaterialDetail(materialId: string) {
   }
 
   async function undoCompleted() {
-    if (!material) return;
+    if (!data?.material || !token) return;
 
     setIsUpdatingProgress(true);
     setProgressErrorMessage(null);
 
     try {
-      if (!token) {
-        throw new Error("Sua sessão não está disponível.");
-      }
+      const progress = await deleteMaterialProgress(data.material.id, token);
 
-      const progress = await deleteMaterialProgress(material.id, token);
-      setProgressItem(
-        progress.items.find((item) => item.material_id === material.id) ?? null,
+      await mutate(
+        (current) =>
+          current
+            ? {
+                ...current,
+                progressItem:
+                  progress.items.find(
+                    (item) => item.material_id === data.material?.id,
+                  ) ?? null,
+                progressPercentage: progress.percentage,
+              }
+            : current,
+        { revalidate: false },
       );
-      setProgressPercentage(progress.percentage);
+
+      await revalidateStudentReadData({
+        materialId,
+        token,
+        userId: user?.id,
+      });
     } catch (error) {
       if (error instanceof ApiClientError && error.status === 401) {
         await logout();
@@ -145,16 +196,21 @@ export function useMaterialDetail(materialId: string) {
   }
 
   return {
-    errorMessage,
+    errorMessage:
+      error instanceof Error
+        ? error.message
+        : error
+          ? "Não foi possível carregar este material."
+          : null,
     fetchData,
-    isLoading,
+    isLoading: Boolean(cacheKey) && isLoading && !data,
     isUpdatingProgress,
     markAsCompleted,
-    material,
-    notFound,
+    material: data?.material ?? null,
+    notFound: data?.notFound ?? false,
     undoCompleted,
     progressErrorMessage,
-    progressItem,
-    progressPercentage,
+    progressItem: data?.progressItem ?? null,
+    progressPercentage: data?.progressPercentage ?? 0,
   };
 }

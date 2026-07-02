@@ -1,10 +1,11 @@
+import { ApiClientError } from "@/lib/api/errors";
 import { getMaterials } from "@/lib/api/materials";
 import { getProgress } from "@/lib/api/progress";
-import { ApiClientError } from "@/lib/api/errors";
 import {
   filterProgressForReleasedMaterials,
   filterReleasedMaterials,
 } from "@/lib/student/material-availability";
+import { studentDataKeys } from "@/lib/student/student-data-cache";
 import { useStudentData } from "@/lib/student/use-student-data";
 import type { Material, ProgressSummary } from "@/types/student";
 
@@ -30,6 +31,7 @@ async function loadMaterialsData(token: string): Promise<MaterialsData> {
 
 export function useMaterialsData() {
   return useStudentData({
+    getCacheKey: (token) => studentDataKeys.materials(token),
     loadData: loadMaterialsData,
     fallbackErrorMessage: "Não foi possível carregar os materiais.",
     isEmpty: (data) => (data?.materials.length ?? 0) === 0,

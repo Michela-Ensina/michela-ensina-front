@@ -1,11 +1,12 @@
+import { ApiClientError } from "@/lib/api/errors";
 import { getMaterials } from "@/lib/api/materials";
 import { getProgress } from "@/lib/api/progress";
-import { ApiClientError } from "@/lib/api/errors";
 import {
   filterProgressForReleasedMaterials,
   filterReleasedMaterials,
 } from "@/lib/student/material-availability";
 import { createEmptyProgressSummary } from "@/lib/student/progress-summary";
+import { studentDataKeys } from "@/lib/student/student-data-cache";
 import { useStudentData } from "@/lib/student/use-student-data";
 import type { Material, ProgressSummary, User } from "@/types/student";
 
@@ -40,6 +41,7 @@ async function loadDashboardData(token: string, user: User | null): Promise<Dash
 
 export function useDashboardData() {
   return useStudentData({
+    getCacheKey: (token, user) => studentDataKeys.dashboard(token, user?.id ?? "anonymous"),
     loadData: loadDashboardData,
     fallbackErrorMessage: "Não foi possível carregar o dashboard.",
     isEmpty: (data) => (data?.materials.length ?? 0) === 0,

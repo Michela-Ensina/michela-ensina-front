@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
+import useSWR from "swr";
 
 import { ApiClientError } from "@/lib/api/errors";
 import { useAuth } from "@/lib/auth/use-auth";
@@ -9,6 +10,7 @@ import type { User } from "@/types/student";
 type StudentDataLoader<TData> = (token: string, user: User | null) => Promise<TData>;
 
 type UseStudentDataOptions<TData> = {
+  getCacheKey: (token: string, user: User | null) => readonly unknown[];
   loadData: StudentDataLoader<TData>;
   fallbackErrorMessage: string;
   isEmpty: (data: TData | null) => boolean;
@@ -24,6 +26,7 @@ type UseStudentDataResult<TData> = {
 };
 
 export function useStudentData<TData>({
+  getCacheKey,
   loadData,
   fallbackErrorMessage,
   isEmpty,
@@ -31,55 +34,47 @@ export function useStudentData<TData>({
 }: UseStudentDataOptions<TData>): UseStudentDataResult<TData> {
   const { token, user, isLoading: isAuthLoading, logout } = useAuth();
   const authenticatedUser = requiresUser ? user : null;
-  const [data, setData] = useState<TData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const fetchData = useCallback(async () => {
-    if (isAuthLoading) {
-      return;
+  const cacheKey = useMemo(() => {
+    if (isAuthLoading || !token) {
+      return null;
     }
 
-    setIsLoading(true);
-    setErrorMessage(null);
+    if (requiresUser && !authenticatedUser) {
+      return null;
+    }
 
-    try {
+    return getCacheKey(token, authenticatedUser);
+  }, [authenticatedUser, getCacheKey, isAuthLoading, requiresUser, token]);
+
+  const { data, error, isLoading: isDataLoading, mutate } = useSWR<TData>(
+    cacheKey,
+    async () => {
       if (!token) {
         throw new Error("Sua sessão não está disponível.");
       }
 
-      setData(await loadData(token, authenticatedUser));
-    } catch (error) {
-      if (error instanceof ApiClientError && error.status === 401) {
-        await logout();
-      }
-
-      setErrorMessage(error instanceof Error ? error.message : fallbackErrorMessage);
-      setData(null);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [authenticatedUser, fallbackErrorMessage, isAuthLoading, loadData, logout, token]);
+      return loadData(token, authenticatedUser);
+    },
+  );
 
   useEffect(() => {
-    if (isAuthLoading) {
+    if (!(error instanceof ApiClientError) || error.status !== 401) {
       return;
     }
 
-    const timer = window.setTimeout(() => {
-      void fetchData();
-    }, 0);
+    void logout();
+  }, [error, logout]);
 
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [fetchData, isAuthLoading]);
+  const fetchData = useCallback(async () => {
+    await mutate();
+  }, [mutate]);
 
   return {
-    data,
-    isLoading,
-    errorMessage,
-    isEmpty: isEmpty(data),
+    data: data ?? null,
+    isLoading: isAuthLoading || (Boolean(cacheKey) && isDataLoading && !data),
+    errorMessage: error instanceof Error ? error.message : error ? fallbackErrorMessage : null,
+    isEmpty: isEmpty(data ?? null),
     refetch: fetchData,
   };
 }
