@@ -18,6 +18,7 @@ type MaterialDetailSidebarProps = {
   progressErrorMessage: string | null;
   isUpdatingProgress: boolean;
   onMarkAsCompleted: () => void;
+  onUndoCompleted: () => void;
 };
 
 export function MaterialDetailSidebar({
@@ -27,6 +28,7 @@ export function MaterialDetailSidebar({
   progressErrorMessage,
   isUpdatingProgress,
   onMarkAsCompleted,
+  onUndoCompleted,
 }: MaterialDetailSidebarProps) {
   const isCompleted = status.tone === "concluído";
 
@@ -77,8 +79,8 @@ export function MaterialDetailSidebar({
           ) : null}
           <Button
             type="button"
-            onClick={onMarkAsCompleted}
-            disabled={isUpdatingProgress || isCompleted}
+            onClick={isCompleted ? onUndoCompleted : onMarkAsCompleted}
+            disabled={isUpdatingProgress}
             variant={isCompleted ?"outline" : "primary"}
             fullWidth
             className="mt-4"
@@ -86,7 +88,7 @@ export function MaterialDetailSidebar({
             {isUpdatingProgress
               ?"Atualizando..."
               : isCompleted
-                ?"Material concluído"
+                ?"Desfazer conclusão"
                 : "Marcar como concluído"}
           </Button>
         </SurfaceCard>

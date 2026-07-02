@@ -119,6 +119,18 @@ async function fetchRemoteFile(
   });
 
   if (!response.ok) {
+    if (response.status === 403) {
+      throw new Error(
+        "Este arquivo não está disponível para download ou visualização na sua conta.",
+      );
+    }
+
+    if (response.status === 404) {
+      throw new Error(
+        "Este arquivo não está disponível para sua conta ou não existe mais.",
+      );
+    }
+
     throw new Error(
       "Não foi possível carregar este arquivo agora. Tente novamente em alguns instantes.",
     );

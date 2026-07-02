@@ -9,6 +9,18 @@ export function getMaterialById(id: string, token: string) {
   return apiGet<Material>(`/student/materials/${id}`, { token });
 }
 
-export function getMaterialUploadFileUrl(materialId: string, uploadId: string) {
-  return buildApiUrl(`/student/materials/${materialId}/uploads/${uploadId}`);
+export function getMaterialUploadFileUrl(
+  materialId: string,
+  uploadId: string,
+  options?: { download?: boolean },
+) {
+  const params = new URLSearchParams();
+  if (options?.download) {
+    params.set("download", "1");
+  }
+
+  const query = params.toString();
+  return buildApiUrl(
+    `/student/materials/${materialId}/uploads/${uploadId}${query ? `?${query}` : ""}`,
+  );
 }

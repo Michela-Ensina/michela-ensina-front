@@ -83,6 +83,7 @@ type MaterialCompletionActionProps = {
   isUpdating: boolean;
   errorMessage: string | null;
   onMarkAsCompleted: () => void;
+  onUndoCompleted: () => void;
 };
 
 function MaterialCompletionAction({
@@ -90,6 +91,7 @@ function MaterialCompletionAction({
   isUpdating,
   errorMessage,
   onMarkAsCompleted,
+  onUndoCompleted,
 }: MaterialCompletionActionProps) {
   return (
     <SurfaceCard className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -106,15 +108,15 @@ function MaterialCompletionAction({
       </div>
       <Button
         type="button"
-        onClick={onMarkAsCompleted}
-        disabled={isUpdating || isCompleted}
+        onClick={isCompleted ? onUndoCompleted : onMarkAsCompleted}
+        disabled={isUpdating}
         variant={isCompleted ? "outline" : "primary"}
         className="shrink-0"
       >
         {isUpdating
           ? "Atualizando..."
           : isCompleted
-            ? "Material concluído"
+            ? "Desfazer conclusão"
             : "Marcar como concluído"}
       </Button>
     </SurfaceCard>
@@ -159,7 +161,10 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
   if (detail.notFound || !detail.material || !type || !status) {
     return (
       <SurfaceCard>
-        <h2 className="text-2xl">Material não encontrado</h2>
+        <h2 className="text-2xl">Material indisponível</h2>
+        <p className="student-muted-text mt-2 text-sm">
+          Este material não está disponível para a sua conta agora ou não existe mais.
+        </p>
         <Link href="/materiais" className="student-text-action mt-4 inline-flex rounded-lg px-2 py-1 text-sm font-semibold">
           Voltar para materiais
         </Link>
@@ -182,6 +187,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
         progressErrorMessage={detail.progressErrorMessage}
         isUpdatingProgress={detail.isUpdatingProgress}
         onMarkAsCompleted={() => void detail.markAsCompleted()}
+        onUndoCompleted={() => void detail.undoCompleted()}
       />
     </div>
   );
@@ -230,6 +236,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
           isUpdating={detail.isUpdatingProgress}
           errorMessage={detail.progressErrorMessage}
           onMarkAsCompleted={() => void detail.markAsCompleted()}
+          onUndoCompleted={() => void detail.undoCompleted()}
         />
         <MaterialAttachmentsList
           attachments={attachments}

@@ -84,16 +84,18 @@ function AttachmentCard({
           />
         </button>
       )}
-      <button
-        type="button"
-        className="student-action student-hover-surface grid size-10 shrink-0 place-items-center rounded-[var(--radius-sm)] text-[var(--color-text-muted)]"
-        disabled={isDownloading}
-        onClick={() => onDownload(attachment)}
-        aria-label={`Baixar ${attachment.original_name}`}
-        title="Baixar arquivo"
-      >
-        <Download size={17} aria-hidden="true" />
-      </button>
+      {attachment.downloadable ? (
+        <button
+          type="button"
+          className="student-action student-hover-surface grid size-10 shrink-0 place-items-center rounded-[var(--radius-sm)] text-[var(--color-text-muted)]"
+          disabled={isDownloading}
+          onClick={() => onDownload(attachment)}
+          aria-label={`Baixar ${attachment.original_name}`}
+          title="Baixar arquivo"
+        >
+          <Download size={17} aria-hidden="true" />
+        </button>
+      ) : null}
     </div>
   );
 }
@@ -115,7 +117,7 @@ export function MaterialAttachmentsList({
 
     try {
       const { objectUrl, revoke } = await createObjectUrlFromRemoteFile(
-        getMaterialUploadFileUrl(materialId, attachment.id),
+        getMaterialUploadFileUrl(materialId, attachment.id, { download: true }),
         undefined,
         token,
       );

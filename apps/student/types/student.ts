@@ -32,6 +32,8 @@ export type MaterialAttachment = {
   type: "pdf" | "attachment" | "other";
   mime_type?: string;
   size?: number;
+  downloadable?: boolean;
+  order?: number;
 };
 
 export type ProgressItem = {

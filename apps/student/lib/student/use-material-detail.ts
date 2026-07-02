@@ -2,7 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 
 import { ApiClientError } from "@/lib/api/errors";
 import { getMaterialById } from "@/lib/api/materials";
-import { getProgress, updateMaterialProgress } from "@/lib/api/progress";
+import {
+  deleteMaterialProgress,
+  getProgress,
+  updateMaterialProgress,
+} from "@/lib/api/progress";
 import { useAuth } from "@/lib/auth/use-auth";
 import { isMaterialReleased } from "@/lib/student/material-availability";
 import { createEmptyProgressSummary } from "@/lib/student/progress-summary";
@@ -109,6 +113,37 @@ export function useMaterialDetail(materialId: string) {
     }
   }
 
+  async function undoCompleted() {
+    if (!material) return;
+
+    setIsUpdatingProgress(true);
+    setProgressErrorMessage(null);
+
+    try {
+      if (!token) {
+        throw new Error("Sua sessão não está disponível.");
+      }
+
+      const progress = await deleteMaterialProgress(material.id, token);
+      setProgressItem(
+        progress.items.find((item) => item.material_id === material.id) ?? null,
+      );
+      setProgressPercentage(progress.percentage);
+    } catch (error) {
+      if (error instanceof ApiClientError && error.status === 401) {
+        await logout();
+      }
+
+      setProgressErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível atualizar o progresso.",
+      );
+    } finally {
+      setIsUpdatingProgress(false);
+    }
+  }
+
   return {
     errorMessage,
     fetchData,
@@ -117,6 +152,7 @@ export function useMaterialDetail(materialId: string) {
     markAsCompleted,
     material,
     notFound,
+    undoCompleted,
     progressErrorMessage,
     progressItem,
     progressPercentage,
