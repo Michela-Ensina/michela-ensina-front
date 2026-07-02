@@ -22,6 +22,13 @@ function formatReleaseDate(value: string | null): string | null {
   }).format(new Date(value));
 }
 
+function getAccessScopeLabel(material: AdminMaterial) {
+  const productCount = material.products?.length ?? material.product_ids?.length ?? 0;
+  return productCount > 0
+    ? `${productCount} produto${productCount > 1 ? "s" : ""}`
+    : "Acesso geral";
+}
+
 export function AdminMaterialsList({
   materials,
   onEdit,
@@ -64,6 +71,7 @@ export function AdminMaterialsList({
                 </div>
                 <div className="student-muted-text mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
                   <span>{getMaterialTypeMeta(material.type).label}</span>
+                  <span>{getAccessScopeLabel(material)}</span>
                   {material.attachments?.length ?(
                     <span className="inline-flex items-center gap-1">
                       <Paperclip size={14} aria-hidden="true" />

@@ -66,6 +66,8 @@ export function AdminMaterialsContent() {
           selectedMaterial={manager.selectedMaterial}
           file={manager.file}
           attachedFiles={manager.attachedFiles}
+          products={manager.products}
+          productsErrorMessage={manager.productsErrorMessage}
           errorMessage={manager.errorMessage}
           uploadType={manager.uploadType}
           isSaving={manager.isSaving}
@@ -77,6 +79,8 @@ export function AdminMaterialsContent() {
           onSubmit={manager.handleSubmit}
           onUpload={() => void manager.handleUpload()}
           onRemoveAttachment={manager.removeAttachedFile}
+          onAttachmentDownloadableChange={manager.setAttachmentDownloadable}
+          onToggleProduct={manager.toggleProduct}
         />
 
         <AdminMaterialsList

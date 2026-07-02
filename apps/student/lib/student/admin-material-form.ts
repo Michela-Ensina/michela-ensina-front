@@ -1,5 +1,15 @@
-import type { AdminMaterial, AdminMaterialPayload, AdminUploadType } from "@/types/admin";
-import type { MaterialType } from "@/types/student";
+import type {
+  AdminMaterial,
+  AdminMaterialAttachmentPayload,
+  AdminMaterialPayload,
+  AdminUploadType,
+} from "@/types/admin";
+import type { MaterialAttachment, MaterialType } from "@/types/student";
+
+export type MaterialFormAttachment = {
+  id: string;
+  downloadable: boolean;
+};
 
 export type MaterialFormState = {
   title: string;
@@ -9,7 +19,8 @@ export type MaterialFormState = {
   order: string;
   releasedAt: string;
   isActive: boolean;
-  attachmentIds: string[];
+  attachments: MaterialFormAttachment[];
+  productIds: string[];
 };
 
 export const emptyMaterialForm: MaterialFormState = {
@@ -20,7 +31,8 @@ export const emptyMaterialForm: MaterialFormState = {
   order: "0",
   releasedAt: "",
   isActive: true,
-  attachmentIds: [],
+  attachments: [],
+  productIds: [],
 };
 
 export const adminMaterialTypes = [
@@ -37,8 +49,37 @@ export function getAdminUploadType(type: MaterialType): AdminUploadType | null {
   return null;
 }
 
-export function uniqueAttachmentIds(attachmentIds: string[]): string[] {
-  return Array.from(new Set(attachmentIds));
+export function normalizeFormAttachments(
+  attachments: MaterialFormAttachment[],
+): MaterialFormAttachment[] {
+  const seen = new Set<string>();
+
+  return attachments.filter((attachment) => {
+    if (seen.has(attachment.id)) return false;
+    seen.add(attachment.id);
+    return true;
+  });
+}
+
+export function toMaterialFormAttachments(
+  attachments: MaterialAttachment[],
+): MaterialFormAttachment[] {
+  return normalizeFormAttachments(
+    attachments.map((attachment) => ({
+      id: attachment.id,
+      downloadable: Boolean(attachment.downloadable),
+    })),
+  );
+}
+
+export function toAdminMaterialAttachmentsPayload(
+  attachments: MaterialFormAttachment[],
+): AdminMaterialAttachmentPayload[] {
+  return normalizeFormAttachments(attachments).map((attachment, index) => ({
+    id: attachment.id,
+    order: index,
+    downloadable: attachment.downloadable,
+  }));
 }
 
 export function toAdminMaterialPayload(form: MaterialFormState): AdminMaterialPayload {
@@ -50,7 +91,8 @@ export function toAdminMaterialPayload(form: MaterialFormState): AdminMaterialPa
     order: Number(form.order || 0),
     released_at: form.releasedAt || new Date().toISOString(),
     is_active: form.isActive,
-    attachment_ids: uniqueAttachmentIds(form.attachmentIds),
+    attachments: toAdminMaterialAttachmentsPayload(form.attachments),
+    product_ids: Array.from(new Set(form.productIds)),
   };
 }
 
@@ -63,6 +105,7 @@ export function toAdminMaterialFormState(material: AdminMaterial): MaterialFormS
     order: String(material.order),
     releasedAt: material.released_at ? material.released_at.slice(0, 16) : "",
     isActive: material.is_active,
-    attachmentIds: uniqueAttachmentIds(material.attachments?.map((attachment) => attachment.id) ?? []),
+    attachments: toMaterialFormAttachments(material.attachments ?? []),
+    productIds: material.products?.map((product) => product.id) ?? material.product_ids ?? [],
   };
 }

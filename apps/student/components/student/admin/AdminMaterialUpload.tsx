@@ -2,6 +2,7 @@ import { useEffect, useRef, type ChangeEvent } from "react";
 import { FileUp, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
   getAdminUploadAcceptValue,
@@ -21,6 +22,7 @@ type AdminMaterialUploadProps = {
   onFileRejected: (message: string) => void;
   onUpload: () => void;
   onRemoveAttachment: (attachmentId: string) => void;
+  onAttachmentDownloadableChange: (attachmentId: string, downloadable: boolean) => void;
 };
 
 export function AdminMaterialUpload({
@@ -33,6 +35,7 @@ export function AdminMaterialUpload({
   onFileRejected,
   onUpload,
   onRemoveAttachment,
+  onAttachmentDownloadableChange,
 }: AdminMaterialUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -118,8 +121,24 @@ export function AdminMaterialUpload({
         <div className="mt-3 rounded-[var(--radius-sm)] border px-3 py-2 text-sm" style={{ borderColor: "var(--color-border)" }}>
           <p className="font-semibold">{replacesPrimaryFile ? "Arquivo principal" : "Anexos vinculados"}</p>
           {attachedFiles.map((attachment) => (
-            <div key={attachment.id} className="mt-1 flex items-center justify-between gap-2">
-              <p className="student-muted-text min-w-0 truncate">{attachment.original_name}</p>
+            <div key={attachment.id} className="mt-2 flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="student-muted-text min-w-0 truncate">{attachment.original_name}</p>
+                {!replacesPrimaryFile ? (
+                  <label className="student-action mt-2 flex items-center gap-2 text-xs font-semibold">
+                    <Checkbox
+                      checked={Boolean(attachment.downloadable)}
+                      onCheckedChange={(checked) =>
+                        onAttachmentDownloadableChange(
+                          attachment.id,
+                          Boolean(checked),
+                        )
+                      }
+                    />
+                    Permitir download
+                  </label>
+                ) : null}
+              </div>
               <button
                 type="button"
                 className="student-action student-hover-surface grid size-7 shrink-0 place-items-center rounded-lg text-[var(--color-text-muted)]"

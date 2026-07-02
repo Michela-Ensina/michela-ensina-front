@@ -1,5 +1,11 @@
 import type { Material, MaterialType } from "@/types/student";
 
+export type AdminMaterialAttachmentPayload = {
+  id: string;
+  order?: number;
+  downloadable?: boolean;
+};
+
 export type AdminMaterialPayload = {
   title: string;
   description?: string | null;
@@ -8,7 +14,8 @@ export type AdminMaterialPayload = {
   order?: number | null;
   is_active?: boolean;
   released_at?: string | null;
-  attachment_ids?: string[];
+  attachments?: AdminMaterialAttachmentPayload[];
+  product_ids?: string[];
 };
 
 export type AdminUploadType = "pdf" | "attachment" | "other";
@@ -26,4 +33,18 @@ export type AdminUpload = {
   updated_at?: string;
 };
 
-export type AdminMaterial = Material;
+export type AdminProduct = {
+  id: string;
+  name: string;
+  hotmart_product_id?: string;
+  is_active?: boolean;
+  grants?: Array<{
+    id: string;
+    name: string;
+  }>;
+};
+
+export type AdminMaterial = Material & {
+  product_ids?: string[];
+  products?: AdminProduct[];
+};

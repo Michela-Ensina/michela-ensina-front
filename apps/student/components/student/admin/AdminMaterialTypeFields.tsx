@@ -1,4 +1,6 @@
 import { AdminMaterialUpload } from "@/components/student/admin/AdminMaterialUpload";
+import { Alert } from "@/components/ui/alert";
+import { Checkbox } from "@/components/ui/checkbox";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,13 +9,15 @@ import {
   adminMaterialTypes,
   type MaterialFormState,
 } from "@/lib/student/admin-material-form";
-import type { AdminUploadType } from "@/types/admin";
+import type { AdminProduct, AdminUploadType } from "@/types/admin";
 import type { MaterialAttachment, MaterialType } from "@/types/student";
 
 type AdminMaterialTypeFieldsProps = {
   form: MaterialFormState;
   file: File | null;
   attachedFiles: MaterialAttachment[];
+  products: AdminProduct[];
+  productsErrorMessage: string | null;
   uploadType: AdminUploadType | null;
   isUploading: boolean;
   onFieldChange: <TField extends keyof MaterialFormState>(
@@ -24,12 +28,16 @@ type AdminMaterialTypeFieldsProps = {
   onFileRejected: (message: string) => void;
   onUpload: () => void;
   onRemoveAttachment: (attachmentId: string) => void;
+  onAttachmentDownloadableChange: (attachmentId: string, downloadable: boolean) => void;
+  onToggleProduct: (productId: string, checked: boolean) => void;
 };
 
 export function AdminMaterialTypeFields({
   form,
   file,
   attachedFiles,
+  products,
+  productsErrorMessage,
   uploadType,
   isUploading,
   onFieldChange,
@@ -37,6 +45,8 @@ export function AdminMaterialTypeFields({
   onFileRejected,
   onUpload,
   onRemoveAttachment,
+  onAttachmentDownloadableChange,
+  onToggleProduct,
 }: AdminMaterialTypeFieldsProps) {
   const selectedTypeLabel =
     adminMaterialTypes.find((type) => type.value === form.type)?.label ?? "Selecione";
@@ -71,6 +81,7 @@ export function AdminMaterialTypeFields({
         onFileRejected={onFileRejected}
         onUpload={onUpload}
         onRemoveAttachment={onRemoveAttachment}
+        onAttachmentDownloadableChange={onAttachmentDownloadableChange}
       />
 
       {form.type === "video" ? (
@@ -107,6 +118,44 @@ export function AdminMaterialTypeFields({
         <p className="student-muted-text mt-1 text-xs">
           Se ficar em branco, o material será liberado imediatamente ao salvar.
         </p>
+      </div>
+
+      <div className="min-w-0">
+        <Label>Produtos com acesso</Label>
+        {productsErrorMessage ? <Alert tone="error">{productsErrorMessage}</Alert> : null}
+        {products.length > 0 ? (
+          <div className="student-soft-surface mt-2 space-y-2 rounded-[var(--radius-md)] border p-3">
+            {products.map((product) => {
+              const isChecked = form.productIds.includes(product.id);
+
+              return (
+                <label
+                  key={product.id}
+                  className="student-action student-hover-surface flex items-start gap-3 rounded-[var(--radius-sm)] px-2 py-2 text-sm"
+                >
+                  <Checkbox
+                    checked={isChecked}
+                    onCheckedChange={(checked) =>
+                      onToggleProduct(product.id, Boolean(checked))
+                    }
+                  />
+                  <span className="min-w-0">
+                    <span className="block font-semibold">{product.name}</span>
+                    {product.hotmart_product_id ? (
+                      <span className="student-muted-text mt-0.5 block text-xs">
+                        Hotmart ID: {product.hotmart_product_id}
+                      </span>
+                    ) : null}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="student-muted-text mt-2 text-xs">
+            Sem produtos vinculáveis no momento. Se este material deve ficar aberto para todos os alunos, deixe assim.
+          </p>
+        )}
       </div>
     </>
   );

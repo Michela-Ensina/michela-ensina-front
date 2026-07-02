@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { Textarea } from "@/components/ui/textarea";
 import type { MaterialFormState } from "@/lib/student/admin-material-form";
-import type { AdminMaterial, AdminUploadType } from "@/types/admin";
+import type { AdminMaterial, AdminProduct, AdminUploadType } from "@/types/admin";
 import type { MaterialAttachment } from "@/types/student";
 
 type AdminMaterialFormProps = {
@@ -19,6 +19,8 @@ type AdminMaterialFormProps = {
   selectedMaterial: AdminMaterial | null;
   file: File | null;
   attachedFiles: MaterialAttachment[];
+  products: AdminProduct[];
+  productsErrorMessage: string | null;
   errorMessage: string | null;
   uploadType: AdminUploadType | null;
   isSaving: boolean;
@@ -30,6 +32,8 @@ type AdminMaterialFormProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onUpload: () => void;
   onRemoveAttachment: (attachmentId: string) => void;
+  onAttachmentDownloadableChange: (attachmentId: string, downloadable: boolean) => void;
+  onToggleProduct: (productId: string, checked: boolean) => void;
 };
 
 export function AdminMaterialForm({
@@ -37,6 +41,8 @@ export function AdminMaterialForm({
   selectedMaterial,
   file,
   attachedFiles,
+  products,
+  productsErrorMessage,
   errorMessage,
   uploadType,
   isSaving,
@@ -48,6 +54,8 @@ export function AdminMaterialForm({
   onSubmit,
   onUpload,
   onRemoveAttachment,
+  onAttachmentDownloadableChange,
+  onToggleProduct,
 }: AdminMaterialFormProps) {
   return (
     <SurfaceCard className="min-w-0 overflow-hidden">
@@ -83,6 +91,8 @@ export function AdminMaterialForm({
           form={form}
           file={file}
           attachedFiles={attachedFiles}
+          products={products}
+          productsErrorMessage={productsErrorMessage}
           uploadType={uploadType}
           isUploading={isUploading}
           onFieldChange={onFieldChange}
@@ -90,6 +100,8 @@ export function AdminMaterialForm({
           onFileRejected={onFileRejected}
           onUpload={onUpload}
           onRemoveAttachment={onRemoveAttachment}
+          onAttachmentDownloadableChange={onAttachmentDownloadableChange}
+          onToggleProduct={onToggleProduct}
         />
 
         <label className="student-action student-hover-surface flex w-fit max-w-full items-center gap-2 rounded-lg px-2 py-1 text-sm font-semibold">

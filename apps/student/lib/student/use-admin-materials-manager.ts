@@ -4,9 +4,9 @@ import { toast } from "sonner";
 import {
   emptyMaterialForm,
   getAdminUploadType,
+  normalizeFormAttachments,
   toAdminMaterialFormState,
   toAdminMaterialPayload,
-  uniqueAttachmentIds,
   type MaterialFormState,
 } from "@/lib/student/admin-material-form";
 import {
@@ -20,13 +20,15 @@ import {
   updateAdminMaterial,
   uploadAdminMaterialFile,
 } from "@/lib/api/admin-materials";
+import { getAdminProducts } from "@/lib/api/admin-products";
 import { ApiClientError, getFirstApiFieldError } from "@/lib/api/errors";
 import { resolveYoutubeEmbedUrl } from "@/lib/student/material-media";
-import type { AdminMaterial, AdminUpload } from "@/types/admin";
+import type { AdminMaterial, AdminProduct, AdminUpload } from "@/types/admin";
 import type { MaterialAttachment } from "@/types/student";
 
 export function useAdminMaterialsManager(token: string | null, isAdmin: boolean) {
   const [materials, setMaterials] = useState<AdminMaterial[]>([]);
+  const [products, setProducts] = useState<AdminProduct[]>([]);
   const [selectedMaterial, setSelectedMaterial] = useState<AdminMaterial | null>(null);
   const [form, setForm] = useState<MaterialFormState>(emptyMaterialForm);
   const [file, setFile] = useState<File | null>(null);
@@ -37,6 +39,7 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
   const [isDeleting, setIsDeleting] = useState(false);
   const [materialPendingDeletion, setMaterialPendingDeletion] = useState<AdminMaterial | null>(null);
   const [loadErrorMessage, setLoadErrorMessage] = useState<string | null>(null);
+  const [productsErrorMessage, setProductsErrorMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const uploadType = useMemo(() => getAdminUploadType(form.type), [form.type]);
@@ -48,8 +51,15 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     setLoadErrorMessage(null);
 
     try {
-      const nextMaterials = await getAdminMaterials(token);
+      const [nextMaterials, nextProducts] = await Promise.all([
+        getAdminMaterials(token),
+        getAdminProducts(token).catch(() => null),
+      ]);
       setMaterials(nextMaterials);
+      setProducts(nextProducts ?? []);
+      setProductsErrorMessage(
+        nextProducts === null ? "Não foi possível carregar a lista de produtos agora." : null,
+      );
     } catch (error) {
       setLoadErrorMessage(error instanceof Error ? error.message : "Não foi possível carregar os materiais.");
     } finally {
@@ -75,7 +85,7 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
         ...current,
         [field]: value,
         url: "",
-        attachmentIds: [],
+        attachments: [],
       }));
       return;
     }
@@ -101,24 +111,27 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
 
   function applyUploadedFile(upload: AdminUpload) {
     const shouldReplacePrimaryFile = form.type === "pdf" || form.type === "attachment";
-    const nextAttachmentIds = shouldReplacePrimaryFile
-      ?[upload.id]
-      : uniqueAttachmentIds([...form.attachmentIds, upload.id]);
+    const nextAttachments = shouldReplacePrimaryFile
+      ? [{ id: upload.id, downloadable: false }]
+      : normalizeFormAttachments([
+          ...form.attachments,
+          { id: upload.id, downloadable: false },
+        ]);
 
     if (shouldReplacePrimaryFile) {
       updateField("url", upload.url);
     }
-    updateField("attachmentIds", nextAttachmentIds);
+    updateField("attachments", nextAttachments);
     setAttachedFiles((current) => {
       if (shouldReplacePrimaryFile) return [upload];
       if (current.some((attachment) => attachment.id === upload.id)) return current;
-      return [...current, upload];
+      return [...current, { ...upload, downloadable: false }];
     });
     setFile(null);
 
     return {
       url: shouldReplacePrimaryFile ? upload.url : form.url,
-      attachmentIds: nextAttachmentIds,
+      attachments: nextAttachments,
     };
   }
 
@@ -160,19 +173,42 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
   function removeAttachedFile(attachmentId: string) {
     setAttachedFiles((current) => current.filter((attachment) => attachment.id !== attachmentId));
     setForm((current) => {
-      const nextAttachmentIds = uniqueAttachmentIds(
-        current.attachmentIds.filter((id) => id !== attachmentId),
+      const nextAttachments = normalizeFormAttachments(
+        current.attachments.filter((attachment) => attachment.id !== attachmentId),
       );
 
       return {
         ...current,
-        attachmentIds: nextAttachmentIds,
+        attachments: nextAttachments,
         url:
-          (current.type === "pdf" || current.type === "attachment") && nextAttachmentIds.length === 0
+          (current.type === "pdf" || current.type === "attachment") && nextAttachments.length === 0
             ?""
             : current.url,
       };
     });
+  }
+
+  function setAttachmentDownloadable(attachmentId: string, downloadable: boolean) {
+    setAttachedFiles((current) =>
+      current.map((attachment) =>
+        attachment.id === attachmentId ? { ...attachment, downloadable } : attachment,
+      ),
+    );
+    setForm((current) => ({
+      ...current,
+      attachments: current.attachments.map((attachment) =>
+        attachment.id === attachmentId ? { ...attachment, downloadable } : attachment,
+      ),
+    }));
+  }
+
+  function toggleProduct(productId: string, checked: boolean) {
+    setForm((current) => ({
+      ...current,
+      productIds: checked
+        ? Array.from(new Set([...current.productIds, productId]))
+        : current.productIds.filter((id) => id !== productId),
+    }));
   }
 
   function rejectFile(message: string) {
@@ -219,10 +255,17 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
 
       if (uploadedState) {
         payload.url = uploadedState.url;
-        payload.attachment_ids = uploadedState.attachmentIds;
+        payload.attachments = uploadedState.attachments.map((attachment, index) => ({
+          id: attachment.id,
+          order: index,
+          downloadable: attachment.downloadable,
+        }));
       }
 
-      if ((payload.type === "pdf" || payload.type === "attachment") && payload.attachment_ids?.length === 0) {
+      if (
+        (payload.type === "pdf" || payload.type === "attachment") &&
+        payload.attachments?.length === 0
+      ) {
         const message = payload.type === "pdf" ? "Envie o PDF do material." : "Envie o arquivo do anexo.";
         setErrorMessage(message);
         toast.error(message);
@@ -294,6 +337,8 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     isSaving,
     isUploading,
     isDeleting,
+    products,
+    productsErrorMessage,
     errorMessage,
     loadErrorMessage,
     materialPendingDeletion,
@@ -308,7 +353,9 @@ export function useAdminMaterialsManager(token: string | null, isAdmin: boolean)
     requestDeleteMaterial,
     resetForm,
     selectMaterial,
+    setAttachmentDownloadable,
     setFile,
+    toggleProduct,
     updateField,
   };
 }
