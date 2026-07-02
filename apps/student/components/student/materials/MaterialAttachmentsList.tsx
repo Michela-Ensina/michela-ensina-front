@@ -45,7 +45,10 @@ function AttachmentCard({
         <Icon size={18} aria-hidden="true" />
       </span>
       <span className="min-w-0 flex-1 text-left">
-        <span className="block truncate text-sm font-semibold">
+        <span
+          className="block truncate text-sm font-semibold"
+          style={{ fontFamily: "var(--font-body)" }}
+        >
           {attachment.original_name}
         </span>
         <span className="student-muted-text block text-xs">
@@ -210,7 +213,10 @@ export function MaterialAttachmentsList({
               style={{ borderColor: "var(--color-border)" }}
             >
               <div className="min-w-0">
-                <BaseDialog.Title className="truncate text-lg font-semibold">
+                <BaseDialog.Title
+                  className="truncate text-lg font-semibold"
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
                   {previewAttachment?.original_name ?? "Material de apoio"}
                 </BaseDialog.Title>
               </div>

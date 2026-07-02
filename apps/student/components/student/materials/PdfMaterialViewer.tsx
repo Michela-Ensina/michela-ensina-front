@@ -2,8 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-  ChevronLeft,
-  ChevronRight,
   FileText,
   Maximize2,
   Minimize2,
@@ -17,6 +15,7 @@ import type { PDFDocumentProxy, RenderTask } from "pdfjs-dist";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { fetchRemoteFileAsArrayBuffer } from "@/lib/student/material-media";
+import { cn } from "@/lib/utils/cn";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -44,6 +43,7 @@ type PdfCanvasPageProps = {
   availableHeight: number;
   document: PDFDocumentProxy;
   fitMode: PdfFitMode;
+  isPageMode?: boolean;
   maxPageWidth: number;
   pageNumber: number;
   zoom: number;
@@ -68,6 +68,7 @@ function PdfCanvasPage({
   availableHeight,
   document,
   fitMode,
+  isPageMode = false,
   maxPageWidth,
   pageNumber,
   zoom,
@@ -104,11 +105,20 @@ function PdfCanvasPage({
       if (!currentCanvas) return;
 
       const baseViewport = page.getViewport({ scale: 1 });
-      const safeContainerWidth = Math.max(280, containerWidth - 16);
-      const safeContainerHeight = Math.max(360, availableHeight - 32);
+      const safeContainerWidth = Math.max(
+        280,
+        containerWidth - (isPageMode ? 12 : 16),
+      );
+      const safeContainerHeight = Math.max(
+        420,
+        availableHeight - (isPageMode ? 12 : 32),
+      );
       const fitWidth = Math.min(safeContainerWidth, maxPageWidth);
       const widthScale = fitWidth / baseViewport.width;
-      const pageScale = Math.min(widthScale, safeContainerHeight / baseViewport.height);
+      const pageScale = Math.min(
+        widthScale,
+        safeContainerHeight / baseViewport.height,
+      );
       const cssScale = (fitMode === "page" ? pageScale : widthScale) * zoom;
       const outputScale = window.devicePixelRatio || 1;
       const viewport = page.getViewport({ scale: cssScale * outputScale });
@@ -135,16 +145,117 @@ function PdfCanvasPage({
       isCancelled = true;
       renderTask?.cancel();
     };
-  }, [availableHeight, containerWidth, document, fitMode, maxPageWidth, pageNumber, zoom]);
+  }, [
+    availableHeight,
+    containerWidth,
+    document,
+    fitMode,
+    isPageMode,
+    maxPageWidth,
+    pageNumber,
+    zoom,
+  ]);
 
   return (
-    <div ref={containerRef} className="flex min-w-full justify-center">
+    <div
+      ref={containerRef}
+      className={
+        isPageMode
+          ? "mx-auto flex w-full max-w-[980px] justify-center"
+          : "mx-auto flex w-full max-w-[1180px] justify-center"
+      }
+    >
       <canvas
         ref={canvasRef}
         aria-label={`Página ${pageNumber}`}
         className="shrink-0 rounded-[var(--radius-sm)] bg-white shadow-[var(--shadow-sm)]"
       />
     </div>
+  );
+}
+
+type PdfThumbnailProps = {
+  document: PDFDocumentProxy;
+  isActive: boolean;
+  pageNumber: number;
+  onSelect: (pageNumber: number) => void;
+};
+
+function PdfThumbnail({
+  document,
+  isActive,
+  pageNumber,
+  onSelect,
+}: PdfThumbnailProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    let isCancelled = false;
+    let renderTask: RenderTask | null = null;
+
+    async function renderThumbnail() {
+      const page = await document.getPage(pageNumber);
+      if (isCancelled) return;
+
+      const currentCanvas = canvasRef.current;
+      if (!currentCanvas) return;
+
+      const context = currentCanvas.getContext("2d");
+      if (!context) return;
+
+      const baseViewport = page.getViewport({ scale: 1 });
+      const scale = 84 / baseViewport.width;
+      const outputScale = Math.min(window.devicePixelRatio || 1, 2);
+      const viewport = page.getViewport({ scale: scale * outputScale });
+
+      currentCanvas.width = Math.floor(viewport.width);
+      currentCanvas.height = Math.floor(viewport.height);
+      currentCanvas.style.width = `${Math.floor(baseViewport.width * scale)}px`;
+      currentCanvas.style.height = `${Math.floor(baseViewport.height * scale)}px`;
+
+      renderTask = page.render({
+        canvas: currentCanvas,
+        canvasContext: context,
+        viewport,
+      });
+      await renderTask.promise;
+    }
+
+    void renderThumbnail();
+
+    return () => {
+      isCancelled = true;
+      renderTask?.cancel();
+    };
+  }, [document, pageNumber]);
+
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(pageNumber)}
+      className="group flex w-full flex-col items-center gap-2 rounded-[var(--radius-sm)] px-2 py-2 text-center"
+      aria-current={isActive ? "page" : undefined}
+    >
+      <span
+        className="overflow-hidden rounded-[10px] border shadow-[0_12px_30px_rgb(10_5_20_/_0.08)] transition-transform duration-200 group-hover:-translate-y-0.5"
+        style={{
+          borderColor: isActive ? "var(--color-secondary)" : "var(--color-border)",
+        }}
+      >
+        <canvas ref={canvasRef} className="block bg-white" aria-hidden="true" />
+      </span>
+      <span
+        className="text-[11px] font-semibold"
+        style={{
+          color: isActive ? "var(--color-secondary)" : "var(--color-text-muted)",
+        }}
+      >
+        {pageNumber}
+      </span>
+    </button>
   );
 }
 
@@ -161,7 +272,7 @@ export function PdfMaterialViewer({
     pageCount: 0,
     message: null,
   });
-  const [fitMode, setFitMode] = useState<PdfFitMode>("page");
+  const [fitMode, setFitMode] = useState<PdfFitMode>("width");
   const [currentPage, setCurrentPage] = useState(1);
   const [viewerHeight, setViewerHeight] = useState(0);
   const [zoom, setZoom] = useState(PDF_DEFAULT_ZOOM);
@@ -247,67 +358,42 @@ export function PdfMaterialViewer({
     );
   }
 
-  const pageMaxWidth = isTheaterMode ? 1320 : 1120;
+  const pageMaxWidth = isTheaterMode ? 1440 : 1280;
   const zoomPercent = Math.round(zoom * 100);
-  const canGoToPreviousPage = currentPage > 1;
-  const canGoToNextPage = currentPage < loadState.pageCount;
+  const isPageMode = fitMode === "page";
+  const pageNumbers = isPageMode
+    ? [currentPage]
+    : Array.from({ length: loadState.pageCount }, (_, index) => index + 1);
 
   return (
     <div
       aria-label={title}
       className={
         isTheaterMode
-          ?"flex h-[calc(100vh-7rem)] min-h-[680px] flex-col overflow-hidden bg-[rgb(13_7_24)]"
-          : "flex h-[min(86vh,980px)] min-h-[620px] flex-col overflow-hidden bg-[var(--color-surface)]"
+          ? "flex h-[calc(100vh-5.5rem)] min-h-[760px] flex-col overflow-hidden bg-[rgb(18_10_31)]"
+          : "flex h-[min(92vh,1080px)] min-h-[720px] flex-col overflow-hidden bg-[var(--color-surface)]"
       }
       onContextMenu={(event) => event.preventDefault()}
       role="region"
     >
-      <div className="z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-4 shadow-[0_10px_24px_rgb(13_7_24_/_0.24)] sm:px-6">
-        <div>
+      <div className="z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 shadow-[0_10px_24px_rgb(13_7_24_/_0.18)] sm:px-5">
+        <div className="min-w-0">
           <p className="text-sm font-semibold text-[var(--color-text)]">
             Visualização do PDF
           </p>
           <p className="student-muted-text text-xs">
-            {getPageCountLabel(loadState.pageCount)}
+            {isPageMode
+              ? `Página ${currentPage} de ${loadState.pageCount}`
+              : getPageCountLabel(loadState.pageCount)}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          {fitMode === "page" ? (
-            <div className="flex items-center gap-1 rounded-full border border-[var(--color-border)] px-1 py-1">
-              <Button
-                aria-label="Página anterior"
-                disabled={!canGoToPreviousPage}
-                onClick={() =>
-                  setCurrentPage((page) => Math.max(1, page - 1))
-                }
-                size="icon"
-                title="Página anterior"
-                type="button"
-                variant="ghost"
-              >
-                <ChevronLeft size={17} aria-hidden="true" />
-              </Button>
-              <span className="min-w-16 px-2 text-center text-xs font-semibold text-[var(--color-text)]">
-                {currentPage}/{loadState.pageCount}
-              </span>
-              <Button
-                aria-label="Próxima página"
-                disabled={!canGoToNextPage}
-                onClick={() =>
-                  setCurrentPage((page) =>
-                    Math.min(loadState.pageCount, page + 1),
-                  )
-                }
-                size="icon"
-                title="Próxima página"
-                type="button"
-                variant="ghost"
-              >
-                <ChevronRight size={17} aria-hidden="true" />
-              </Button>
-            </div>
-          ) : null}
+
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <span className="rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-semibold text-[var(--color-text)]">
+            {isPageMode
+              ? `${currentPage}/${loadState.pageCount}`
+              : `${loadState.pageCount} páginas`}
+          </span>
           <Button
             aria-label="Diminuir zoom"
             disabled={zoom <= PDF_MIN_ZOOM}
@@ -327,26 +413,22 @@ export function PdfMaterialViewer({
             {zoomPercent}%
           </span>
           <Button
-            aria-pressed={fitMode === "page"}
+            aria-pressed={isPageMode}
             className="gap-2"
             onClick={() =>
               setFitMode((current) => (current === "page" ? "width" : "page"))
             }
             size="sm"
-            title={
-              fitMode === "page"
-                ? "Preencher pela largura"
-                : "Ver página inteira"
-            }
+            title={isPageMode ? "Ler preenchendo a largura" : "Ver página inteira"}
             type="button"
             variant="outline"
           >
-            {fitMode === "page" ? (
+            {isPageMode ? (
               <Maximize2 size={16} aria-hidden="true" />
             ) : (
               <Minimize2 size={16} aria-hidden="true" />
             )}
-            {fitMode === "page" ? "Preencher largura" : "Página inteira"}
+            {isPageMode ? "Preencher largura" : "Página inteira"}
           </Button>
           <Button
             aria-label="Aumentar zoom"
@@ -370,34 +452,65 @@ export function PdfMaterialViewer({
               setZoom(PDF_DEFAULT_ZOOM);
             }}
             size="sm"
-            title="Voltar para página inteira em 100%"
+            title="Voltar para página inteira"
             type="button"
             variant="outline"
           >
             <RotateCcw size={16} aria-hidden="true" />
-            Página 100%
+            Ajustar página
           </Button>
         </div>
       </div>
-      <div ref={scrollAreaRef} className="min-h-0 flex-1 overflow-auto p-2 sm:p-3">
-        <div className="mx-auto grid w-full gap-5">
-          {(fitMode === "page"
-            ? [currentPage]
-            : Array.from(
-                { length: loadState.pageCount },
-                (_, index) => index + 1,
-              )
-          ).map((pageNumber) => (
-            <PdfCanvasPage
-              key={pageNumber}
-              availableHeight={viewerHeight}
-              document={loadState.document}
-              fitMode={fitMode}
-              maxPageWidth={pageMaxWidth}
-              pageNumber={pageNumber}
-              zoom={zoom}
-            />
-          ))}
+
+      <div className="min-h-0 flex flex-1 overflow-hidden">
+        {isPageMode && loadState.pageCount > 1 ? (
+          <aside
+            className="hidden w-[108px] shrink-0 overflow-y-auto border-r px-2 py-3 md:block"
+            style={{
+              borderColor: "var(--color-border)",
+              backgroundColor:
+                "color-mix(in oklab, var(--color-surface-soft) 48%, var(--color-surface))",
+            }}
+          >
+            <div className="flex flex-col gap-2">
+              {Array.from({ length: loadState.pageCount }, (_, index) => index + 1).map(
+                (pageNumber) => (
+                  <PdfThumbnail
+                    key={pageNumber}
+                    document={loadState.document}
+                    isActive={currentPage === pageNumber}
+                    pageNumber={pageNumber}
+                    onSelect={setCurrentPage}
+                  />
+                ),
+              )}
+            </div>
+          </aside>
+        ) : null}
+
+        <div
+          ref={scrollAreaRef}
+          className={cn(
+            "min-h-0 flex-1 overflow-auto",
+            isPageMode
+              ? "bg-[color-mix(in_oklab,var(--color-surface-soft)_52%,var(--color-background))] p-3 sm:p-4"
+              : "bg-[var(--color-surface)] p-2 sm:p-3",
+          )}
+        >
+          <div className="mx-auto grid w-full gap-5">
+            {pageNumbers.map((pageNumber) => (
+              <PdfCanvasPage
+                key={pageNumber}
+                availableHeight={viewerHeight}
+                document={loadState.document}
+                fitMode={fitMode}
+                isPageMode={isPageMode}
+                maxPageWidth={pageMaxWidth}
+                pageNumber={pageNumber}
+                zoom={zoom}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
