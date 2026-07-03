@@ -9,11 +9,11 @@ import { toast } from "sonner";
 
 import { LEAD_CAPTURE_COPY } from "@/data/landing";
 import { submitWaitlist } from "@/lib/api/waitlist";
-import { MODO_FLUENTE_HOTMART_URL } from "@/lib/release";
 
 import { Magnet } from "@/components/motion/Magnet";
 import { Reveal } from "@/components/motion/Reveal";
-import { Button, ButtonLink } from "@/components/ui/Button";
+import { ReleasedLeadCapturePanel } from "@/components/sections/landing/ReleasedLeadCapturePanel";
+import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Input } from "@/components/ui/Input";
 import { Section } from "@/components/ui/Section";
@@ -272,46 +272,7 @@ export function LeadCaptureSection({
             />
             <div className="grid gap-8 sm:gap-10 lg:grid-cols-[1fr_0.95fr] lg:items-start">
               {isReleased ? (
-                <>
-                  <Reveal variant="fade-up">
-                    <div className="space-y-6">
-                      <p className="inline-flex rounded-full bg-accent-soft px-5 py-2 text-xs font-semibold uppercase tracking-wide text-secondary">
-                        Modo Fluente
-                      </p>
-                      <h2 className="pb-1 text-3xl sm:pb-2 sm:text-5xl">
-                        O guia já está disponível
-                      </h2>
-                      <p className="max-w-xl text-base leading-relaxed text-text sm:text-lg">
-                        Acesse sua área de aluna ou compre o Modo Fluente para
-                        começar a estudar com mais clareza, organização e
-                        constância.
-                      </p>
-                    </div>
-                  </Reveal>
-
-                  <Reveal delay={0.1} variant="fade-scale">
-                    <div className="rounded-3xl bg-background p-5 text-text sm:p-8">
-                      <div className="grid gap-3">
-                        <Magnet
-                          className="w-full will-change-transform"
-                          magnetStrength={26}
-                          padding={36}
-                        >
-                          <ButtonLink
-                            className="h-14 w-full justify-center rounded-2xl text-base sm:h-16"
-                            href={MODO_FLUENTE_HOTMART_URL}
-                            rel="noopener noreferrer"
-                            size="lg"
-                            target="_blank"
-                            variant="primary"
-                          >
-                            Garanta o seu
-                          </ButtonLink>
-                        </Magnet>
-                      </div>
-                    </div>
-                  </Reveal>
-                </>
+                <ReleasedLeadCapturePanel />
               ) : (
                 <>
               <Reveal variant="fade-up">
