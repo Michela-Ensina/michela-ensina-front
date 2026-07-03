@@ -21,6 +21,11 @@ export type AuthResetPasswordPayload = {
   password_confirmation: string;
 };
 
+export type AuthVerifyResetPasswordTokenPayload = {
+  email: string;
+  token: string;
+};
+
 export type AuthFirstAccessPayload = {
   token: string;
   password: string;

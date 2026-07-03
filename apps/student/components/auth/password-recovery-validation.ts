@@ -1,5 +1,6 @@
 import { isValidEmail } from "@/lib/utils/validation";
 import { getStrongPasswordValidationError } from "@/lib/auth/password-change";
+import { assessPasswordStrength } from "@/lib/auth/password-strength";
 
 type PasswordPairValidation = {
   password: string;
@@ -45,6 +46,36 @@ export function validatePasswordPair({
     return strongPasswordError === "A senha deve ter pelo menos 8 caracteres."
       ? minLengthMessage
       : strongPasswordError;
+  }
+
+  if (password !== passwordConfirmation) {
+    return "As senhas não coincidem.";
+  }
+
+  return null;
+}
+
+type ResetPasswordValidation = {
+  password: string;
+  passwordConfirmation: string;
+};
+
+export function validateResetPasswordPair({
+  password,
+  passwordConfirmation,
+}: ResetPasswordValidation) {
+  if (!password) {
+    return "Informe a nova senha.";
+  }
+
+  if (!passwordConfirmation) {
+    return "Confirme a nova senha.";
+  }
+
+  const assessment = assessPasswordStrength(password);
+
+  if (assessment.level === "weak") {
+    return assessment.blockedReasons[0] ?? "Use uma senha mais segura.";
   }
 
   if (password !== passwordConfirmation) {

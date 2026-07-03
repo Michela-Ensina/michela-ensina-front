@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { forgotPassword } from "@/lib/api/auth";
@@ -7,6 +8,7 @@ import { ApiClientError } from "@/lib/api/errors";
 import { validateRequiredEmail } from "./password-recovery-validation";
 
 export function useForgotPasswordForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -42,11 +44,23 @@ export function useForgotPasswordForm() {
     }
   }
 
+  function openResetPasswordForm() {
+    const params = new URLSearchParams();
+    const trimmedEmail = email.trim();
+
+    if (trimmedEmail) {
+      params.set("email", trimmedEmail);
+    }
+
+    router.push(`/redefinir-senha${params.size ? `?${params.toString()}` : ""}`);
+  }
+
   return {
     email,
     errorMessage,
     handleSubmit,
     isSubmitting,
+    openResetPasswordForm,
     setEmail,
     successMessage,
   };

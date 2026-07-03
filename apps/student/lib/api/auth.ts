@@ -7,6 +7,7 @@ import type {
   AuthLoginPayload,
   AuthLoginResponse,
   AuthResetPasswordPayload,
+  AuthVerifyResetPasswordTokenPayload,
   MessageResponse,
 } from "@/types/auth";
 
@@ -24,6 +25,13 @@ export function forgotPassword(payload: AuthForgotPasswordPayload) {
 
 export function resetPassword(payload: AuthResetPasswordPayload) {
   return apiPost<MessageResponse, AuthResetPasswordPayload>("/auth/reset-password", payload);
+}
+
+export function verifyResetPasswordToken(payload: AuthVerifyResetPasswordTokenPayload) {
+  return apiPost<MessageResponse, AuthVerifyResetPasswordTokenPayload>(
+    "/auth/reset-password/verify-token",
+    payload,
+  );
 }
 
 export function firstAccess(payload: AuthFirstAccessPayload) {
