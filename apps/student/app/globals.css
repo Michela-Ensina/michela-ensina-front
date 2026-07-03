@@ -315,13 +315,20 @@ a {
 
 :root[data-theme="light"] .student-topbar .student-menu-trigger .student-muted-text,
 .light .student-topbar .student-menu-trigger .student-muted-text {
-  color: rgb(228 206 244 / 0.82);
+  color: rgb(255 254 250 / 0.82);
 }
 
 :root[data-theme="light"] .student-topbar .student-menu-trigger .student-account-avatar,
 .light .student-topbar .student-menu-trigger .student-account-avatar {
   background-color: rgb(255 254 250 / 0.14);
   color: var(--color-brand-cream);
+}
+
+:root[data-theme="light"] .student-topbar .student-menu-surface,
+.light .student-topbar .student-menu-surface {
+  --color-text: #4d2375;
+  --color-text-muted: #765094;
+  color: var(--color-text);
 }
 
 .student-sidebar-toggle {
