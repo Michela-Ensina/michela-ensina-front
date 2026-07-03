@@ -40,7 +40,7 @@ export function MaterialsFilterSidebar({
 }: MaterialsFilterSidebarProps) {
   return (
     <aside className="space-y-4">
-      <SurfaceCard className="p-4 shadow-none">
+      <SurfaceCard className="student-section-surface p-4">
         <p className="text-sm font-semibold">Status</p>
         <div className="mt-3">
           <SegmentedControl
@@ -52,7 +52,7 @@ export function MaterialsFilterSidebar({
         </div>
       </SurfaceCard>
 
-      <SurfaceCard className="p-4 shadow-none">
+      <SurfaceCard className="student-section-surface p-4">
         <p className="text-sm font-semibold">Tipo de material</p>
         <div className="mt-3">
           <SegmentedControl

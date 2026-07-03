@@ -227,10 +227,25 @@ a {
   background-color: rgb(19 8 37 / 0.38);
 }
 
-.student-dashboard-outer-surface {
+.student-dashboard-outer-surface,
+.student-section-surface,
+.student-app-content .student-dashboard-outer-surface,
+.student-app-content .student-section-surface {
   border-color: color-mix(in oklab, var(--color-brand-lilac) 32%, var(--color-border));
   background-color: #35184f;
   box-shadow: var(--shadow-brand);
+}
+
+.student-dashboard-outer-surface .student-soft-surface,
+.student-dashboard-outer-surface .student-elevated-surface,
+.student-section-surface .student-soft-surface,
+.student-section-surface .student-elevated-surface,
+.student-app-content .student-dashboard-outer-surface .student-soft-surface,
+.student-app-content .student-dashboard-outer-surface .student-elevated-surface,
+.student-app-content .student-section-surface .student-soft-surface,
+.student-app-content .student-section-surface .student-elevated-surface {
+  border-color: rgb(228 206 244 / 0.16);
+  background-color: rgb(19 8 37 / 0.38);
 }
 
 :root[data-theme="light"] .student-elevated-surface,
@@ -271,7 +286,13 @@ a {
 }
 
 :root[data-theme="light"] .student-dashboard-outer-surface,
-.light .student-dashboard-outer-surface {
+:root[data-theme="light"] .student-section-surface,
+:root[data-theme="light"] .student-app-content .student-dashboard-outer-surface,
+:root[data-theme="light"] .student-app-content .student-section-surface,
+.light .student-dashboard-outer-surface,
+.light .student-section-surface,
+.light .student-app-content .student-dashboard-outer-surface,
+.light .student-app-content .student-section-surface {
   border-color: color-mix(in oklab, var(--me-lavender) 36%, var(--color-border));
   background-color: color-mix(in oklab, var(--me-lilac-light) 34%, var(--color-surface));
   box-shadow: 0 8px 22px rgb(77 35 117 / 0.09);
@@ -279,8 +300,20 @@ a {
 
 :root[data-theme="light"] .student-dashboard-outer-surface .student-soft-surface,
 :root[data-theme="light"] .student-dashboard-outer-surface .student-elevated-surface,
+:root[data-theme="light"] .student-section-surface .student-soft-surface,
+:root[data-theme="light"] .student-section-surface .student-elevated-surface,
+:root[data-theme="light"] .student-app-content .student-dashboard-outer-surface .student-soft-surface,
+:root[data-theme="light"] .student-app-content .student-dashboard-outer-surface .student-elevated-surface,
+:root[data-theme="light"] .student-app-content .student-section-surface .student-soft-surface,
+:root[data-theme="light"] .student-app-content .student-section-surface .student-elevated-surface,
 .light .student-dashboard-outer-surface .student-soft-surface,
-.light .student-dashboard-outer-surface .student-elevated-surface {
+.light .student-dashboard-outer-surface .student-elevated-surface,
+.light .student-section-surface .student-soft-surface,
+.light .student-section-surface .student-elevated-surface,
+.light .student-app-content .student-dashboard-outer-surface .student-soft-surface,
+.light .student-app-content .student-dashboard-outer-surface .student-elevated-surface,
+.light .student-app-content .student-section-surface .student-soft-surface,
+.light .student-app-content .student-section-surface .student-elevated-surface {
   border-color: color-mix(in oklab, var(--me-lavender) 30%, var(--color-border));
   background-color: var(--color-surface);
 }

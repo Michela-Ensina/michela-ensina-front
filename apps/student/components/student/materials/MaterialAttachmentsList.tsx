@@ -168,7 +168,7 @@ export function MaterialAttachmentsList({
 
   return (
     <>
-      <SurfaceCard>
+      <SurfaceCard className="student-section-surface">
         <div>
           <h2 className="text-xl">Materiais de apoio</h2>
           <p className="student-muted-text mt-1 text-sm">

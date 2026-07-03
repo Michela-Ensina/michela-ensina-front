@@ -36,11 +36,7 @@ export function AdminMaterialsList({
 }: AdminMaterialsListProps) {
   return (
     <section
-      className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
-      style={{
-        borderColor: "var(--color-border)",
-        backgroundColor: "var(--color-surface)",
-      }}
+      className="student-section-surface rounded-[var(--radius-lg)] border px-4 sm:px-5"
     >
       <div className="border-b py-4" style={{ borderColor: "var(--color-border)" }}>
         <SectionHeader
@@ -54,11 +50,10 @@ export function AdminMaterialsList({
           {materials.map((material) => (
             <article
               key={material.id}
-              className="grid gap-3 rounded-[var(--radius-md)] border p-4 md:grid-cols-[1fr_auto] md:items-center"
+              className="student-soft-surface grid gap-3 rounded-[var(--radius-md)] border p-4 md:grid-cols-[1fr_auto] md:items-center"
               style={{
                 borderColor:
                   "color-mix(in oklab, var(--color-border) 82%, var(--color-brand-lilac))",
-                backgroundColor: "var(--color-surface-soft)",
               }}
             >
               <div className="min-w-0">

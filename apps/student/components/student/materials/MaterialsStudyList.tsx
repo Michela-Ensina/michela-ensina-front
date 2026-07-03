@@ -17,11 +17,7 @@ function getVisibleMaterialsLabel(visibleCount: number, totalCount: number) {
 export function MaterialsStudyList({ materials, totalMaterials, progressItems }: MaterialsStudyListProps) {
   return (
     <section
-      className="min-h-[420px] rounded-[var(--radius-lg)] border px-4 sm:px-5"
-      style={{
-        borderColor: "var(--color-border)",
-        backgroundColor: "var(--color-surface)",
-      }}
+      className="student-section-surface min-h-[420px] rounded-[var(--radius-lg)] border px-4 sm:px-5"
     >
       <div
         className="flex flex-col gap-2 border-b py-4 sm:flex-row sm:items-end sm:justify-between"

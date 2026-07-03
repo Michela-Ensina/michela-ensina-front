@@ -41,11 +41,7 @@ export function AdminMaterialsContent() {
   return (
     <div className="space-y-5">
       <section
-        className="rounded-[var(--radius-lg)] border p-5 sm:p-6"
-        style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "var(--color-surface)",
-        }}
+        className="student-section-surface rounded-[var(--radius-lg)] border p-5 sm:p-6"
       >
         <div className="flex flex-wrap items-center gap-4">
           <span className="grid size-11 place-items-center rounded-[var(--radius-md)] bg-[var(--color-surface-soft)] text-[var(--color-primary)]">

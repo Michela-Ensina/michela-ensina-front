@@ -58,7 +58,7 @@ export function AdminMaterialForm({
   onToggleProduct,
 }: AdminMaterialFormProps) {
   return (
-    <SurfaceCard className="min-w-0 overflow-hidden">
+    <SurfaceCard className="student-section-surface min-w-0 overflow-hidden">
       <SectionHeader
         title={selectedMaterial ?"Editar material" : "Novo material"}
         description="Cadastre vídeos do YouTube, PDFs de leitura ou anexos da fase 1."

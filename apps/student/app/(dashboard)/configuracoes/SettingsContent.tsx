@@ -26,11 +26,7 @@ export function SettingsContent() {
       </aside>
 
       <section
-        className="rounded-[var(--radius-lg)] border px-4 sm:px-5"
-        style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "var(--color-surface)",
-        }}
+        className="student-section-surface rounded-[var(--radius-lg)] border px-4 sm:px-5"
       >
         <div className="border-b py-4" style={{ borderColor: "var(--color-border)" }}>
           <SectionHeader

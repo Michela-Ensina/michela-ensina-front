@@ -10,7 +10,7 @@ export function SettingsAccountCard({ user }: SettingsAccountCardProps) {
   const userStatusLabel = user ? (user.is_active ? "Ativo" : "Inativo") : "Sem dados";
 
   return (
-    <SurfaceCard>
+    <SurfaceCard className="student-section-surface">
       <div className="flex items-start gap-3">
         <div className="student-account-avatar grid size-12 shrink-0 place-items-center rounded-2xl text-sm font-bold">
           {user?.name?.slice(0, 2).toUpperCase() ?? "ME"}

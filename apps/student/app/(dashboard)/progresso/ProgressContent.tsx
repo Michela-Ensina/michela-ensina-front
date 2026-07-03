@@ -73,7 +73,7 @@ export function ProgressContent() {
   return (
     <div className="grid gap-5 xl:grid-cols-[340px_1fr]">
       <aside className="space-y-4">
-        <SurfaceCard className="relative overflow-hidden">
+        <SurfaceCard className="student-section-surface relative overflow-hidden">
           <Image
             src="/assets/brand/graphics/estrela-lilas.svg"
             alt=""
@@ -103,7 +103,7 @@ export function ProgressContent() {
         </SurfaceCard>
 
         <div
-          className="student-elevated-surface rounded-[var(--radius-lg)] border p-4"
+          className="student-section-surface rounded-[var(--radius-lg)] border p-4"
         >
           <p className="flex items-center gap-2 text-sm font-semibold">
             <Clock3 size={16} aria-hidden="true" />
@@ -121,7 +121,7 @@ export function ProgressContent() {
       </aside>
 
       <section
-        className="student-elevated-surface rounded-[var(--radius-lg)] border px-4 sm:px-5"
+        className="student-section-surface rounded-[var(--radius-lg)] border px-4 sm:px-5"
       >
         <div className="border-b py-4" style={{ borderColor: "var(--color-border)" }}>
           <SectionHeader

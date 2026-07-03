@@ -65,7 +65,7 @@ export function MaterialsContent() {
   return (
     <div className="space-y-6">
       <section
-        className="student-elevated-surface relative overflow-hidden rounded-[var(--radius-lg)] border p-5 sm:p-6"
+        className="student-section-surface relative overflow-hidden rounded-[var(--radius-lg)] border p-5 sm:p-6"
       >
         <Image
           src="/assets/brand/graphics/estrela-lilas.svg"

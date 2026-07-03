@@ -94,7 +94,7 @@ function MaterialCompletionAction({
   onUndoCompleted,
 }: MaterialCompletionActionProps) {
   return (
-    <SurfaceCard className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <SurfaceCard className="student-section-surface flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <p className="text-base font-semibold">
           {isCompleted ? "Material concluído" : "Concluir este material"}
@@ -160,7 +160,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
 
   if (detail.notFound || !detail.material || !type || !status) {
     return (
-      <SurfaceCard>
+      <SurfaceCard className="student-section-surface">
         <h2 className="text-2xl">Material indisponível</h2>
         <p className="student-muted-text mt-2 text-sm">
           Este material não está disponível para a sua conta agora ou não existe mais.
@@ -201,7 +201,7 @@ export function MaterialDetailContent({ materialId }: MaterialDetailContentProps
       typeLabel={type.label}
     >
       {!isTheaterMode ? (
-        <SurfaceCard className="flex flex-wrap items-start justify-between gap-3">
+        <SurfaceCard className="student-section-surface flex flex-wrap items-start justify-between gap-3">
           <div className="max-w-3xl">
             <p className="student-muted-text text-sm">Materiais / {type.label}</p>
             <h1 className="mt-1 text-3xl">{detail.material.title}</h1>
