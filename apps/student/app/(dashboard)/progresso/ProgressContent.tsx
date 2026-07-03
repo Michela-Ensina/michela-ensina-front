@@ -125,7 +125,7 @@ export function ProgressContent() {
             procurar demais.
           </p>
           <Link href="/materiais" className="mt-4 inline-block">
-            <Button type="button" variant="primary" size="sm">
+            <Button type="button" variant="primary" size="sm" className="text-sm">
               Abrir materiais
             </Button>
           </Link>

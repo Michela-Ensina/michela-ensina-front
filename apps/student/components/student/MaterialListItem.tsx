@@ -62,6 +62,7 @@ export function MaterialListItem({
         href={`/materiais/${material.id}`}
         className={cn(
           buttonVariants({ variant: "primary", size: "sm" }),
+          "text-sm",
           density === "compact"
             ? "col-start-2 justify-self-start sm:col-start-auto sm:justify-self-end"
             : "",
