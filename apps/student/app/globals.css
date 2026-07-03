@@ -235,7 +235,7 @@ a {
     var(--color-border)
   );
   --color-text-muted: #d9c0ee;
-  background-color: rgb(53 24 79 / 0.7);
+  background-color: rgb(53 24 79 / 0.9);
   box-shadow: var(--shadow-brand);
 }
 
@@ -250,10 +250,10 @@ a {
 .student-app-content .student-section-surface {
   border-color: color-mix(
     in oklab,
-    var(--color-brand-lilac) 32%,
+    var(--color-brand-lilac) 12%,
     var(--color-border)
   );
-  background-color: rgb(53 24 79 / 0.7);
+  background-color: rgb(53 24 79 / 0.9);
   box-shadow: var(--shadow-brand);
 }
 
