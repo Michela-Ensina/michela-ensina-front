@@ -5,8 +5,10 @@ import {
   getMaterialTypeAccent,
   getMaterialTypeMeta,
 } from "@/components/student/materials/material-display";
+import { buttonVariants } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
+import { cn } from "@/lib/utils/cn";
 import type { Material, ProgressItem } from "@/types/student";
 
 type MaterialCardProps = {
@@ -47,8 +49,7 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
 
       <Link
         href={`/materiais/${material.id}`}
-        className="student-text-action -mx-2 mt-5 w-fit rounded-lg px-2 py-1 text-sm font-semibold"
-        style={{ color: accent.color }}
+        className={cn(buttonVariants({ variant: "primary", size: "sm" }), "mt-5")}
       >
         {status.tone === "concluído" ?"Revisar material" : "Continue estudando"}
       </Link>

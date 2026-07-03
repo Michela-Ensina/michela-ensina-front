@@ -115,7 +115,7 @@ export function DateTimePicker({ id, value, onChange }: DateTimePickerProps) {
   const [open, setOpen] = useState(false);
   const [draftParts, setDraftParts] = useState<DateTimeParts>(() => splitDateTime(value));
   const selectedMonthLabel =
-    monthOptions.find((month) => month.value === draftParts.month)?.label ?? "M?s";
+    monthOptions.find((month) => month.value === draftParts.month)?.label ?? "Mês";
   const yearOptions = useMemo(
     () => getYearOptions(draftParts.year),
     [draftParts.year],

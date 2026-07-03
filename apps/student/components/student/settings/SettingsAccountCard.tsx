@@ -18,7 +18,7 @@ export function SettingsAccountCard({ user }: SettingsAccountCardProps) {
         <div className="min-w-0">
           <p className="font-semibold">{user?.name ?? "Aluno"}</p>
           <p className="student-muted-text truncate text-sm">
-            {user?.email ?? "?rea do aluno"}
+            {user?.email ?? "Área do aluno"}
           </p>
         </div>
       </div>
