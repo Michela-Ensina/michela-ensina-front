@@ -375,7 +375,7 @@ body[data-material-theater="true"] .student-mobile-nav {
 }
 
 body[data-material-theater="true"] .student-app-content {
-  padding: 16px;
+  padding: 0 16px 16px;
 }
 
 body[data-material-theater="true"] .student-app-main {
