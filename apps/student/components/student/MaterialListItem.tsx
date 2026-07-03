@@ -53,7 +53,7 @@ export function MaterialListItem({
         <h3 className="mt-1 text-lg leading-tight">{material.title}</h3>
         {density === "comfortable" ? (
           <p className="student-muted-text mt-1 max-w-2xl text-sm">
-            {material.description ?? "Material dispon?vel para estudo."}
+            {material.description ?? "Material disponível para estudo."}
           </p>
         ) : null}
       </div>

@@ -41,7 +41,7 @@ export function MaterialCard({ material, progressItems }: MaterialCardProps) {
         </p>
         <h3 className="mt-2 text-xl leading-tight">{material.title}</h3>
         <p className="student-muted-text mt-2 text-sm">
-          {material.description ?? "Material dispon?vel para estudo."}
+          {material.description ?? "Material disponível para estudo."}
         </p>
       </div>
 

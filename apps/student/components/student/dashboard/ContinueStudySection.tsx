@@ -43,7 +43,7 @@ export function ContinueStudySection({
             Próximo material
           </p>
           <h3 className="mt-3 text-2xl leading-tight">
-            {nextMaterial?.title ?? "Sem sugest?o dispon?vel"}
+            {nextMaterial?.title ?? "Sem sugestão disponível"}
           </h3>
           <p className="student-muted-text mt-3 max-w-xl text-sm">
             {nextMaterial?.description ??
