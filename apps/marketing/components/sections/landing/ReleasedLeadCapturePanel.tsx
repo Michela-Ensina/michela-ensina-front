@@ -64,7 +64,7 @@ export function ReleasedLeadCapturePanel() {
           />
 
           <div className="relative z-10 space-y-6">
-            <div className="flex items-start justify-center gap-8">
+            <div className="flex items-start justify-center gap-2 xl:gap-8">
               <h3 className="mt-1 text-3xl text-primary sm:text-4xl">
                 Modo Fluente
               </h3>
@@ -74,7 +74,7 @@ export function ReleasedLeadCapturePanel() {
             </div>
 
             <div className="space-y-1 text-primary">
-              <div className="flex items-end gap-2 ">
+              <div className="flex items-end gap-2 justify-center">
                 <p>
                   <span className="text-base font-semibold sm:text-xl">
                     {PRODUCT_INFO.installmentCountLabel.replaceAll("de", "")}
