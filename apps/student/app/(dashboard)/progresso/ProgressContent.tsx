@@ -25,10 +25,14 @@ function getCompletedCountLabel(count: number) {
   return count === 1 ? "Concluído" : "Concluídos";
 }
 
-function groupMaterialsByProgress(materials: Material[], progressItems: ProgressItem[]): ProgressMaterialGroups {
+function groupMaterialsByProgress(
+  materials: Material[],
+  progressItems: ProgressItem[],
+): ProgressMaterialGroups {
   return materials.reduce<ProgressMaterialGroups>(
     (groups, material) => {
-      const isCompleted = getMaterialStatus(material, progressItems).tone === "concluído";
+      const isCompleted =
+        getMaterialStatus(material, progressItems).tone === "concluído";
 
       if (isCompleted) {
         groups.completedMaterials.push(material);
@@ -43,7 +47,8 @@ function groupMaterialsByProgress(materials: Material[], progressItems: Progress
 }
 
 export function ProgressContent() {
-  const { data, isLoading, errorMessage, isEmpty, refetch } = useMaterialsData();
+  const { data, isLoading, errorMessage, isEmpty, refetch } =
+    useMaterialsData();
 
   if (isLoading) {
     return (
@@ -55,7 +60,9 @@ export function ProgressContent() {
   }
 
   if (errorMessage) {
-    return <LoadErrorCard message={errorMessage} onRetry={() => void refetch()} />;
+    return (
+      <LoadErrorCard message={errorMessage} onRetry={() => void refetch()} />
+    );
   }
 
   if (!data || isEmpty || !data.progress) {
@@ -68,7 +75,10 @@ export function ProgressContent() {
   }
 
   const progress = data.progress;
-  const { completedMaterials, openMaterials } = groupMaterialsByProgress(data.materials, progress.items);
+  const { completedMaterials, openMaterials } = groupMaterialsByProgress(
+    data.materials,
+    progress.items,
+  );
 
   return (
     <div className="grid gap-5 xl:grid-cols-[340px_1fr]">
@@ -85,7 +95,10 @@ export function ProgressContent() {
           <div className="relative">
             <p className="text-sm font-semibold">Resumo da jornada</p>
             <div className="mt-5">
-              <ProgressBar value={progress.percentage} label="Progresso geral" />
+              <ProgressBar
+                value={progress.percentage}
+                label="Progresso geral"
+              />
             </div>
             <div className="mt-5 grid grid-cols-2 gap-3">
               <ProgressCountTile
@@ -102,28 +115,28 @@ export function ProgressContent() {
           </div>
         </SurfaceCard>
 
-        <div
-          className="student-section-surface rounded-[var(--radius-lg)] border p-4"
-        >
+        <div className="student-section-surface rounded-lg border p-4">
           <p className="flex items-center gap-2 text-sm font-semibold">
             <Clock3 size={16} aria-hidden="true" />
             Próximo passo
           </p>
           <p className="student-muted-text mt-2 text-sm">
-            Continue pelo primeiro material em aberto para manter o ritmo sem procurar demais.
+            Continue pelo primeiro material em aberto para manter o ritmo sem
+            procurar demais.
           </p>
           <Link href="/materiais" className="mt-4 inline-block">
-            <Button type="button" variant="outline" size="sm">
+            <Button type="button" variant="primary" size="sm">
               Abrir materiais
             </Button>
           </Link>
         </div>
       </aside>
 
-      <section
-        className="student-section-surface rounded-[var(--radius-lg)] border px-4 sm:px-5"
-      >
-        <div className="border-b py-4" style={{ borderColor: "var(--color-border)" }}>
+      <section className="student-section-surface rounded-lg border px-4 sm:px-5">
+        <div
+          className="border-b py-4"
+          style={{ borderColor: "var(--color-border)" }}
+        >
           <SectionHeader
             title="Linha de progresso"
             description="Materiais agrupados pelo estado atual para uma leitura rápida da sua jornada."
@@ -138,7 +151,10 @@ export function ProgressContent() {
           emptyMessage="Não há materiais em aberto no momento."
         />
 
-        <div className="border-t py-4" style={{ borderColor: "var(--color-border)" }}>
+        <div
+          className="border-t py-4"
+          style={{ borderColor: "var(--color-border)" }}
+        >
           <ProgressMaterialSection
             title="Concluídos"
             icon={<CheckCircle2 size={16} aria-hidden="true" />}

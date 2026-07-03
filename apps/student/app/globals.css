@@ -163,6 +163,11 @@ a {
     transform 180ms ease;
 }
 
+.student-primary-action {
+  color: var(--color-brand-cream);
+  background-color: var(--color-secondary);
+}
+
 .student-text-action {
   cursor: pointer;
   transition:

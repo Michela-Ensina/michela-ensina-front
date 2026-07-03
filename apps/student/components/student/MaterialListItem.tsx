@@ -5,6 +5,7 @@ import {
   getMaterialTypeAccent,
   getMaterialTypeMeta,
 } from "@/components/student/materials/material-display";
+import { buttonVariants } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { cn } from "@/lib/utils/cn";
 import type { Material, ProgressItem } from "@/types/student";
@@ -15,7 +16,11 @@ type MaterialListItemProps = {
   density?: "comfortable" | "compact";
 };
 
-export function MaterialListItem({ material, progressItems, density = "comfortable" }: MaterialListItemProps) {
+export function MaterialListItem({
+  material,
+  progressItems,
+  density = "comfortable",
+}: MaterialListItemProps) {
   const status = getMaterialStatus(material, progressItems);
   const type = getMaterialTypeMeta(material.type);
   const accent = getMaterialTypeAccent(material.type);
@@ -24,7 +29,7 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
   return (
     <article
       className={cn(
-        "student-hover-surface student-soft-surface grid gap-3 rounded-[var(--radius-md)] border p-4 transition-colors duration-200",
+        "student-hover-surface student-soft-surface grid gap-3 rounded-md border p-4 transition-colors duration-200",
         density === "compact"
           ? "grid-cols-[auto_1fr] items-start sm:grid-cols-[auto_1fr_auto] sm:items-center"
           : "sm:grid-cols-[auto_1fr_auto] sm:items-center",
@@ -42,9 +47,7 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
 
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
-          <p className="student-muted-text text-xs font-bold">
-            {type.label}
-          </p>
+          <p className="student-muted-text text-xs font-bold">{type.label}</p>
           <StatusBadge label={status.label} tone={status.tone} />
         </div>
         <h3 className="mt-1 text-lg leading-tight">{material.title}</h3>
@@ -58,15 +61,13 @@ export function MaterialListItem({ material, progressItems, density = "comfortab
       <Link
         href={`/materiais/${material.id}`}
         className={cn(
-          "student-action student-primary-action inline-flex min-h-9 items-center justify-center rounded-xl px-3 text-sm font-semibold",
-          density === "compact" ? "col-start-2 justify-self-start sm:col-start-auto sm:justify-self-end" : "",
+          buttonVariants({ variant: "primary", size: "sm" }),
+          density === "compact"
+            ? "col-start-2 justify-self-start sm:col-start-auto sm:justify-self-end"
+            : "",
         )}
-        style={{
-          color: "var(--color-brand-cream)",
-          backgroundColor: "var(--color-secondary)",
-        }}
       >
-        {status.tone === "concluído" ?"Revisar" : "Continuar"}
+        {status.tone === "concluído" ? "Revisar" : "Continuar"}
       </Link>
     </article>
   );

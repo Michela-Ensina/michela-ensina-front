@@ -8,7 +8,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "student-primary-action text-[var(--color-background)]",
+        primary: "student-primary-action bg-[var(--color-secondary)] text-[var(--color-brand-cream)]",
         outline: "student-hover-surface border bg-transparent text-[var(--color-text)]",
         ghost: "student-hover-surface bg-transparent text-[var(--color-text-muted)]",
         danger: "student-hover-surface border",
@@ -46,11 +46,6 @@ export function Button({
   const mergedStyle: React.CSSProperties = {
     ...style,
   };
-
-  if (variant === "primary") {
-    mergedStyle.backgroundColor = mergedStyle.backgroundColor ?? "var(--color-secondary)";
-    mergedStyle.color = mergedStyle.color ?? "#fffefa";
-  }
 
   if (variant === "outline") {
     mergedStyle.borderColor = mergedStyle.borderColor ?? "var(--color-border)";
