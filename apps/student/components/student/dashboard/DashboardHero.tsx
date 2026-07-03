@@ -18,7 +18,7 @@ export function DashboardHero({
   totalMaterials,
 }: DashboardHeroProps) {
   return (
-    <section className="student-hero-surface relative overflow-hidden rounded-[var(--radius-lg)] border px-5 py-5 sm:px-6">
+    <section className="student-hero-surface relative overflow-hidden rounded-lg border px-5 py-5 sm:px-6">
       <Image
         src="/assets/brand/graphics/elementos-02-lilas.svg"
         alt=""
@@ -40,10 +40,10 @@ export function DashboardHero({
         <div className="max-w-3xl">
           <div className="flex flex-wrap items-center gap-2">
             <StatusBadge
-              label={student.is_active ?"Acesso ativo" : "Acesso limitado"}
-              tone={student.is_active ?"concluído" : "bloqueado"}
+              label={student.is_active ? "Acesso ativo" : "Acesso limitado"}
+              tone={student.is_active ? "concluído" : "bloqueado"}
             />
-            {student.must_change_password ?(
+            {student.must_change_password ? (
               <StatusBadge label="Senha recomendada" tone="em-andamento" />
             ) : null}
           </div>
