@@ -29,7 +29,7 @@ export function DashboardHighlights({
   progressItems,
 }: DashboardHighlightsProps) {
   return (
-    <SurfaceCard className="space-y-4">
+    <SurfaceCard className="student-dashboard-outer-surface space-y-4">
       <SectionHeader
         title="Destaques"
         description="Uma visão compacta do que está liberado agora."

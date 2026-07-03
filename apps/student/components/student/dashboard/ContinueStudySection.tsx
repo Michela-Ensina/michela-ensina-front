@@ -19,7 +19,7 @@ export function ContinueStudySection({
   recentMaterials,
 }: ContinueStudySectionProps) {
   return (
-    <SurfaceCard className="space-y-4">
+    <SurfaceCard className="student-dashboard-outer-surface space-y-4">
       <SectionHeader
         title="Continue estudando"
         description="O próximo conteúdo aparece em destaque para manter o fluxo de estudo simples."
