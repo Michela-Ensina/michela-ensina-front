@@ -9,7 +9,7 @@ import { ButtonLink } from "@/components/ui/Button";
 
 const RELEASED_HIGHLIGHTS = [
   "Guia completo",
-  "Planner incluso",
+  "Materiais de apoio",
   "Acesso imediato",
 ] as const;
 
@@ -25,10 +25,6 @@ export function ReleasedLeadCapturePanel() {
             <h2 className="pb-1 text-3xl sm:pb-2 sm:text-5xl">
               O guia já está disponível
             </h2>
-            <p className="max-w-xl text-base leading-relaxed text-text sm:text-lg">
-              O Modo Fluente abriu. Agora é só entrar, baixar o guia e começar
-              com um plano claro de estudos.
-            </p>
           </div>
 
           <div className="flex flex-wrap gap-2">

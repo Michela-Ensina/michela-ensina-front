@@ -56,7 +56,7 @@ export function DashboardHero({
           </p>
         </div>
 
-        <div className="student-soft-surface rounded-[var(--radius-md)] border p-4">
+        <div className="student-soft-surface rounded-md border p-4">
           <DashboardProgressSummary
             percentage={progress.percentage}
             viewedCount={progress.viewed_count}
