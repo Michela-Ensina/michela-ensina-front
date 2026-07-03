@@ -211,8 +211,16 @@ a {
 }
 
 .student-soft-surface {
-  border-color: color-mix(in oklab, var(--color-border) 86%, var(--color-brand-lilac));
-  background-color: color-mix(in oklab, var(--color-surface-soft) 76%, transparent);
+  border-color: color-mix(
+    in oklab,
+    var(--color-border) 86%,
+    var(--color-brand-lilac)
+  );
+  background-color: color-mix(
+    in oklab,
+    var(--color-surface-soft) 76%,
+    transparent
+  );
 }
 
 .student-app-content .student-soft-surface {
@@ -221,9 +229,13 @@ a {
 }
 
 .student-hero-surface {
-  border-color: color-mix(in oklab, var(--color-brand-lilac) 32%, var(--color-border));
+  border-color: color-mix(
+    in oklab,
+    var(--color-brand-lilac) 32%,
+    var(--color-border)
+  );
   --color-text-muted: #d9c0ee;
-  background-color: #35184f;
+  background-color: rgb(53 24 79 / 0.7);
   box-shadow: var(--shadow-brand);
 }
 
@@ -236,8 +248,12 @@ a {
 .student-section-surface,
 .student-app-content .student-dashboard-outer-surface,
 .student-app-content .student-section-surface {
-  border-color: color-mix(in oklab, var(--color-brand-lilac) 32%, var(--color-border));
-  background-color: #35184f;
+  border-color: color-mix(
+    in oklab,
+    var(--color-brand-lilac) 32%,
+    var(--color-border)
+  );
+  background-color: rgb(53 24 79 / 0.7);
   box-shadow: var(--shadow-brand);
 }
 
@@ -255,39 +271,79 @@ a {
 
 :root[data-theme="light"] .student-elevated-surface,
 .light .student-elevated-surface {
-  border-color: color-mix(in oklab, var(--me-lavender) 32%, var(--color-border));
-  background-color: color-mix(in oklab, var(--me-lilac-light) 22%, var(--color-surface));
+  border-color: color-mix(
+    in oklab,
+    var(--me-lavender) 32%,
+    var(--color-border)
+  );
+  background-color: color-mix(
+    in oklab,
+    var(--me-lilac-light) 22%,
+    var(--color-surface)
+  );
 }
 
 :root[data-theme="light"] .student-app-content .student-elevated-surface,
 .light .student-app-content .student-elevated-surface {
-  border-color: color-mix(in oklab, var(--me-lavender) 36%, var(--color-border));
-  background-color: color-mix(in oklab, var(--me-lilac-light) 26%, var(--color-surface));
+  border-color: color-mix(
+    in oklab,
+    var(--me-lavender) 36%,
+    var(--color-border)
+  );
+  background-color: color-mix(
+    in oklab,
+    var(--me-lilac-light) 26%,
+    var(--color-surface)
+  );
   box-shadow: 0 8px 22px rgb(77 35 117 / 0.09);
 }
 
 :root[data-theme="light"] .student-soft-surface,
 .light .student-soft-surface {
-  border-color: color-mix(in oklab, var(--me-lavender) 28%, var(--color-border));
-  background-color: color-mix(in oklab, var(--me-lilac-light) 42%, var(--color-surface));
+  border-color: color-mix(
+    in oklab,
+    var(--me-lavender) 28%,
+    var(--color-border)
+  );
+  background-color: color-mix(
+    in oklab,
+    var(--me-lilac-light) 42%,
+    var(--color-surface)
+  );
 }
 
 :root[data-theme="light"] .student-app-content .student-soft-surface,
 .light .student-app-content .student-soft-surface {
-  border-color: color-mix(in oklab, var(--me-lavender) 30%, var(--color-border));
-  background-color: color-mix(in oklab, var(--me-lilac-light) 20%, var(--color-surface));
+  border-color: color-mix(
+    in oklab,
+    var(--me-lavender) 30%,
+    var(--color-border)
+  );
+  background-color: color-mix(
+    in oklab,
+    var(--me-lilac-light) 20%,
+    var(--color-surface)
+  );
 }
 
 :root[data-theme="light"] .student-hero-surface,
 .light .student-hero-surface {
   --color-text-muted: #7e4ca5;
-  background-color: color-mix(in oklab, var(--me-lilac-light) 34%, var(--color-surface));
+  background-color: color-mix(
+    in oklab,
+    var(--me-lilac-light) 34%,
+    var(--color-surface)
+  );
 }
 
 :root[data-theme="light"] .student-hero-surface .student-soft-surface,
 .light .student-hero-surface .student-soft-surface {
   border-color: var(--color-border);
-  background-color: color-mix(in oklab, var(--color-surface) 88%, var(--me-lilac-light));
+  background-color: color-mix(
+    in oklab,
+    var(--color-surface) 88%,
+    var(--me-lilac-light)
+  );
 }
 
 :root[data-theme="light"] .student-dashboard-outer-surface,
@@ -298,35 +354,69 @@ a {
 .light .student-section-surface,
 .light .student-app-content .student-dashboard-outer-surface,
 .light .student-app-content .student-section-surface {
-  border-color: color-mix(in oklab, var(--me-lavender) 36%, var(--color-border));
-  background-color: color-mix(in oklab, var(--me-lilac-light) 34%, var(--color-surface));
+  border-color: color-mix(
+    in oklab,
+    var(--me-lavender) 36%,
+    var(--color-border)
+  );
+  background-color: color-mix(
+    in oklab,
+    var(--me-lilac-light) 34%,
+    var(--color-surface)
+  );
   box-shadow: 0 8px 22px rgb(77 35 117 / 0.09);
 }
 
-:root[data-theme="light"] .student-dashboard-outer-surface .student-soft-surface,
-:root[data-theme="light"] .student-dashboard-outer-surface .student-elevated-surface,
+:root[data-theme="light"]
+  .student-dashboard-outer-surface
+  .student-soft-surface,
+:root[data-theme="light"]
+  .student-dashboard-outer-surface
+  .student-elevated-surface,
 :root[data-theme="light"] .student-section-surface .student-soft-surface,
 :root[data-theme="light"] .student-section-surface .student-elevated-surface,
-:root[data-theme="light"] .student-app-content .student-dashboard-outer-surface .student-soft-surface,
-:root[data-theme="light"] .student-app-content .student-dashboard-outer-surface .student-elevated-surface,
-:root[data-theme="light"] .student-app-content .student-section-surface .student-soft-surface,
-:root[data-theme="light"] .student-app-content .student-section-surface .student-elevated-surface,
+:root[data-theme="light"]
+  .student-app-content
+  .student-dashboard-outer-surface
+  .student-soft-surface,
+:root[data-theme="light"]
+  .student-app-content
+  .student-dashboard-outer-surface
+  .student-elevated-surface,
+:root[data-theme="light"]
+  .student-app-content
+  .student-section-surface
+  .student-soft-surface,
+:root[data-theme="light"]
+  .student-app-content
+  .student-section-surface
+  .student-elevated-surface,
 .light .student-dashboard-outer-surface .student-soft-surface,
 .light .student-dashboard-outer-surface .student-elevated-surface,
 .light .student-section-surface .student-soft-surface,
 .light .student-section-surface .student-elevated-surface,
-.light .student-app-content .student-dashboard-outer-surface .student-soft-surface,
-.light .student-app-content .student-dashboard-outer-surface .student-elevated-surface,
+.light
+  .student-app-content
+  .student-dashboard-outer-surface
+  .student-soft-surface,
+.light
+  .student-app-content
+  .student-dashboard-outer-surface
+  .student-elevated-surface,
 .light .student-app-content .student-section-surface .student-soft-surface,
 .light .student-app-content .student-section-surface .student-elevated-surface {
-  border-color: color-mix(in oklab, var(--me-lavender) 30%, var(--color-border));
+  border-color: color-mix(
+    in oklab,
+    var(--me-lavender) 30%,
+    var(--color-border)
+  );
   background-color: var(--color-surface);
 }
 
 .student-sidebar {
-  border-right: 1px solid color-mix(in oklab, var(--color-border) 82%, transparent);
-  background:
-    linear-gradient(160deg, #4d2375 0%, #32174b 100%);
+  border-right: 1px solid
+    color-mix(in oklab, var(--color-border) 82%, transparent);
+  background: linear-gradient(160deg, #4d2375 0%, #32174b 100%);
 }
 
 .student-topbar {
@@ -340,8 +430,7 @@ a {
   --color-text: var(--color-brand-cream);
   --color-text-muted: rgb(228 206 244 / 0.82);
   border-color: rgb(228 206 244 / 0.24);
-  background:
-    linear-gradient(160deg, #4d2375 0%, #32174b 100%);
+  background: linear-gradient(160deg, #4d2375 0%, #32174b 100%);
 }
 
 :root[data-theme="light"] .student-topbar .student-menu-trigger,
@@ -351,12 +440,18 @@ a {
   color: var(--color-brand-cream);
 }
 
-:root[data-theme="light"] .student-topbar .student-menu-trigger .student-muted-text,
+:root[data-theme="light"]
+  .student-topbar
+  .student-menu-trigger
+  .student-muted-text,
 .light .student-topbar .student-menu-trigger .student-muted-text {
   color: rgb(255 254 250 / 0.82);
 }
 
-:root[data-theme="light"] .student-topbar .student-menu-trigger .student-account-avatar,
+:root[data-theme="light"]
+  .student-topbar
+  .student-menu-trigger
+  .student-account-avatar,
 .light .student-topbar .student-menu-trigger .student-account-avatar {
   background-color: rgb(255 254 250 / 0.14);
   color: var(--color-brand-cream);
@@ -385,7 +480,11 @@ a {
 @media (hover: hover) {
   .student-sidebar-toggle:hover {
     color: var(--color-primary);
-    background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
+    background-color: color-mix(
+      in oklab,
+      var(--color-primary) 10%,
+      transparent
+    );
   }
 }
 
@@ -435,7 +534,11 @@ body[data-material-theater="true"] .student-app-main {
 :root[data-theme="light"] .student-theater-header,
 .light .student-theater-header {
   border-color: var(--color-border);
-  background-color: color-mix(in oklab, var(--color-surface) 90%, var(--me-lilac-light));
+  background-color: color-mix(
+    in oklab,
+    var(--color-surface) 90%,
+    var(--me-lilac-light)
+  );
 }
 
 :root[data-theme="light"] .student-theater-stage,
@@ -457,13 +560,21 @@ body[data-material-theater="true"] .student-app-main {
 
 @media (hover: hover) {
   .student-primary-action:hover {
-    background-color: color-mix(in oklab, var(--color-secondary) 86%, var(--color-primary));
+    background-color: color-mix(
+      in oklab,
+      var(--color-secondary) 86%,
+      var(--color-primary)
+    );
     box-shadow: var(--shadow-sm);
   }
 
   .student-hover-surface:hover {
     background-color: var(--color-surface-soft);
-    border-color: color-mix(in oklab, var(--color-primary) 36%, var(--color-border));
+    border-color: color-mix(
+      in oklab,
+      var(--color-primary) 36%,
+      var(--color-border)
+    );
   }
 
   .student-sidebar .student-hover-surface:hover {
@@ -474,12 +585,24 @@ body[data-material-theater="true"] .student-app-main {
 
   .student-text-action:hover {
     color: var(--color-text);
-    background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
+    background-color: color-mix(
+      in oklab,
+      var(--color-primary) 10%,
+      transparent
+    );
   }
 
   .student-input-control:hover {
-    background-color: color-mix(in oklab, var(--color-surface-soft) 86%, var(--color-surface));
-    border-color: color-mix(in oklab, var(--color-primary) 50%, var(--color-border));
+    background-color: color-mix(
+      in oklab,
+      var(--color-surface-soft) 86%,
+      var(--color-surface)
+    );
+    border-color: color-mix(
+      in oklab,
+      var(--color-primary) 50%,
+      var(--color-border)
+    );
   }
 }
 
@@ -529,5 +652,9 @@ body[data-material-theater="true"] .student-app-main {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in oklab, var(--color-primary) 50%, var(--color-text-muted));
+  background: color-mix(
+    in oklab,
+    var(--color-primary) 50%,
+    var(--color-text-muted)
+  );
 }
