@@ -13,43 +13,51 @@ import type { AdminUploadType } from "@/types/admin";
 import type { MaterialAttachment, MaterialType } from "@/types/student";
 
 type AdminMaterialUploadProps = {
-  file: File | null;
+  primaryFile: File | null;
+  supportFile: File | null;
   attachedFiles: MaterialAttachment[];
   isUploading: boolean;
-  uploadType: AdminUploadType | null;
+  primaryUploadType: AdminUploadType | null;
+  supportUploadType: AdminUploadType;
   materialType: MaterialType;
-  onFileChange: (file: File | null) => void;
+  onPrimaryFileChange: (file: File | null) => void;
+  onSupportFileChange: (file: File | null) => void;
   onFileRejected: (message: string) => void;
-  onUpload: () => void;
+  onPrimaryUpload: () => void;
+  onSupportUpload: () => void;
   onRemoveAttachment: (attachmentId: string) => void;
   onAttachmentDownloadableChange: (attachmentId: string, downloadable: boolean) => void;
 };
 
-export function AdminMaterialUpload({
+type FileUploadControlProps = {
+  id: string;
+  label: string;
+  file: File | null;
+  isUploading: boolean;
+  uploadType: AdminUploadType;
+  onFileChange: (file: File | null) => void;
+  onFileRejected: (message: string) => void;
+  onUpload: () => void;
+};
+
+function FileUploadControl({
+  id,
+  label,
   file,
-  attachedFiles,
   isUploading,
   uploadType,
-  materialType,
   onFileChange,
   onFileRejected,
   onUpload,
-  onRemoveAttachment,
-  onAttachmentDownloadableChange,
-}: AdminMaterialUploadProps) {
+}: FileUploadControlProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const uploadHelpText = getAdminUploadHelpText(uploadType);
 
   useEffect(() => {
     if (!file && inputRef.current) {
       inputRef.current.value = "";
     }
   }, [file]);
-
-  if (!uploadType) {
-    return null;
-  }
-
-  const activeUploadType = uploadType;
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     const nextFile = event.target.files?.[0] ?? null;
@@ -59,7 +67,7 @@ export function AdminMaterialUpload({
       return;
     }
 
-    const validationMessage = validateAdminUploadFile(nextFile, activeUploadType);
+    const validationMessage = validateAdminUploadFile(nextFile, uploadType);
     if (validationMessage) {
       onFileChange(null);
       event.target.value = "";
@@ -70,23 +78,14 @@ export function AdminMaterialUpload({
     onFileChange(nextFile);
   }
 
-  const replacesPrimaryFile = materialType === "pdf" || materialType === "attachment";
-  const uploadHelpText = getAdminUploadHelpText(activeUploadType);
-  const fieldLabel =
-    materialType === "pdf"
-      ? "PDF do material"
-      : materialType === "video"
-        ?"Anexo de apoio ao vídeo"
-        : "Arquivo do anexo";
-
   return (
-    <div className="student-soft-surface min-w-0 rounded-[var(--radius-md)] border p-4">
-      <Label htmlFor="materialFile">{fieldLabel}</Label>
+    <div className="min-w-0">
+      <Label htmlFor={id}>{label}</Label>
       <input
-        id="materialFile"
+        id={id}
         ref={inputRef}
         type="file"
-        accept={getAdminUploadAcceptValue(activeUploadType)}
+        accept={getAdminUploadAcceptValue(uploadType)}
         className="sr-only"
         onChange={handleFileChange}
       />
@@ -117,44 +116,8 @@ export function AdminMaterialUpload({
           ) : null}
         </div>
       </div>
-      {attachedFiles.length > 0 ? (
-        <div className="mt-3 rounded-[var(--radius-sm)] border px-3 py-2 text-sm" style={{ borderColor: "var(--color-border)" }}>
-          <p className="font-semibold">{replacesPrimaryFile ? "Arquivo principal" : "Anexos vinculados"}</p>
-          {attachedFiles.map((attachment) => (
-            <div key={attachment.id} className="mt-2 flex items-start justify-between gap-3">
-              <div className="min-w-0 flex-1">
-                <p className="student-muted-text min-w-0 truncate">{attachment.original_name}</p>
-                {!replacesPrimaryFile ? (
-                  <label className="student-action mt-2 flex items-center gap-2 text-xs font-semibold">
-                    <Checkbox
-                      checked={Boolean(attachment.downloadable)}
-                      onCheckedChange={(checked) =>
-                        onAttachmentDownloadableChange(
-                          attachment.id,
-                          Boolean(checked),
-                        )
-                      }
-                    />
-                    Permitir download
-                  </label>
-                ) : null}
-              </div>
-              <button
-                type="button"
-                className="student-action student-hover-surface grid size-7 shrink-0 place-items-center rounded-lg text-[var(--color-text-muted)]"
-                onClick={() => onRemoveAttachment(attachment.id)}
-                aria-label={`Remover ${attachment.original_name}`}
-              >
-                <X size={14} aria-hidden="true" />
-              </button>
-            </div>
-          ))}
-        </div>
-      ) : null}
-      <p className="student-muted-text mt-3 text-xs">
-        {replacesPrimaryFile
-          ?"O arquivo selecionado será enviado ao salvar. Enviar outro arquivo substitui o principal deste material."
-          : "O arquivo selecionado será enviado ao salvar. Use o envio manual para adicionar mais apoios antes de criar."}
+      <p className="student-muted-text mt-2 text-xs">
+        O arquivo selecionado será enviado ao salvar. Use o envio manual para adicioná-lo antes de criar.
       </p>
       <p className="student-muted-text mt-1 text-xs">{uploadHelpText}</p>
       <Button
@@ -168,6 +131,141 @@ export function AdminMaterialUpload({
         <FileUp size={16} aria-hidden="true" />
         {isUploading ? "Enviando..." : "Adicionar agora"}
       </Button>
+    </div>
+  );
+}
+
+function getPrimaryAttachment(
+  materialType: MaterialType,
+  attachments: MaterialAttachment[],
+) {
+  if (materialType === "pdf") {
+    return attachments.find((attachment) => attachment.type === "pdf") ?? null;
+  }
+
+  if (materialType === "attachment") {
+    return attachments[0] ?? null;
+  }
+
+  return null;
+}
+
+function getSupportAttachments(
+  materialType: MaterialType,
+  attachments: MaterialAttachment[],
+) {
+  const primaryAttachment = getPrimaryAttachment(materialType, attachments);
+  const seenIds = new Set<string>();
+
+  return attachments.filter((attachment) => {
+    if (attachment.id === primaryAttachment?.id || seenIds.has(attachment.id)) {
+      return false;
+    }
+
+    seenIds.add(attachment.id);
+    return true;
+  });
+}
+
+export function AdminMaterialUpload({
+  primaryFile,
+  supportFile,
+  attachedFiles,
+  isUploading,
+  primaryUploadType,
+  supportUploadType,
+  materialType,
+  onPrimaryFileChange,
+  onSupportFileChange,
+  onFileRejected,
+  onPrimaryUpload,
+  onSupportUpload,
+  onRemoveAttachment,
+  onAttachmentDownloadableChange,
+}: AdminMaterialUploadProps) {
+  const primaryAttachment = getPrimaryAttachment(materialType, attachedFiles);
+  const supportAttachments = getSupportAttachments(materialType, attachedFiles);
+  const primaryLabel =
+    materialType === "pdf" ? "PDF do material" : "Arquivo principal";
+  const supportLabel =
+    materialType === "video" ? "Anexo de apoio ao vídeo" : "Materiais de apoio";
+
+  return (
+    <div className="student-soft-surface min-w-0 space-y-4 rounded-[var(--radius-md)] border p-4">
+      {primaryUploadType ? (
+        <div className="min-w-0">
+          <FileUploadControl
+            id="materialPrimaryFile"
+            label={primaryLabel}
+            file={primaryFile}
+            isUploading={isUploading}
+            uploadType={primaryUploadType}
+            onFileChange={onPrimaryFileChange}
+            onFileRejected={onFileRejected}
+            onUpload={onPrimaryUpload}
+          />
+          {primaryAttachment ? (
+            <div className="mt-3 rounded-[var(--radius-sm)] border px-3 py-2 text-sm" style={{ borderColor: "var(--color-border)" }}>
+              <p className="font-semibold">Arquivo principal</p>
+              <div className="mt-2 flex items-start justify-between gap-3">
+                <p className="student-muted-text min-w-0 truncate">{primaryAttachment.original_name}</p>
+                <button
+                  type="button"
+                  className="student-action student-hover-surface grid size-7 shrink-0 place-items-center rounded-lg text-[var(--color-text-muted)]"
+                  onClick={() => onRemoveAttachment(primaryAttachment.id)}
+                  aria-label={`Remover ${primaryAttachment.original_name}`}
+                >
+                  <X size={14} aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
+      <FileUploadControl
+        id="materialSupportFile"
+        label={supportLabel}
+        file={supportFile}
+        isUploading={isUploading}
+        uploadType={supportUploadType}
+        onFileChange={onSupportFileChange}
+        onFileRejected={onFileRejected}
+        onUpload={onSupportUpload}
+      />
+
+      {supportAttachments.length > 0 ? (
+        <div className="rounded-[var(--radius-sm)] border px-3 py-2 text-sm" style={{ borderColor: "var(--color-border)" }}>
+          <p className="font-semibold">Anexos vinculados</p>
+          {supportAttachments.map((attachment) => (
+            <div key={attachment.id} className="mt-2 flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="student-muted-text min-w-0 truncate">{attachment.original_name}</p>
+                <label className="student-action mt-2 flex items-center gap-2 text-xs font-semibold">
+                  <Checkbox
+                    checked={Boolean(attachment.downloadable)}
+                    onCheckedChange={(checked) =>
+                      onAttachmentDownloadableChange(
+                        attachment.id,
+                        Boolean(checked),
+                      )
+                    }
+                  />
+                  Permitir download
+                </label>
+              </div>
+              <button
+                type="button"
+                className="student-action student-hover-surface grid size-7 shrink-0 place-items-center rounded-lg text-[var(--color-text-muted)]"
+                onClick={() => onRemoveAttachment(attachment.id)}
+                aria-label={`Remover ${attachment.original_name}`}
+              >
+                <X size={14} aria-hidden="true" />
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

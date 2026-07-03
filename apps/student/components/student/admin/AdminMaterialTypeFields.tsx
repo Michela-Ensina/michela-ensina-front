@@ -14,19 +14,23 @@ import type { MaterialAttachment, MaterialType } from "@/types/student";
 
 type AdminMaterialTypeFieldsProps = {
   form: MaterialFormState;
-  file: File | null;
+  primaryFile: File | null;
+  supportFile: File | null;
   attachedFiles: MaterialAttachment[];
   products: AdminProduct[];
   productsErrorMessage: string | null;
-  uploadType: AdminUploadType | null;
+  primaryUploadType: AdminUploadType | null;
+  supportUploadType: AdminUploadType;
   isUploading: boolean;
   onFieldChange: <TField extends keyof MaterialFormState>(
     field: TField,
     value: MaterialFormState[TField],
   ) => void;
-  onFileChange: (file: File | null) => void;
+  onPrimaryFileChange: (file: File | null) => void;
+  onSupportFileChange: (file: File | null) => void;
   onFileRejected: (message: string) => void;
-  onUpload: () => void;
+  onPrimaryUpload: () => void;
+  onSupportUpload: () => void;
   onRemoveAttachment: (attachmentId: string) => void;
   onAttachmentDownloadableChange: (attachmentId: string, downloadable: boolean) => void;
   onToggleProduct: (productId: string, checked: boolean) => void;
@@ -34,16 +38,20 @@ type AdminMaterialTypeFieldsProps = {
 
 export function AdminMaterialTypeFields({
   form,
-  file,
+  primaryFile,
+  supportFile,
   attachedFiles,
   products,
   productsErrorMessage,
-  uploadType,
+  primaryUploadType,
+  supportUploadType,
   isUploading,
   onFieldChange,
-  onFileChange,
+  onPrimaryFileChange,
+  onSupportFileChange,
   onFileRejected,
-  onUpload,
+  onPrimaryUpload,
+  onSupportUpload,
   onRemoveAttachment,
   onAttachmentDownloadableChange,
   onToggleProduct,
@@ -72,14 +80,18 @@ export function AdminMaterialTypeFields({
       </div>
 
       <AdminMaterialUpload
-        file={file}
+        primaryFile={primaryFile}
+        supportFile={supportFile}
         attachedFiles={attachedFiles}
         isUploading={isUploading}
-        uploadType={uploadType}
+        primaryUploadType={primaryUploadType}
+        supportUploadType={supportUploadType}
         materialType={form.type}
-        onFileChange={onFileChange}
+        onPrimaryFileChange={onPrimaryFileChange}
+        onSupportFileChange={onSupportFileChange}
         onFileRejected={onFileRejected}
-        onUpload={onUpload}
+        onPrimaryUpload={onPrimaryUpload}
+        onSupportUpload={onSupportUpload}
         onRemoveAttachment={onRemoveAttachment}
         onAttachmentDownloadableChange={onAttachmentDownloadableChange}
       />

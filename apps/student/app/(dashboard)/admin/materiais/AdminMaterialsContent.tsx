@@ -60,20 +60,24 @@ export function AdminMaterialsContent() {
         <AdminMaterialForm
           form={manager.form}
           selectedMaterial={manager.selectedMaterial}
-          file={manager.file}
+          primaryFile={manager.primaryFile}
+          supportFile={manager.supportFile}
           attachedFiles={manager.attachedFiles}
           products={manager.products}
           productsErrorMessage={manager.productsErrorMessage}
           errorMessage={manager.errorMessage}
-          uploadType={manager.uploadType}
+          primaryUploadType={manager.primaryUploadType}
+          supportUploadType={manager.supportUploadType}
           isSaving={manager.isSaving}
           isUploading={manager.isUploading}
           onFieldChange={manager.updateField}
-          onFileChange={manager.setFile}
+          onPrimaryFileChange={manager.setPrimaryFile}
+          onSupportFileChange={manager.setSupportFile}
           onFileRejected={manager.rejectFile}
           onReset={manager.resetForm}
           onSubmit={manager.handleSubmit}
-          onUpload={() => void manager.handleUpload()}
+          onPrimaryUpload={() => void manager.handlePrimaryUpload()}
+          onSupportUpload={() => void manager.handleSupportUpload()}
           onRemoveAttachment={manager.removeAttachedFile}
           onAttachmentDownloadableChange={manager.setAttachmentDownloadable}
           onToggleProduct={manager.toggleProduct}

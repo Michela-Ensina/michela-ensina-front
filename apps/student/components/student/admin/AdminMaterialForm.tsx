@@ -17,20 +17,24 @@ import type { MaterialAttachment } from "@/types/student";
 type AdminMaterialFormProps = {
   form: MaterialFormState;
   selectedMaterial: AdminMaterial | null;
-  file: File | null;
+  primaryFile: File | null;
+  supportFile: File | null;
   attachedFiles: MaterialAttachment[];
   products: AdminProduct[];
   productsErrorMessage: string | null;
   errorMessage: string | null;
-  uploadType: AdminUploadType | null;
+  primaryUploadType: AdminUploadType | null;
+  supportUploadType: AdminUploadType;
   isSaving: boolean;
   isUploading: boolean;
   onFieldChange: <TField extends keyof MaterialFormState>(field: TField, value: MaterialFormState[TField]) => void;
-  onFileChange: (file: File | null) => void;
+  onPrimaryFileChange: (file: File | null) => void;
+  onSupportFileChange: (file: File | null) => void;
   onFileRejected: (message: string) => void;
   onReset: () => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
-  onUpload: () => void;
+  onPrimaryUpload: () => void;
+  onSupportUpload: () => void;
   onRemoveAttachment: (attachmentId: string) => void;
   onAttachmentDownloadableChange: (attachmentId: string, downloadable: boolean) => void;
   onToggleProduct: (productId: string, checked: boolean) => void;
@@ -39,20 +43,24 @@ type AdminMaterialFormProps = {
 export function AdminMaterialForm({
   form,
   selectedMaterial,
-  file,
+  primaryFile,
+  supportFile,
   attachedFiles,
   products,
   productsErrorMessage,
   errorMessage,
-  uploadType,
+  primaryUploadType,
+  supportUploadType,
   isSaving,
   isUploading,
   onFieldChange,
-  onFileChange,
+  onPrimaryFileChange,
+  onSupportFileChange,
   onFileRejected,
   onReset,
   onSubmit,
-  onUpload,
+  onPrimaryUpload,
+  onSupportUpload,
   onRemoveAttachment,
   onAttachmentDownloadableChange,
   onToggleProduct,
@@ -89,16 +97,20 @@ export function AdminMaterialForm({
 
         <AdminMaterialTypeFields
           form={form}
-          file={file}
+          primaryFile={primaryFile}
+          supportFile={supportFile}
           attachedFiles={attachedFiles}
           products={products}
           productsErrorMessage={productsErrorMessage}
-          uploadType={uploadType}
+          primaryUploadType={primaryUploadType}
+          supportUploadType={supportUploadType}
           isUploading={isUploading}
           onFieldChange={onFieldChange}
-          onFileChange={onFileChange}
+          onPrimaryFileChange={onPrimaryFileChange}
+          onSupportFileChange={onSupportFileChange}
           onFileRejected={onFileRejected}
-          onUpload={onUpload}
+          onPrimaryUpload={onPrimaryUpload}
+          onSupportUpload={onSupportUpload}
           onRemoveAttachment={onRemoveAttachment}
           onAttachmentDownloadableChange={onAttachmentDownloadableChange}
           onToggleProduct={onToggleProduct}
