@@ -36,14 +36,20 @@ export default function EsqueciSenhaPage() {
       </form>
 
       {forgotPasswordForm.successMessage ? (
-        <div className="mt-5 space-y-3 rounded-[var(--radius-md)] border p-4" style={{ borderColor: "var(--color-border)" }}>
+        <div
+          className="mt-5 space-y-3 rounded-[var(--radius-md)] border p-4 shadow-[var(--shadow-sm)]"
+          style={{
+            backgroundColor: "var(--color-surface)",
+            borderColor: "color-mix(in oklab, var(--color-brand-lilac) 32%, var(--color-border))",
+          }}
+        >
           <div>
             <p className="text-sm font-semibold">Recebeu o e-mail?</p>
             <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
               Insira o código de 8 caracteres para criar uma nova senha.
             </p>
           </div>
-          <Button type="button" variant="outline" fullWidth onClick={forgotPasswordForm.openResetPasswordForm}>
+          <Button type="button" variant="primary" fullWidth onClick={forgotPasswordForm.openResetPasswordForm}>
             Inserir código recebido
           </Button>
         </div>
