@@ -70,8 +70,8 @@ export function ReleasedLeadCapturePanel() {
             </div>
 
             <div className="space-y-1 text-primary">
-              <div className="flex items-end gap-2 justify-center">
-                <p>
+              <div className="flex flex-col items-center justify-center gap-1 sm:flex-row sm:items-end sm:gap-2">
+                <p className="whitespace-nowrap">
                   <span className="text-base font-semibold sm:text-xl">
                     {PRODUCT_INFO.installmentCountLabel.replaceAll("de", "")}
                   </span>
@@ -80,7 +80,7 @@ export function ReleasedLeadCapturePanel() {
                   </span>
                 </p>
 
-                <p className="text-end text-sm font-semibold text-text-muted">
+                <p className="text-center text-sm font-semibold text-text-muted sm:text-end">
                   ou {PRODUCT_INFO.cashPrice}
                 </p>
               </div>
