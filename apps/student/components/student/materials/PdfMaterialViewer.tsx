@@ -389,33 +389,49 @@ export function PdfMaterialViewer({
         </div>
 
         <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:justify-end">
-          <span className="order-1 rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-semibold text-[var(--color-text)] sm:order-none">
+          <span className="rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-semibold text-[var(--color-text)]">
             {isPageMode
               ? `${currentPage}/${loadState.pageCount}`
               : `${loadState.pageCount} páginas`}
           </span>
-          <Button
-            aria-label="Diminuir zoom"
-            className="order-2 sm:order-none"
-            disabled={zoom <= PDF_MIN_ZOOM}
-            onClick={() =>
-              setZoom((currentZoom) =>
-                clampPdfZoom(currentZoom - PDF_ZOOM_STEP),
-              )
-            }
-            size="icon"
-            title="Diminuir zoom"
-            type="button"
-            variant="ghost"
-          >
-            <ZoomOut size={18} aria-hidden="true" />
-          </Button>
-          <span className="order-3 min-w-14 rounded-full border border-[var(--color-border)] px-3 py-1 text-center text-xs font-semibold text-[var(--color-text)] sm:order-none">
-            {zoomPercent}%
-          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              aria-label="Diminuir zoom"
+              disabled={zoom <= PDF_MIN_ZOOM}
+              onClick={() =>
+                setZoom((currentZoom) =>
+                  clampPdfZoom(currentZoom - PDF_ZOOM_STEP),
+                )
+              }
+              size="icon"
+              title="Diminuir zoom"
+              type="button"
+              variant="ghost"
+            >
+              <ZoomOut size={18} aria-hidden="true" />
+            </Button>
+            <span className="min-w-14 rounded-full border border-[var(--color-border)] px-3 py-1 text-center text-xs font-semibold text-[var(--color-text)]">
+              {zoomPercent}%
+            </span>
+            <Button
+              aria-label="Aumentar zoom"
+              disabled={zoom >= PDF_MAX_ZOOM}
+              onClick={() =>
+                setZoom((currentZoom) =>
+                  clampPdfZoom(currentZoom + PDF_ZOOM_STEP),
+                )
+              }
+              size="icon"
+              title="Aumentar zoom"
+              type="button"
+              variant="ghost"
+            >
+              <ZoomIn size={18} aria-hidden="true" />
+            </Button>
+          </div>
           <Button
             aria-pressed={isPageMode}
-            className="order-5 gap-2 sm:order-none"
+            className="gap-2"
             onClick={() =>
               setFitMode((current) => (current === "page" ? "width" : "page"))
             }
@@ -432,23 +448,7 @@ export function PdfMaterialViewer({
             {isPageMode ? "Preencher largura" : "Página inteira"}
           </Button>
           <Button
-            aria-label="Aumentar zoom"
-            className="order-4 sm:order-none"
-            disabled={zoom >= PDF_MAX_ZOOM}
-            onClick={() =>
-              setZoom((currentZoom) =>
-                clampPdfZoom(currentZoom + PDF_ZOOM_STEP),
-              )
-            }
-            size="icon"
-            title="Aumentar zoom"
-            type="button"
-            variant="ghost"
-          >
-            <ZoomIn size={18} aria-hidden="true" />
-          </Button>
-          <Button
-            className="order-6 gap-2 sm:order-none"
+            className="gap-2"
             onClick={() => {
               setFitMode("page");
               setZoom(PDF_DEFAULT_ZOOM);
