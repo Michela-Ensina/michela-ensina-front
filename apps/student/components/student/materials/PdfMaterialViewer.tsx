@@ -53,7 +53,7 @@ type PdfFitMode = "page" | "width";
 
 const PDF_DEFAULT_ZOOM = 1;
 const PDF_MIN_ZOOM = 0.45;
-const PDF_MAX_ZOOM = 1.5;
+const PDF_MAX_ZOOM = 2;
 const PDF_ZOOM_STEP = 0.1;
 
 function clampPdfZoom(value: number) {
@@ -388,14 +388,15 @@ export function PdfMaterialViewer({
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-end gap-2">
-          <span className="rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-semibold text-[var(--color-text)]">
+        <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:justify-end">
+          <span className="order-1 rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-semibold text-[var(--color-text)] sm:order-none">
             {isPageMode
               ? `${currentPage}/${loadState.pageCount}`
               : `${loadState.pageCount} páginas`}
           </span>
           <Button
             aria-label="Diminuir zoom"
+            className="order-2 sm:order-none"
             disabled={zoom <= PDF_MIN_ZOOM}
             onClick={() =>
               setZoom((currentZoom) =>
@@ -409,12 +410,12 @@ export function PdfMaterialViewer({
           >
             <ZoomOut size={18} aria-hidden="true" />
           </Button>
-          <span className="min-w-14 rounded-full border border-[var(--color-border)] px-3 py-1 text-center text-xs font-semibold text-[var(--color-text)]">
+          <span className="order-3 min-w-14 rounded-full border border-[var(--color-border)] px-3 py-1 text-center text-xs font-semibold text-[var(--color-text)] sm:order-none">
             {zoomPercent}%
           </span>
           <Button
             aria-pressed={isPageMode}
-            className="gap-2"
+            className="order-5 gap-2 sm:order-none"
             onClick={() =>
               setFitMode((current) => (current === "page" ? "width" : "page"))
             }
@@ -432,6 +433,7 @@ export function PdfMaterialViewer({
           </Button>
           <Button
             aria-label="Aumentar zoom"
+            className="order-4 sm:order-none"
             disabled={zoom >= PDF_MAX_ZOOM}
             onClick={() =>
               setZoom((currentZoom) =>
@@ -446,7 +448,7 @@ export function PdfMaterialViewer({
             <ZoomIn size={18} aria-hidden="true" />
           </Button>
           <Button
-            className="gap-2"
+            className="order-6 gap-2 sm:order-none"
             onClick={() => {
               setFitMode("page");
               setZoom(PDF_DEFAULT_ZOOM);
