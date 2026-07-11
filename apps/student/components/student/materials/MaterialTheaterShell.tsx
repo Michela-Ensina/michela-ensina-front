@@ -105,8 +105,8 @@ export function MaterialTheaterShell({
 
       {isTheaterMode ?(
         <div className="student-theater-header relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen border-y">
-          <div className="mx-auto flex min-h-14 w-full max-w-[96rem] items-center justify-between gap-3 px-4 sm:px-6">
-            <div className="flex min-w-0 items-center gap-3">
+          <div className="mx-auto flex min-h-14 w-full max-w-[96rem] flex-col gap-2 px-4 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-6 sm:py-0">
+            <div className="flex min-w-0 items-center gap-2 sm:gap-3">
               <Link
                 href="/materiais"
                 className="student-action student-hover-surface grid size-9 shrink-0 place-items-center rounded-lg text-[var(--color-text-muted)]"
@@ -122,7 +122,7 @@ export function MaterialTheaterShell({
                 <span className="hidden shrink-0 text-[var(--color-text-muted)] sm:block">{typeLabel}</span>
               </div>
             </div>
-            <div className="flex shrink-0 items-center gap-2">
+            <div className="flex w-full min-w-0 flex-wrap items-center gap-2 sm:w-auto sm:shrink-0 sm:justify-end">
               {actions}
             </div>
           </div>
